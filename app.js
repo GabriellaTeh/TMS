@@ -1,16 +1,12 @@
-const mysql = require("mysql2");
 const express = require("express");
 const session = require("express-session");
 const path = require("path");
-
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root",
-  database: "tms",
-});
+const database = require("./config/db");
+const dotenv = require("dotenv");
 
 const app = express();
+
+dotenv.config({ path: "./config/config.env" });
 
 app.use(
   session({
@@ -37,7 +33,7 @@ app.post("/auth", function (request, response) {
   // Ensure the input fields exists and are not empty
   if (username && password) {
     // Execute SQL query that'll select the account from the database based on the specified username and password
-    connection.query(
+    database.query(
       "SELECT * FROM accounts WHERE username = ? AND password = ?",
       [username, password],
       function (error, results, fields) {
@@ -75,4 +71,7 @@ app.get("/home", function (request, response) {
   response.end();
 });
 
-app.listen(3000);
+const PORT = process.env.PORT;
+app.listen(PORT, function () {
+  console.log(`Server started on port ${process.env.PORT}`);
+});
