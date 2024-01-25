@@ -18,9 +18,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "static")));
 
-app.get("/", function (request, response) {
+app.get("/", function (req, res) {
   // Render login template
-  response.sendFile(path.join(__dirname + "/login.html"));
+  res.status(200).send("logged in");
 });
 
 const login = require("./routes/login");
