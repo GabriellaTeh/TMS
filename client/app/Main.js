@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header";
 import Login from "./components/Login";
@@ -7,8 +8,12 @@ import Login from "./components/Login";
 function Main() {
   return (
     <>
-      <Header />
-      <Login />
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Login />}></Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
