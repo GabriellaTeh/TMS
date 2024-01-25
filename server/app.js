@@ -2,6 +2,8 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 
@@ -16,7 +18,7 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "static")));
+app.use();
 
 app.get("/", function (req, res) {
   // Render login template
