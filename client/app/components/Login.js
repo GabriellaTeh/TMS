@@ -1,7 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
+import Axios from "axios";
+Axios.defaults.baseURL = "http://localhost:8080";
 
 function Login() {
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      const response = await Axios.post("", {
+        username,
+        password,
+      });
+      if (response.data) {
+        console.log();
+      } else {
+        console.log("Incorrect username/password");
+      }
+      console.log(response.data);
+    } catch (err) {
+      console.log("there was a error");
+    }
+  }
   return (
     <div className="container py-md-5">
       <div className="pls-center">
@@ -10,12 +32,13 @@ function Login() {
           style={{ width: "100%" }}
         >
           <div className="col-lg-5 pl-lg-5 pb-3 py-lg-5">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="username-register" className="text-muted mb-1">
                   <small>Username</small>
                 </label>
                 <input
+                  onChange={(e) => setUsername(e.target.value)}
                   id="username-register"
                   name="username"
                   className="form-control"
@@ -29,6 +52,7 @@ function Login() {
                   <small>Password</small>
                 </label>
                 <input
+                  onChange={(e) => setPassword(e.target.value)}
                   id="password-register"
                   name="password"
                   className="form-control"

@@ -2,8 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const dotenv = require("dotenv");
-const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
+const cors = require("cors");
 
 const app = express();
 
@@ -18,17 +17,22 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use();
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["POST", "GET"],
+    credentials: true,
+  })
+);
 
 app.get("/", function (req, res) {
-  // Render login template
-  res.status(200).send("logged in");
+  res.json("hello");
 });
 
 const login = require("./routes/login");
-const homepage = require("./routes/homepage");
+const viewHome = require("./routes/home");
 app.use(login);
-app.use(homepage);
+app.use(viewHome);
 
 const PORT = process.env.PORT;
 app.listen(PORT, function () {
