@@ -187,3 +187,82 @@ exports.updatePassword = async (req, res, next) => {
     console.log(err);
   }
 };
+
+//admin update password => /user/updatePasswordAdmin
+exports.updatePasswordAdmin = async (req, res, next) => {
+  const password = req.body.password;
+
+  if (password) {
+    const hashedPassword = await bcrypt(password, 10);
+    database.query(
+      "UPDATE accounts SET password = ? WHERE username = ?",
+      [hashedPassword],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          if (results) {
+            res.status(200).json({ message: "Password updated by admin" });
+          } else {
+            res.json({ message: "Username not found" });
+          }
+        }
+      }
+    );
+  } else {
+    res.json({ message: "Enter email" });
+  }
+};
+
+//admin update email => /user/updateEmailAdmin
+exports.updateEmailAdmin = (req, res, next) => {
+  const email = req.body.email;
+
+  if (email) {
+    database.query(
+      "UPDATE accounts SET email = ? WHERE username = ?",
+      [email],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          if (results) {
+            res.status(200).json({ message: "Email updated by admin" });
+          } else {
+            res.json({ message: "Username not found" });
+          }
+        }
+      }
+    );
+  } else {
+    res.json({ message: "Enter email" });
+  }
+};
+
+//admin update isActive to false => /user/disableAdmin
+exports.disableUser = (req, res, next) => {
+  const isActive = false;
+
+  if (isActive) {
+    database.query(
+      "UPDATE accounts SET isActive = ? WHERE username = ?",
+      [isActive],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          if (results) {
+            res.status(200).json({ message: "isActive updated by admin" });
+          } else {
+            res.json({ message: "Username not found" });
+          }
+        }
+      }
+    );
+  } else {
+    res.json({ message: "Enter email" });
+  }
+};
+
+//admin update isActive to true
+exports.activateUser = (req, res, next) => {};
