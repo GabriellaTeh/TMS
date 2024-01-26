@@ -29,7 +29,24 @@ exports.viewUsers = (req, res, next) => {
     if (error) {
       console.log(error);
     } else {
-      res.json({ message: "View users succcessful" });
+      res.json(results);
     }
   });
+};
+
+exports.viewProfile = (req, res, next) => {
+  const userId = req.userId;
+  database.query(
+    "SELECT * FROM accounts WHERE id = ?",
+    [userId.id],
+    function (err, results) {
+      if (err) {
+        console.log(err);
+      } else if (results.length === 0) {
+        res.status(500).json("Error fetching details");
+      } else {
+        res.json({ username: results[0].username, email: results[0].email });
+      }
+    }
+  );
 };
