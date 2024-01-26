@@ -104,3 +104,86 @@ exports.viewProfile = (req, res, next) => {
     console.log(err);
   }
 };
+
+//update email => /user/updateEmail
+exports.updateEmail = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+    const decoded = jwt.verify(token, "my_secret_key");
+    const username = decoded.username;
+    const email = req.body.email;
+
+    if (email) {
+      database.query(
+        "UPDATE accounts SET email = ? WHERE username = ?",
+        [email, username],
+        function (err, results) {
+          if (err) {
+            console.log(err);
+          } else {
+            if (results) {
+              res.status(200).json({ message: "Email updated" });
+            } else {
+              res.json({ message: "Username not found" });
+            }
+          }
+        }
+      );
+    } else {
+      res.json({ message: "Enter email!" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+//update password => /user/updatePassword
+exports.updatePassword = async (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+    const decoded = jwt.verify(token, "my_secret_key");
+    const username = decoded.username;
+    const password = req.body.password;
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      database.query(
+        "UPDATE accounts SET password = ? WHERE username = ?",
+        [hashedPassword, username],
+        function (err, results) {
+          if (err) {
+            console.log(err);
+          } else {
+            if (results) {
+              res.status(200).json({ message: "Password updated" });
+            } else {
+              res.json({ message: "Username not found" });
+            }
+          }
+        }
+      );
+    } else {
+      res.json({ message: "Enter password!" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
