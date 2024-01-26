@@ -19,14 +19,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.get("/", function (req, res) {
-  res.json("hello");
-});
-
 const login = require("./routes/login");
-const viewHome = require("./routes/home");
+const viewHome = require("./routes/home"); // /home
+const users = require("./routes/users"); // /users
 app.use(login);
 app.use(viewHome);
+app.use(users);
 
 const PORT = process.env.PORT;
 app.listen(PORT, function () {

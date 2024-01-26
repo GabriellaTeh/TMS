@@ -2,24 +2,24 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-Axios.defaults.baseURL = "http://localhost:8080";
 
-function Login() {
+function Login(props) {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [loggedIn, setLoggedIn] = useState();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await Axios.post("", {
+      const response = await Axios.post("/", {
         username,
         password,
       });
       if (response.data) {
+        setLoggedIn(true);
         navigate("/home");
       } else {
-        console.log("Incorrect username/password");
       }
     } catch (err) {
       console.log("there was a error");
