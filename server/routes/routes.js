@@ -17,7 +17,13 @@ const {
 
 const { isAuthenticatedUser, authorizedAdmin } = require("../middleware/auth");
 
-const { checkGroup } = require("../controllers/groupController");
+const {
+  checkGroup,
+  addUserToGroup,
+  getUserGroups,
+  removeUserFromGroup,
+  getGroups,
+} = require("../controllers/groupController");
 
 //admin insert
 router.route("/").post(createAdmin);
@@ -27,6 +33,8 @@ router.route("/user/login").post(loginUser);
 router.route("/user/profile").get(isAuthenticatedUser, viewProfile);
 router.route("/user/updateEmail").put(isAuthenticatedUser, updateEmail);
 router.route("/user/updatePassword").put(isAuthenticatedUser, updatePassword);
+router.route("/group/user").get(isAuthenticatedUser, getUserGroups);
+router.route("/group/checkGroup").get(isAuthenticatedUser, checkGroup);
 
 //admin
 router.route("/users").get(isAuthenticatedUser, viewUsers);
@@ -46,7 +54,13 @@ router
   .route("/user/activateUser")
   .put(isAuthenticatedUser, authorizedAdmin, activateUser);
 
-//group
-router.route("/group/checkGroup").get(isAuthenticatedUser, checkGroup);
+//admin group functions
+router
+  .route("/group/addUser")
+  .post(isAuthenticatedUser, authorizedAdmin, addUserToGroup);
+router
+  .route("/group/removeUser")
+  .delete(isAuthenticatedUser, authorizedAdmin, removeUserFromGroup);
+router.route("/groups").get(isAuthenticatedUser, getGroups);
 
 module.exports = router;
