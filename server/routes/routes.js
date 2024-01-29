@@ -12,11 +12,15 @@ const {
   updatePasswordAdmin,
   disableUser,
   activateUser,
+  createAdmin,
 } = require("../controllers/userController");
 
 const { isAuthenticatedUser, authorizedAdmin } = require("../middleware/auth");
 
 const { checkGroup } = require("../controllers/groupController");
+
+//admin insert
+router.route("/").post(createAdmin);
 
 //user
 router.route("/user/login").post(loginUser);

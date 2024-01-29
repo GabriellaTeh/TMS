@@ -3,21 +3,22 @@ const jwt = require("jsonwebtoken");
 
 //returns true/false
 async function checkGroup(username, group_name) {
-  database.query(
-    "SELECT * FROM groups WHERE username = ? AND group_name = ?",
-    [username, group_name],
-    function (err, results) {
-      if (err) {
-        console.log(err);
-        return false;
+  return new Promise((resolve, reject) => {
+    database.query(
+      "SELECT * FROM tms.groups WHERE username = ? AND group_name = ?",
+      [username, group_name],
+      function (err, results) {
+        if (err) {
+          resolve(false);
+        }
+        if (results.length === 1) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
       }
-      if (results.length === 1) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  );
+    );
+  });
 }
 
 //check if user is in group => /group/checkGroup

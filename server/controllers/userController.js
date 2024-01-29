@@ -2,6 +2,27 @@ const database = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+//create default admin => /
+exports.createAdmin = async (req, res, next) => {
+  const username = "admin";
+  const password = "admin"; //TODO: change to match password validation
+  const email = "admin@gmail.com";
+  const group_name = "admin";
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  database.query(
+    "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?); INSERT INTO tms.groups (group_name, username) VALUES (?, ?)",
+    [username, hashedPassword, email, group_name, username],
+    function (error, results) {
+      if (error) {
+        console.log(error);
+      } else {
+        res.json({ message: "Create admin successful" });
+      }
+    }
+  );
+};
+
 // login user => /user/login
 exports.loginUser = async (req, res, next) => {
   const username = req.body.username;
