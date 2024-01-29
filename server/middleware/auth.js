@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const database = require("../config/db");
+const { checkGroup } = require("../controllers/groupController");
 
 exports.isAuthenticatedUser = (req, res, next) => {
   let token;
@@ -36,7 +37,7 @@ exports.isAuthenticatedUser = (req, res, next) => {
   }
 };
 
-exports.authorizedAdmin = (req, res, next) => {
+exports.authorizedAdmin = async (req, res, next) => {
   let token;
 
   if (
@@ -51,20 +52,14 @@ exports.authorizedAdmin = (req, res, next) => {
     try {
       const decoded = jwt.verify(token, "my_secret_key");
       const username = decoded.username;
-
-      database.query(
-        "SELECT group_name FROM groups WHERE username = ? AND group_name = 'admin'",
-        [username],
-        function (err, results) {
-          if (err) {
-            console.log(err);
-          } else if (results.length == 1) {
-            next();
-          } else {
-            res.json({ message: "User is not admin" });
-          }
-        }
-      );
-    } catch (err) {}
+      const result = await checkGroup(username, "admin");
+      if (result) {
+        next();
+      } else {
+        res.json({ message: "User is not an admin" });
+      }
+    } catch (err) {
+      res.status(401).json({ message: "Invalid token" });
+    }
   }
 };

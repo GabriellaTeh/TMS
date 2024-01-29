@@ -43,6 +43,7 @@ exports.createUser = async (req, res, next) => {
 
   if (username && password && email) {
     //TODO: password, username, email validation
+
     const hashedPassword = await bcrypt.hash(password, 10);
     database.query(
       "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)",
