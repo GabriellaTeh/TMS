@@ -1,25 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
+import DispatchContext from "../DispatchContext";
 
 function Login(props) {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
-  const [loggedIn, setLoggedIn] = useState();
   const navigate = useNavigate();
+  const appDispatch = useContext(DispatchContext);
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await Axios.post("/", {
-        username,
-        password,
-      });
+      const response = await Axios.post("/user/login", { username, password });
       if (response.data) {
-        setLoggedIn(true);
+        appDispatch({ type: "login", data: response.data });
         navigate("/home");
       } else {
+        //TODO: flash incorrect username/password
       }
     } catch (err) {
       console.log("there was a error");

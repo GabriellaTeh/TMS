@@ -25,7 +25,7 @@ const {
 } = require("../controllers/groupController");
 
 //admin insert
-router.route("/").post(createAdmin);
+router.route("/createAdmin").post(createAdmin);
 
 //user
 router.route("/user/login").post(loginUser);

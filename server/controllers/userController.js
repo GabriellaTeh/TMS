@@ -2,7 +2,7 @@ const database = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-//create default admin => /
+//create default admin => /createAdmin
 exports.createAdmin = async (req, res, next) => {
   const username = "admin";
   const password = "admin"; //TODO: change to match password validation
@@ -35,7 +35,7 @@ exports.loginUser = async (req, res, next) => {
         if (error) {
           console.log(error);
         } else if (results.length === 0) {
-          res.status(401).json({ message: "Invalid username/password" });
+          res.send(false);
         } else {
           const match = await bcrypt.compare(password, results[0].password);
           const active = results[0].isActive === 1;
@@ -43,15 +43,15 @@ exports.loginUser = async (req, res, next) => {
             const token = jwt.sign({ username: username }, "my_secret_key", {
               expiresIn: "3d",
             });
-            res.status(200).json({ message: "Login successful", token });
+            res.status(200).json({ token: token });
           } else {
-            res.status(401).json({ message: "Invalid username/password" });
+            res.send(false);
           }
         }
       }
     );
   } else {
-    res.send("Please enter Username and Password!");
+    res.send(false);
     res.end();
   }
 };
@@ -78,7 +78,7 @@ exports.createUser = async (req, res, next) => {
       }
     );
   } else {
-    res.send("Please enter Username, password and email!");
+    res.send(false);
   }
 };
 
@@ -103,7 +103,7 @@ exports.viewProfile = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.send(false);
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
@@ -119,12 +119,13 @@ exports.viewProfile = (req, res, next) => {
         if (results[0]) {
           res.status(200).json({ message: "View profile success" });
         } else {
-          res.json({ message: "Account not active" });
+          res.send(false);
         }
       }
     );
   } catch (err) {
     console.log(err);
+    res.send(false);
   }
 };
 
@@ -138,7 +139,7 @@ exports.updateEmail = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.send(false);
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
@@ -156,16 +157,17 @@ exports.updateEmail = (req, res, next) => {
             if (results) {
               res.status(200).json({ message: "Email updated" });
             } else {
-              res.json({ message: "Username not found" });
+              res.send(false);
             }
           }
         }
       );
     } else {
-      res.json({ message: "Enter email!" });
+      res.send(false);
     }
   } catch (err) {
     console.log(err);
+    res.send(false);
   }
 };
 
@@ -179,7 +181,7 @@ exports.updatePassword = async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.send(false);
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
@@ -198,16 +200,17 @@ exports.updatePassword = async (req, res, next) => {
             if (results) {
               res.status(200).json({ message: "Password updated" });
             } else {
-              res.json({ message: "Username not found" });
+              res.send(false);
             }
           }
         }
       );
     } else {
-      res.json({ message: "Enter password!" });
+      res.send(false);
     }
   } catch (err) {
     console.log(err);
+    res.send(false);
   }
 };
 
@@ -227,13 +230,13 @@ exports.updatePasswordAdmin = async (req, res, next) => {
           if (results) {
             res.status(200).json({ message: "Password updated by admin" });
           } else {
-            res.json({ message: "Username not found" });
+            res.send(false);
           }
         }
       }
     );
   } else {
-    res.json({ message: "Enter email" });
+    res.send(false);
   }
 };
 
@@ -252,13 +255,13 @@ exports.updateEmailAdmin = (req, res, next) => {
           if (results) {
             res.status(200).json({ message: "Email updated by admin" });
           } else {
-            res.json({ message: "Username not found" });
+            res.send(false);
           }
         }
       }
     );
   } else {
-    res.json({ message: "Enter email" });
+    res.send(false);
   }
 };
 
@@ -277,13 +280,13 @@ exports.disableUser = (req, res, next) => {
           if (results) {
             res.status(200).json({ message: "isActive updated by admin" });
           } else {
-            res.json({ message: "Username not found" });
+            res.send(false);
           }
         }
       }
     );
   } else {
-    res.json({ message: "User is already inactive" });
+    res.send(false);
   }
 };
 
@@ -302,12 +305,12 @@ exports.activateUser = (req, res, next) => {
           if (results) {
             res.status(200).json({ message: "isActive updated by admin" });
           } else {
-            res.json({ message: "Username not found" });
+            res.send(false);
           }
         }
       }
     );
   } else {
-    res.json({ message: "User is already active" });
+    res.send(false);
   }
 };

@@ -11,7 +11,7 @@ exports.addUserToGroup = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.send(false);
   }
   try {
     const username = req.body.username;
@@ -30,6 +30,7 @@ exports.addUserToGroup = (req, res, next) => {
     );
   } catch (error) {
     console.log(error);
+    res.send(false);
   }
 };
 
@@ -43,7 +44,7 @@ exports.removeUserFromGroup = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.send(false);
   }
   try {
     const username = req.body.username;
@@ -62,6 +63,7 @@ exports.removeUserFromGroup = (req, res, next) => {
     );
   } catch (error) {
     console.log(error);
+    res.send(false);
   }
 };
 
@@ -75,7 +77,7 @@ exports.getUserGroups = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.send(false);
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
@@ -93,6 +95,7 @@ exports.getUserGroups = (req, res, next) => {
     );
   } catch (error) {
     console.log(error);
+    res.send(false);
   }
 };
 
