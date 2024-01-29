@@ -53,7 +53,7 @@ exports.authorizedAdmin = (req, res, next) => {
       const username = decoded.username;
 
       database.query(
-        "SELECT group_name FROM groups WHERE username = ? AND group_name = 'Admin'",
+        "SELECT group_name FROM groups WHERE username = ? AND group_name = 'admin'",
         [username],
         function (err, results) {
           if (err) {

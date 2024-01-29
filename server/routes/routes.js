@@ -25,7 +25,7 @@ router.route("/user/updateEmail").put(isAuthenticatedUser, updateEmail);
 router.route("/user/updatePassword").put(isAuthenticatedUser, updatePassword);
 
 //admin
-router.route("/users").get(viewUsers);
+router.route("/users").get(isAuthenticatedUser, viewUsers);
 router
   .route("/user/createUser")
   .post(isAuthenticatedUser, authorizedAdmin, createUser);

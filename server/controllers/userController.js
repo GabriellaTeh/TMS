@@ -42,6 +42,7 @@ exports.createUser = async (req, res, next) => {
   const email = req.body.email;
 
   if (username && password && email) {
+    //TODO: password, username, email validation
     const hashedPassword = await bcrypt.hash(password, 10);
     database.query(
       "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)",
@@ -239,7 +240,7 @@ exports.updateEmailAdmin = (req, res, next) => {
   }
 };
 
-//admin update isActive to false => /user/disableAdmin
+//admin update isActive to false => /user/disableUser
 exports.disableUser = (req, res, next) => {
   const isActive = false;
 
@@ -260,9 +261,31 @@ exports.disableUser = (req, res, next) => {
       }
     );
   } else {
-    res.json({ message: "Enter email" });
+    res.json({ message: "User is already inactive" });
   }
 };
 
-//admin update isActive to true
-exports.activateUser = (req, res, next) => {};
+//admin update isActive to true => /user/activateUser
+exports.activateUser = (req, res, next) => {
+  const isActive = true;
+
+  if (isActive) {
+    database.query(
+      "UPDATE accounts SET isActive = ? WHERE username = ?",
+      [isActive],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          if (results) {
+            res.status(200).json({ message: "isActive updated by admin" });
+          } else {
+            res.json({ message: "Username not found" });
+          }
+        }
+      }
+    );
+  } else {
+    res.json({ message: "User is already active" });
+  }
+};
