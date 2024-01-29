@@ -34,7 +34,9 @@ exports.loginUser = async (req, res, next) => {
       async function (error, results) {
         if (error) {
           console.log(error);
-        } else if (results.length > 0) {
+        } else if (results.length === 0) {
+          res.status(401).json({ message: "Invalid username/password" });
+        } else {
           const match = await bcrypt.compare(password, results[0].password);
           const active = results[0].isActive === 1;
           if (match && active) {
@@ -43,13 +45,14 @@ exports.loginUser = async (req, res, next) => {
             });
             res.status(200).json({ message: "Login successful", token });
           } else {
-            res.send(false);
+            res.status(401).json({ message: "Invalid username/password" });
           }
         }
       }
     );
   } else {
-    res.send(false);
+    res.send("Please enter Username and Password!");
+    res.end();
   }
 };
 
@@ -75,7 +78,7 @@ exports.createUser = async (req, res, next) => {
       }
     );
   } else {
-    res.send(false);
+    res.send("Please enter Username, password and email!");
   }
 };
 
@@ -100,8 +103,7 @@ exports.viewProfile = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    res.send(false);
-    return;
+    return res.status(401).json({ message: "Unauthorized" });
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
@@ -117,7 +119,7 @@ exports.viewProfile = (req, res, next) => {
         if (results[0]) {
           res.status(200).json({ message: "View profile success" });
         } else {
-          res.send(false);
+          res.json({ message: "Account not active" });
         }
       }
     );
@@ -136,8 +138,7 @@ exports.updateEmail = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    res.send(false);
-    return;
+    return res.status(401).json({ message: "Unauthorized" });
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
@@ -154,12 +155,14 @@ exports.updateEmail = (req, res, next) => {
           } else {
             if (results) {
               res.status(200).json({ message: "Email updated" });
+            } else {
+              res.json({ message: "Username not found" });
             }
           }
         }
       );
     } else {
-      res.send(false);
+      res.json({ message: "Enter email!" });
     }
   } catch (err) {
     console.log(err);
@@ -176,8 +179,7 @@ exports.updatePassword = async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    res.send(false);
-    return;
+    return res.status(401).json({ message: "Unauthorized" });
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
@@ -195,12 +197,14 @@ exports.updatePassword = async (req, res, next) => {
           } else {
             if (results) {
               res.status(200).json({ message: "Password updated" });
+            } else {
+              res.json({ message: "Username not found" });
             }
           }
         }
       );
     } else {
-      res.send(false);
+      res.json({ message: "Enter password!" });
     }
   } catch (err) {
     console.log(err);
@@ -222,12 +226,14 @@ exports.updatePasswordAdmin = async (req, res, next) => {
         } else {
           if (results) {
             res.status(200).json({ message: "Password updated by admin" });
+          } else {
+            res.json({ message: "Username not found" });
           }
         }
       }
     );
   } else {
-    res.send(false);
+    res.json({ message: "Enter email" });
   }
 };
 
@@ -245,12 +251,14 @@ exports.updateEmailAdmin = (req, res, next) => {
         } else {
           if (results) {
             res.status(200).json({ message: "Email updated by admin" });
+          } else {
+            res.json({ message: "Username not found" });
           }
         }
       }
     );
   } else {
-    res.send(false);
+    res.json({ message: "Enter email" });
   }
 };
 
@@ -268,12 +276,14 @@ exports.disableUser = (req, res, next) => {
         } else {
           if (results) {
             res.status(200).json({ message: "isActive updated by admin" });
+          } else {
+            res.json({ message: "Username not found" });
           }
         }
       }
     );
   } else {
-    res.send(false);
+    res.json({ message: "User is already inactive" });
   }
 };
 
@@ -291,11 +301,13 @@ exports.activateUser = (req, res, next) => {
         } else {
           if (results) {
             res.status(200).json({ message: "isActive updated by admin" });
+          } else {
+            res.json({ message: "Username not found" });
           }
         }
       }
     );
   } else {
-    res.send(false);
+    res.json({ message: "User is already active" });
   }
 };

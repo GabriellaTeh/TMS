@@ -12,16 +12,14 @@ function Login(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await Axios.post("/user/login", {
+      const response = await Axios.post("/", {
         username,
         password,
       });
       if (response.data) {
-        console.log(response.data);
         setLoggedIn(true);
         navigate("/home");
       } else {
-        //TODO: flash message
       }
     } catch (err) {
       console.log("there was a error");
