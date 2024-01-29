@@ -11,12 +11,12 @@ exports.addUserToGroup = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).send(false);
   }
   try {
     const username = req.body.username;
     const group_name = req.body.group_name;
-
+    //TODO: validation for group
     database.query(
       "INSERT INTO tms.groups (group_name, username) VALUES (?, ?)",
       [group_name, username],
@@ -43,7 +43,7 @@ exports.removeUserFromGroup = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).send(false);
   }
   try {
     const username = req.body.username;
@@ -75,7 +75,7 @@ exports.getUserGroups = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).send(false);
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
