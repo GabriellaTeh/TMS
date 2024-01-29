@@ -10,8 +10,15 @@ function HeaderLoggedIn() {
     appDispatch({ type: "logout" });
     navigate("/");
   }
+  function handleEditProfile() {
+    navigate("/profile");
+  }
+
   return (
     <div className="flex-row my-3 my-md-0">
+      <button onClick={handleEditProfile} className="btn btn-sm btn-secondary">
+        Edit Profile
+      </button>{" "}
       <button onClick={handleLogout} className="btn btn-sm btn-secondary">
         Sign Out
       </button>

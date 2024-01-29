@@ -10,6 +10,7 @@ import Homepage from "./components/Homepage";
 import Header from "./components/Header";
 import DispatchContext from "./DispatchContext";
 import StateContext from "./StateContext";
+import EditProfile from "./components/EditProfile";
 
 function Main() {
   const initialState = {
@@ -47,6 +48,7 @@ function Main() {
             <Routes>
               <Route path="/" element={<Login />}></Route>
               <Route path="/home" element={<Homepage />}></Route>
+              <Route path="/profile" element={<EditProfile />}></Route>
             </Routes>
           </BrowserRouter>
         </DispatchContext.Provider>
