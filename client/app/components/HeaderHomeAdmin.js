@@ -6,7 +6,10 @@ function HeaderHomeAdmin() {
   const appDispatch = useContext(DispatchContext);
   const navigate = useNavigate();
 
-  function handleUserManagement() {}
+  function handleUserManagement() {
+    appDispatch({ type: "edit" });
+    navigate("/manage");
+  }
 
   function handleLogout() {
     appDispatch({ type: "logout" });
