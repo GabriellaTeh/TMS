@@ -89,8 +89,16 @@ exports.createUser = async (req, res, next) => {
   const email = req.body.email;
 
   if (username && password && email) {
-    //TODO: password, username, email validation
-
+    const regex = "^(?=.*d)(?=.*[#$@!%&*?])[A-Za-zd#$@!%&*?]";
+    //TODO: username validation
+    if (!validator.isEmail(email)) {
+      return res.send("Invalid");
+    }
+    if (password.length < 8 || password.length > 10) {
+      return res.send("Length");
+    } else if (!password.match(regex)) {
+      return res.send("Character");
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     database.query(
       "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)",
