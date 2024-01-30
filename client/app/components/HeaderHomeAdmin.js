@@ -23,7 +23,7 @@ function HeaderHomeAdmin() {
         onClick={handleUserManagement}
         className="btn btn-sm btn-secondary"
       >
-        User Management
+        Manage Users
       </button>{" "}
       <button onClick={handleEditProfile} className="btn btn-sm btn-secondary">
         Edit Profile

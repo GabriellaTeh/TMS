@@ -16,6 +16,7 @@ import StateContext from "./StateContext";
 import EditProfile from "./components/EditProfile";
 import SuccessFlashMessage from "./components/SuccessFlashMessage";
 import ErrorFlashMessage from "./components/ErrorFlashMessage";
+import UserManagement from "./components/UserManagement";
 
 function Main() {
   const initialState = {
@@ -76,6 +77,7 @@ function Main() {
               <Route path="/" element={<Login />}></Route>
               <Route path="/home" element={<Homepage />}></Route>
               <Route path="/profile" element={<EditProfile />}></Route>
+              <Route path="/manage" element={<UserManagement />}></Route>
             </Routes>
           </BrowserRouter>
         </DispatchContext.Provider>
