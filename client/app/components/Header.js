@@ -3,6 +3,7 @@ import StateContext from "../StateContext";
 import { Link } from "react-router-dom";
 import HeaderHomeUser from "./HeaderHomeUser";
 import HeaderOthers from "./HeaderOthers";
+import HeaderHomeAdmin from "./HeaderHomeAdmin";
 
 function Header() {
   const appState = useContext(StateContext);
@@ -20,6 +21,8 @@ function Header() {
             ""
           ) : appState.edit ? (
             <HeaderOthers />
+          ) : appState.admin ? (
+            <HeaderHomeAdmin />
           ) : (
             <HeaderHomeUser />
           )}
