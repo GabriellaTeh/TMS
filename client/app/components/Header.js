@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import StateContext from "../StateContext";
-import { Link } from "react-router-dom";
 import HeaderHomeUser from "./HeaderHomeUser";
 import HeaderOthers from "./HeaderOthers";
 import HeaderHomeAdmin from "./HeaderHomeAdmin";

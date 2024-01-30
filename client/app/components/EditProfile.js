@@ -17,8 +17,7 @@ function EditProfile() {
         setUsername(response.data.username);
         setUserEmail(response.data.email);
       } else {
-        //TODO: get different response for expired token & normal error
-        //dispatch error msg/log out
+        //TODO: dispatch msg for expired token
       }
     } catch (err) {
       console.log(err);
@@ -32,10 +31,11 @@ function EditProfile() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (email) {
-      //TODO: Validate email
       try {
         const response = await Axios.put("/user/updateEmail", { email });
-        if (response.data) {
+        if (response.data === "Invalid") {
+          appDispatch({ type: "errorFlashMessage", value: "Invalid Email" });
+        } else if (response.data) {
           setEmail("");
           getUserDetails();
           appDispatch({ type: "successFlashMessage", value: "Updated" });
@@ -51,10 +51,22 @@ function EditProfile() {
     if (password) {
       try {
         const res = await Axios.put("/user/updatePassword", { password });
-        if (!res.data) {
-          appDispatch({ type: "errorFlashMessage", value: "Error" });
-        } else {
+        if (res.data === "Character") {
+          appDispatch({
+            type: "errorFlashMessage",
+            value:
+              "Password must contain alphabet, number and special character",
+          });
+        } else if (res.data === "Length") {
+          appDispatch({
+            type: "errorFlashMessage",
+            value:
+              "Password must be minimum 8 characters and maximum 10 characters",
+          });
+        } else if (res.data) {
           appDispatch({ type: "successFlashMessage", value: "Updated" });
+        } else {
+          appDispatch({ type: "errorFlashMessage", value: "Error" });
         }
         setPassword("");
       } catch (err) {

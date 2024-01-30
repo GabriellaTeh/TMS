@@ -1,6 +1,7 @@
 const database = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const validator = require("validator");
 
 //create default admin => /createAdmin
 exports.createAdmin = async (req, res, next) => {
@@ -177,6 +178,9 @@ exports.updateEmail = (req, res, next) => {
     const email = req.body.email;
 
     if (email) {
+      if (!validator.isEmail(email)) {
+        return res.send("Invalid");
+      }
       database.query(
         "UPDATE accounts SET email = ? WHERE username = ?",
         [email, username],
@@ -219,6 +223,12 @@ exports.updatePassword = async (req, res, next) => {
     const password = req.body.password;
 
     if (password) {
+      const regex = "^(?=.*d)(?=.*[#$@!%&*?])[A-Za-zd#$@!%&*?]";
+      if (password.length < 8 || password.length > 10) {
+        return res.send("Length");
+      } else if (!password.match(regex)) {
+        return res.send("Character");
+      }
       const hashedPassword = await bcrypt.hash(password, 10);
       database.query(
         "UPDATE accounts SET password = ? WHERE username = ?",
@@ -249,8 +259,13 @@ exports.updatePassword = async (req, res, next) => {
 //admin update password => /user/updatePasswordAdmin
 exports.updatePasswordAdmin = async (req, res, next) => {
   const password = req.body.password;
-
   if (password) {
+    const regex = "^(?=.*d)(?=.*[#$@!%&*?])[A-Za-zd#$@!%&*?]";
+    if (password.length < 8 || password.length > 10) {
+      return res.send("Length");
+    } else if (!password.match(regex)) {
+      return res.send("Character");
+    }
     const hashedPassword = await bcrypt(password, 10);
     database.query(
       "UPDATE accounts SET password = ? WHERE username = ?",
@@ -279,6 +294,9 @@ exports.updateEmailAdmin = (req, res, next) => {
   const email = req.body.email;
 
   if (email) {
+    if (!validator.isEmail(email)) {
+      return res.send("Invalid");
+    }
     database.query(
       "UPDATE accounts SET email = ? WHERE username = ?",
       [email],
