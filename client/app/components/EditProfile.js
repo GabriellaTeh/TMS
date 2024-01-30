@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
+import { Helmet } from "react-helmet";
 
 function EditProfile() {
   const appDispatch = useContext(DispatchContext);
@@ -66,6 +67,9 @@ function EditProfile() {
   return (
     <>
       <div className="container py-md-5">
+        <Helmet>
+          <title>My Profile</title>
+        </Helmet>
         <div className="row align-items-center">
           <div className="col-lg-7 py-3 py-md-5">
             <h1 className="display-3">My details</h1>

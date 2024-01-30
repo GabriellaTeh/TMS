@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import DispatchContext from "../DispatchContext";
 
 function Login(props) {
@@ -33,6 +34,9 @@ function Login(props) {
   }
   return (
     <div className="container py-md-5">
+      <Helmet>
+        <title>TMS Login</title>
+      </Helmet>
       <div className="pls-center">
         <div
           className="pls-center row align-items-center"
