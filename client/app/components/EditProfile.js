@@ -39,7 +39,7 @@ function EditProfile() {
           getUserDetails();
           appDispatch({ type: "successFlashMessage", value: "Updated" });
         } else {
-          //flash message
+          appDispatch({ type: "errorFlashMessage", value: "Error" });
           setEmail("");
         }
       } catch (err) {
@@ -51,7 +51,9 @@ function EditProfile() {
       try {
         const res = await Axios.put("/user/updatePassword", { password });
         if (!res.data) {
-          //flash message
+          appDispatch({ type: "errorFlashMessage", value: "Error" });
+        } else {
+          appDispatch({ type: "successFlashMessage", value: "Updated" });
         }
         setPassword("");
       } catch (err) {
