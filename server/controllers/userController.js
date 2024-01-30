@@ -43,7 +43,7 @@ exports.loginUser = async (req, res, next) => {
             const token = jwt.sign({ username: username }, "my_secret_key", {
               expiresIn: "3d",
             });
-            res.status(200).json({ token: token });
+            res.status(200).json({ token: token, username: username });
           } else {
             res.send(false);
           }
@@ -109,15 +109,20 @@ exports.viewProfile = (req, res, next) => {
     const decoded = jwt.verify(token, "my_secret_key");
     const username = decoded.username;
     database.query(
-      "SELECT isActive FROM accounts WHERE username = ?",
+      "SELECT * FROM accounts WHERE username = ?",
       [username],
       function (err, results) {
         if (err) {
           console.log(err);
           return;
         }
-        if (results[0]) {
-          res.status(200).json({ message: "View profile success" });
+        if (results) {
+          res.status(200).json({
+            token: token,
+            username: username,
+            email: results[0].email,
+            message: "View profile success",
+          });
         } else {
           res.send(false);
         }
@@ -155,7 +160,7 @@ exports.updateEmail = (req, res, next) => {
             console.log(err);
           } else {
             if (results) {
-              res.status(200).json({ message: "Email updated" });
+              res.status(200).json({ token: token, message: "Email updated" });
             } else {
               res.send(false);
             }
@@ -198,7 +203,9 @@ exports.updatePassword = async (req, res, next) => {
             console.log(err);
           } else {
             if (results) {
-              res.status(200).json({ message: "Password updated" });
+              res
+                .status(200)
+                .json({ token: token, message: "Password updated" });
             } else {
               res.send(false);
             }
@@ -228,7 +235,9 @@ exports.updatePasswordAdmin = async (req, res, next) => {
           console.log(err);
         } else {
           if (results) {
-            res.status(200).json({ message: "Password updated by admin" });
+            res
+              .status(200)
+              .json({ token: token, message: "Password updated by admin" });
           } else {
             res.send(false);
           }
@@ -253,7 +262,9 @@ exports.updateEmailAdmin = (req, res, next) => {
           console.log(err);
         } else {
           if (results) {
-            res.status(200).json({ message: "Email updated by admin" });
+            res
+              .status(200)
+              .json({ token: token, message: "Email updated by admin" });
           } else {
             res.send(false);
           }
@@ -278,7 +289,9 @@ exports.disableUser = (req, res, next) => {
           console.log(err);
         } else {
           if (results) {
-            res.status(200).json({ message: "isActive updated by admin" });
+            res
+              .status(200)
+              .json({ token: token, message: "isActive updated by admin" });
           } else {
             res.send(false);
           }
@@ -303,7 +316,9 @@ exports.activateUser = (req, res, next) => {
           console.log(err);
         } else {
           if (results) {
-            res.status(200).json({ message: "isActive updated by admin" });
+            res
+              .status(200)
+              .json({ token: token, message: "isActive updated by admin" });
           } else {
             res.send(false);
           }

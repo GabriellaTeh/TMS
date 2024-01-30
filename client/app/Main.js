@@ -4,6 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useImmerReducer } from "use-immer";
 import Axios from "axios";
 Axios.defaults.baseURL = "http://localhost:8080";
+Axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+  "token"
+)}`;
 
 import Login from "./components/Login";
 import Homepage from "./components/Homepage";
@@ -22,6 +25,10 @@ function Main() {
     switch (action.type) {
       case "login":
         draft.loggedIn = true;
+        draft.token = action.data.token;
+        Axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${action.data.token}`;
         return;
       case "logout":
         draft.loggedIn = false;
@@ -36,8 +43,9 @@ function Main() {
       localStorage.setItem("token", state.token);
     } else {
       localStorage.removeItem("token");
+      Axios.defaults.headers.common["Authorization"] = null;
     }
-  }, [state.loggedIn]);
+  }, [state.loggedIn, state.token]);
 
   return (
     <>

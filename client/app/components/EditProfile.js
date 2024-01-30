@@ -1,41 +1,106 @@
-import React, { useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import DispatchContext from "../DispatchContext";
+import Axios from "axios";
 
 function EditProfile() {
+  const appDispatch = useContext(DispatchContext);
+  const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
+  const [username, setUsername] = useState();
+  const [userEmail, setUserEmail] = useState();
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
+
+  async function getUserDetails() {
+    try {
+      const response = await Axios.get("/user/profile", { headers });
+      if (response.data) {
+        setUsername(response.data.username);
+        setUserEmail(response.data.email);
+      } else {
+        //TODO: get different response for expired token & normal error
+        //dispatch error msg/log out
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (email) {
+      //check if is email
+      try {
+        const response = await Axios.put("/user/updateEmail", { headers });
+        if (response.data) {
+          setEmail("");
+          getUserDetails();
+        } else {
+          //flash message
+          setEmail("");
+        }
+      } catch (err) {
+        console.log(err);
+        setEmail("");
+      }
+    }
+    if (password) {
+      try {
+        const res = await Axios.put("/user/updatePassword", { headers });
+        if (!res.data) {
+          //flash message
+        }
+        setPassword("");
+      } catch (err) {
+        console.log(err);
+        setPassword("");
+      }
+    }
+  }
   return (
     <>
-      <div class="container py-md-5">
-        <div class="row align-items-center">
-          <div class="col-lg-5 pl-lg-5 pb-3 py-lg-5">
-            <h2>My Details</h2>
+      <div className="container py-md-5">
+        <div className="row align-items-center">
+          <div className="col-lg-7 py-3 py-md-5">
+            <h1 className="display-3">My details</h1>
+            <p className="lead text-muted">Username: {username}</p>
+            <p className="lead text-muted">Email: {userEmail}</p>
           </div>
-          <div class="col-lg-5 pl-lg-5 pb-3 py-lg-5">
-            <h2>Update Details</h2>
-            <form>
-              <div class="form-group">
-                <label for="username-register" class="text-muted mb-1">
-                  <small>New email</small>
+          <div className="col-lg-5 pl-lg-5 pb-3 py-lg-5">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label className="text-muted mb-1">
+                  <small>New Email</small>
                 </label>
                 <input
-                  class="form-control"
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="form-control"
                   type="text"
                   placeholder="New email"
-                  autocomplete="off"
+                  autoComplete="off"
                 />
               </div>
-              <div class="form-group">
-                <label for="email-register" class="text-muted mb-1">
+              <div className="form-group">
+                <label className="text-muted mb-1">
                   <small>New Password</small>
                 </label>
                 <input
-                  class="form-control"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="form-control"
                   type="password"
                   placeholder="New password"
-                  autocomplete="off"
                 />
               </div>
               <button
                 type="submit"
-                class="py-3 mt-4 btn btn-lg btn-success btn-block"
+                className="py-3 mt-4 btn btn-lg btn-success btn-block"
               >
                 Update
               </button>

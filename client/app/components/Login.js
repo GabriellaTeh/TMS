@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import ReactDOM from "react-dom/client";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DispatchContext from "../DispatchContext";
