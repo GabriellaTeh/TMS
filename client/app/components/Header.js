@@ -21,7 +21,7 @@ function Header() {
             ""
           ) : appState.edit ? (
             <HeaderOthers />
-          ) : appState.admin ? (
+          ) : appState.isAdmin ? (
             <HeaderHomeAdmin />
           ) : (
             <HeaderHomeUser />

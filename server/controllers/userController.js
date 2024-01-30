@@ -23,6 +23,26 @@ exports.createAdmin = async (req, res, next) => {
   );
 };
 
+//returns true/false
+async function checkGroup(username, group_name) {
+  return new Promise((resolve, reject) => {
+    database.query(
+      "SELECT * FROM tms.groups WHERE username = ? AND group_name = ?",
+      [username, group_name],
+      function (err, results) {
+        if (err) {
+          resolve(false);
+        }
+        if (results.length === 1) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      }
+    );
+  });
+}
+
 // login user => /user/login
 exports.loginUser = async (req, res, next) => {
   const username = req.body.username;
@@ -43,7 +63,12 @@ exports.loginUser = async (req, res, next) => {
             const token = jwt.sign({ username: username }, "my_secret_key", {
               expiresIn: "3d",
             });
-            res.status(200).json({ token: token, username: username });
+            const isAdmin = await checkGroup(username, "admin");
+            res.status(200).json({
+              token: token,
+              username: username,
+              admin: isAdmin,
+            });
           } else {
             res.send(false);
           }
