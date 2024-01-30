@@ -14,11 +14,15 @@ import Header from "./components/Header";
 import DispatchContext from "./DispatchContext";
 import StateContext from "./StateContext";
 import EditProfile from "./components/EditProfile";
+import SuccessFlashMessage from "./components/SuccessFlashMessage";
+import ErrorFlashMessage from "./components/ErrorFlashMessage";
 
 function Main() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("token")),
     token: localStorage.getItem("token"),
+    successFlashMessages: [],
+    errorFlashMessages: [],
   };
 
   function ourReducer(draft, action) {
@@ -32,6 +36,12 @@ function Main() {
         return;
       case "logout":
         draft.loggedIn = false;
+        return;
+      case "successFlashMessage":
+        draft.successFlashMessages.push(action.value);
+        return;
+      case "errorFlashMessage":
+        draft.errorFlashMessages.push(action.value);
         return;
     }
   }
@@ -52,6 +62,8 @@ function Main() {
       <StateContext.Provider value={state}>
         <DispatchContext.Provider value={dispatch}>
           <BrowserRouter>
+            <SuccessFlashMessage messages={state.successFlashMessages} />
+            <ErrorFlashMessage messages={state.errorFlashMessages} />
             <Header />
             <Routes>
               <Route path="/" element={<Login />}></Route>

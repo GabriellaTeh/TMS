@@ -37,6 +37,7 @@ function EditProfile() {
         if (response.data) {
           setEmail("");
           getUserDetails();
+          appDispatch({ type: "successFlashMessage", value: "Updated" });
         } else {
           //flash message
           setEmail("");

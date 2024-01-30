@@ -15,12 +15,20 @@ function Login(props) {
       const response = await Axios.post("/user/login", { username, password });
       if (response.data) {
         appDispatch({ type: "login", data: response.data });
+        appDispatch({ type: "successFlashMessage", value: "Welcome" });
         navigate("/home");
       } else {
-        //TODO: flash incorrect username/password
+        appDispatch({
+          type: "errorFlashMessage",
+          value: "Incorrect username/password",
+        });
       }
     } catch (err) {
       console.log("there was a error");
+      appDispatch({
+        type: "errorFlashMessage",
+        value: "Incorrect username/password",
+      });
     }
   }
   return (
