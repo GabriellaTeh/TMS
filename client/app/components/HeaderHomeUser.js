@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DispatchContext from "../DispatchContext";
 
-function HeaderLoggedIn() {
+function HeaderHomeUser() {
   const appDispatch = useContext(DispatchContext);
   const navigate = useNavigate();
 
@@ -11,6 +11,7 @@ function HeaderLoggedIn() {
     navigate("/");
   }
   function handleEditProfile() {
+    appDispatch({ type: "edit" });
     navigate("/profile");
   }
 
@@ -26,4 +27,4 @@ function HeaderLoggedIn() {
   );
 }
 
-export default HeaderLoggedIn;
+export default HeaderHomeUser;

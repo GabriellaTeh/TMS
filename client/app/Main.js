@@ -21,6 +21,7 @@ function Main() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("token")),
     token: localStorage.getItem("token"),
+    edit: false,
     successFlashMessages: [],
     errorFlashMessages: [],
   };
@@ -36,6 +37,12 @@ function Main() {
         return;
       case "logout":
         draft.loggedIn = false;
+        return;
+      case "edit":
+        draft.edit = true;
+        return;
+      case "home":
+        draft.edit = false;
         return;
       case "successFlashMessage":
         draft.successFlashMessages.push(action.value);
