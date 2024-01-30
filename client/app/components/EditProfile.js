@@ -9,14 +9,9 @@ function EditProfile() {
   const [username, setUsername] = useState();
   const [userEmail, setUserEmail] = useState();
 
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-  };
-
   async function getUserDetails() {
     try {
-      const response = await Axios.get("/user/profile", { headers });
+      const response = await Axios.get("/user/profile");
       if (response.data) {
         setUsername(response.data.username);
         setUserEmail(response.data.email);
@@ -36,9 +31,9 @@ function EditProfile() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (email) {
-      //check if is email
+      //TODO: Validate email
       try {
-        const response = await Axios.put("/user/updateEmail", { headers });
+        const response = await Axios.put("/user/updateEmail", { email });
         if (response.data) {
           setEmail("");
           getUserDetails();
@@ -53,7 +48,7 @@ function EditProfile() {
     }
     if (password) {
       try {
-        const res = await Axios.put("/user/updatePassword", { headers });
+        const res = await Axios.put("/user/updatePassword", { password });
         if (!res.data) {
           //flash message
         }
@@ -63,6 +58,7 @@ function EditProfile() {
         setPassword("");
       }
     }
+    e.target.reset();
   }
   return (
     <>
