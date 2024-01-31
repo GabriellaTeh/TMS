@@ -39,8 +39,8 @@ function EditProfile() {
         appDispatch({ type: "successFlashMessage", value: "Updated" });
       } else {
         appDispatch({ type: "errorFlashMessage", value: "Error" });
-        setEmail("");
       }
+      setEmail("");
     } catch (err) {
       console.log(err);
       setEmail("");
@@ -88,7 +88,6 @@ function EditProfile() {
         value: "Key in new email/password to update!",
       });
     }
-    //TODO: check for errors, if no error then reset
     e.target.reset();
   }
   return (
