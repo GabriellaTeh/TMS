@@ -112,6 +112,25 @@ function validateUsername(res, username) {
   }
 }
 
+async function findUser(username) {
+  return new Promise((resolve, reject) => {
+    database.query(
+      "SELECT * FROM accounts WHERE username = ?",
+      [username],
+      function (err, results) {
+        if (err) {
+          resolve(false);
+        }
+        if (results.length === 0) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      }
+    );
+  });
+}
+
 //admin creates new user => /user/createUser
 exports.createUser = async (req, res, next) => {
   const username = req.body.username;
@@ -130,17 +149,22 @@ exports.createUser = async (req, res, next) => {
     }
     const usernameLower = username.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
-    database.query(
-      "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)",
-      [usernameLower, hashedPassword, email],
-      function (error, results) {
-        if (error) {
-          console.log(error);
-        } else {
-          res.json({ message: "Create user successful" });
+    const userExists = await findUser(usernameLower);
+    if (!userExists) {
+      database.query(
+        "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)",
+        [usernameLower, hashedPassword, email],
+        function (error, results) {
+          if (error) {
+            console.log(error);
+          } else {
+            res.json({ message: "Create user successful" });
+          }
         }
-      }
-    );
+      );
+    } else {
+      res.json({ message: "User exists" });
+    }
   } else {
     res.send(false);
   }
