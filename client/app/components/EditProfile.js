@@ -1,10 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import DispatchContext from "../DispatchContext";
+import StateContext from "../StateContext";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { Helmet } from "react-helmet";
 
 function EditProfile() {
+  const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
+  const navigate = useNavigate();
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
   const [username, setUsername] = useState();
@@ -23,6 +27,14 @@ function EditProfile() {
       console.log(err);
     }
   }
+
+  useEffect(() => {
+    if (!appState.loggedIn) {
+      appDispatch({ type: "logout" });
+      appDispatch({ type: "errorFlashMessage", value: "Please log in" });
+      navigate("/");
+    }
+  }, []);
 
   useEffect(() => {
     getUserDetails();
