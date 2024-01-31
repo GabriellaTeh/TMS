@@ -17,12 +17,11 @@ exports.isAuthenticatedUser = (req, res, next) => {
       const userId = decoded.id;
 
       database.query(
-        "SELECT isActive FROM accounts WHERE id = ?",
+        "SELECT * FROM accounts WHERE id = ?",
         [userId],
         function (err, results) {
           if (err) {
-            console.log(err);
-          } else if (results[0].isActive == 1) {
+          } else if (results[0].isActive === 1) {
             //valid token and active user
             next();
           } else {
