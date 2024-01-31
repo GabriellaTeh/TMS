@@ -9,9 +9,9 @@ function UserManagement() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const navigate = useNavigate();
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const [email, setEmail] = useState();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   async function handleCreateUser(e) {
     e.preventDefault();
@@ -57,6 +57,7 @@ function UserManagement() {
           });
         } else if (response.data) {
           appDispatch({ type: "successFlashMessage", value: "User created" });
+          e.target.reset();
         } else {
           appDispatch({ type: "errorFlashMessage", value: "Error" });
         }
