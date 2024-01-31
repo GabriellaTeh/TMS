@@ -11,7 +11,6 @@ function HeaderHomeUser() {
     navigate("/");
   }
   function handleEditProfile() {
-    appDispatch({ type: "edit" });
     navigate("/profile");
   }
 

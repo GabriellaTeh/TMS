@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import StateContext from "../StateContext";
 import HeaderHomeUser from "./HeaderHomeUser";
 import HeaderOthers from "./HeaderOthers";
@@ -6,6 +7,8 @@ import HeaderHomeAdmin from "./HeaderHomeAdmin";
 
 function Header() {
   const appState = useContext(StateContext);
+  const location = useLocation();
+  const path = location.pathname;
 
   return (
     <>
@@ -18,12 +21,10 @@ function Header() {
           </h4>
           {!appState.loggedIn ? (
             ""
-          ) : appState.edit ? (
-            <HeaderOthers />
-          ) : appState.isAdmin ? (
-            <HeaderHomeAdmin />
-          ) : (
+          ) : path === "/home" ? (
             <HeaderHomeUser />
+          ) : (
+            <HeaderOthers />
           )}
         </div>
       </header>

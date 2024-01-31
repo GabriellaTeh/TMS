@@ -14,11 +14,11 @@ exports.isAuthenticatedUser = (req, res, next) => {
   } else {
     try {
       const decoded = jwt.verify(token, "my_secret_key");
-      const username = decoded.username;
+      const userId = decoded.id;
 
       database.query(
-        "SELECT isActive FROM accounts WHERE username = ?",
-        [username],
+        "SELECT isActive FROM accounts WHERE id = ?",
+        [userId],
         function (err, results) {
           if (err) {
             console.log(err);
@@ -50,11 +50,11 @@ exports.authorizedAdmin = async (req, res, next) => {
   } else {
     try {
       const decoded = jwt.verify(token, "my_secret_key");
-      const username = decoded.username;
+      const id = decoded.id;
       const group_name = "admin";
       database.query(
-        "SELECT group_name FROM tms.groups WHERE username = ? AND group_name = ? ",
-        [username, group_name],
+        "SELECT group_name FROM tms.groups WHERE id = ? AND group_name = ? ",
+        [id, group_name],
         function (err, results) {
           if (err) {
             console.log(err);

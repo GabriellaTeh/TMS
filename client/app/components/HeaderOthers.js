@@ -12,7 +12,6 @@ function HeaderOthers() {
   }
 
   function handleHome() {
-    appDispatch({ type: "home" });
     navigate("/home");
   }
 

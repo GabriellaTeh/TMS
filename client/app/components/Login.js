@@ -18,9 +18,6 @@ function Login(props) {
         appDispatch({ type: "login", data: response.data });
         appDispatch({ type: "successFlashMessage", value: "Welcome" });
         navigate("/home");
-        if (response.data.admin) {
-          appDispatch({ type: "admin" });
-        }
       } else {
         appDispatch({
           type: "errorFlashMessage",

@@ -38,11 +38,7 @@ exports.checkUserGroup = async (req, res, next) => {
       const userid = decoded.id;
       const group_name = req.body.group_name;
       const result = await CheckGroup(userid, group_name);
-      if (result === true) {
-        res.send(true);
-      } else {
-        res.send(false);
-      }
+      res.send(result);
     } catch (err) {
       console.log(err);
     }

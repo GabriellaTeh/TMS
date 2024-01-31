@@ -7,7 +7,6 @@ function HeaderHomeAdmin() {
   const navigate = useNavigate();
 
   function handleUserManagement() {
-    appDispatch({ type: "edit" });
     navigate("/manage");
   }
 
@@ -16,7 +15,6 @@ function HeaderHomeAdmin() {
     navigate("/");
   }
   function handleEditProfile() {
-    appDispatch({ type: "edit" });
     navigate("/profile");
   }
 

@@ -9,11 +9,12 @@ exports.createAdmin = async (req, res, next) => {
   const password = "admin123!";
   const email = "admin@gmail.com";
   const group_name = "admin";
+  const userId = 1;
 
   const hashedPassword = await bcrypt.hash(password, 10);
   database.query(
-    "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?); INSERT INTO tms.groups (group_name, username) VALUES (?, ?)",
-    [username, hashedPassword, email, group_name, username],
+    "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?); INSERT INTO tms.groups (group_name, userId) VALUES (?, ?)",
+    [username, hashedPassword, email, group_name, userId],
     function (error, results) {
       if (error) {
         console.log(error);
@@ -62,17 +63,14 @@ exports.loginUser = async (req, res, next) => {
           const active = results[0].isActive === 1;
           const userid = results[0].id;
           if (match && active) {
-            const token = jwt.sign(
-              { username: username, id: userid },
-              "my_secret_key",
-              {
-                expiresIn: "3d",
-              }
-            );
+            const token = jwt.sign({ id: userid }, "my_secret_key", {
+              expiresIn: "3d",
+            });
             const isAdmin = await CheckGroup(userid, "admin");
             res.status(200).json({
               token: token,
               username: username,
+              id: userid,
               admin: isAdmin,
             });
           } else {
@@ -198,10 +196,10 @@ exports.viewProfile = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
-    const username = decoded.username;
+    const userId = decoded.id;
     database.query(
-      "SELECT * FROM accounts WHERE username = ?",
-      [username],
+      "SELECT * FROM accounts WHERE id = ?",
+      [userId],
       function (err, results) {
         if (err) {
           console.log(err);
@@ -210,7 +208,6 @@ exports.viewProfile = (req, res, next) => {
         if (results) {
           res.status(200).json({
             token: token,
-            username: username,
             email: results[0].email,
             message: "View profile success",
           });
@@ -239,7 +236,7 @@ exports.updateEmail = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
-    const username = decoded.username;
+    const userId = decoded.id;
     const email = req.body.email;
 
     if (email) {
@@ -247,8 +244,8 @@ exports.updateEmail = (req, res, next) => {
         return;
       }
       database.query(
-        "UPDATE accounts SET email = ? WHERE username = ?",
-        [email, username],
+        "UPDATE accounts SET email = ? WHERE id = ?",
+        [email, userId],
         function (err, results) {
           if (err) {
             console.log(err);
@@ -284,7 +281,7 @@ exports.updatePassword = async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
-    const username = decoded.username;
+    const userId = decoded.id;
     const password = req.body.password;
 
     if (password) {
@@ -293,8 +290,8 @@ exports.updatePassword = async (req, res, next) => {
       }
       const hashedPassword = await bcrypt.hash(password, 10);
       database.query(
-        "UPDATE accounts SET password = ? WHERE username = ?",
-        [hashedPassword, username],
+        "UPDATE accounts SET password = ? WHERE id = ?",
+        [hashedPassword, userId],
         function (err, results) {
           if (err) {
             console.log(err);
