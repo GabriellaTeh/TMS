@@ -25,11 +25,11 @@ exports.createAdmin = async (req, res, next) => {
 };
 
 //returns true/false
-async function checkGroup(username, group_name) {
+async function CheckGroup(userid, groupname) {
   return new Promise((resolve, reject) => {
     database.query(
-      "SELECT * FROM tms.groups WHERE username = ? AND group_name = ?",
-      [username, group_name],
+      "SELECT * FROM tms.groups WHERE id = ? AND group_name = ?",
+      [userid, groupname],
       function (err, results) {
         if (err) {
           resolve(false);
@@ -60,11 +60,16 @@ exports.loginUser = async (req, res, next) => {
         } else {
           const match = await bcrypt.compare(password, results[0].password);
           const active = results[0].isActive === 1;
+          const userid = results[0].id;
           if (match && active) {
-            const token = jwt.sign({ username: username }, "my_secret_key", {
-              expiresIn: "3d",
-            });
-            const isAdmin = await checkGroup(username, "admin");
+            const token = jwt.sign(
+              { username: username, id: userid },
+              "my_secret_key",
+              {
+                expiresIn: "3d",
+              }
+            );
+            const isAdmin = await CheckGroup(userid, "admin");
             res.status(200).json({
               token: token,
               username: username,

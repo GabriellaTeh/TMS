@@ -2,11 +2,11 @@ const database = require("../config/db");
 const jwt = require("jsonwebtoken");
 
 //returns true/false
-async function checkGroup(username, group_name) {
+async function CheckGroup(userid, groupname) {
   return new Promise((resolve, reject) => {
     database.query(
-      "SELECT * FROM tms.groups WHERE username = ? AND group_name = ?",
-      [username, group_name],
+      "SELECT * FROM tms.groups WHERE id = ? AND group_name = ?",
+      [userid, groupname],
       function (err, results) {
         if (err) {
           resolve(false);
@@ -35,9 +35,9 @@ exports.checkUserGroup = async (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, "my_secret_key");
-      const username = decoded.username;
+      const userid = decoded.id;
       const group_name = req.body.group_name;
-      const result = await checkGroup(username, group_name);
+      const result = await CheckGroup(userid, group_name);
       if (result === true) {
         res.send(true);
       } else {
