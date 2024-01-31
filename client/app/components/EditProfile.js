@@ -28,52 +28,67 @@ function EditProfile() {
     getUserDetails();
   }, []);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (email) {
-      try {
-        const response = await Axios.put("/user/updateEmail", { email });
-        if (response.data === "Invalid") {
-          appDispatch({ type: "errorFlashMessage", value: "Invalid Email" });
-        } else if (response.data) {
-          setEmail("");
-          getUserDetails();
-          appDispatch({ type: "successFlashMessage", value: "Updated" });
-        } else {
-          appDispatch({ type: "errorFlashMessage", value: "Error" });
-          setEmail("");
-        }
-      } catch (err) {
-        console.log(err);
+  async function updateEmail(email) {
+    try {
+      const response = await Axios.put("/user/updateEmail", { email });
+      if (response.data === "Invalid Email") {
+        appDispatch({ type: "errorFlashMessage", value: "Invalid Email" });
+      } else if (response.data) {
+        setEmail("");
+        getUserDetails();
+        appDispatch({ type: "successFlashMessage", value: "Updated" });
+      } else {
+        appDispatch({ type: "errorFlashMessage", value: "Error" });
         setEmail("");
       }
+    } catch (err) {
+      console.log(err);
+      setEmail("");
     }
-    if (password) {
-      try {
-        const res = await Axios.put("/user/updatePassword", { password });
-        if (res.data === "Character") {
-          appDispatch({
-            type: "errorFlashMessage",
-            value:
-              "Password must contain alphabet, number and special character",
-          });
-        } else if (res.data === "Length") {
-          appDispatch({
-            type: "errorFlashMessage",
-            value:
-              "Password must be minimum 8 characters and maximum 10 characters",
-          });
-        } else if (res.data) {
-          appDispatch({ type: "successFlashMessage", value: "Updated" });
-        } else {
-          appDispatch({ type: "errorFlashMessage", value: "Error" });
-        }
-        setPassword("");
-      } catch (err) {
-        console.log(err);
-        setPassword("");
+  }
+
+  async function updatePassword(password) {
+    try {
+      const res = await Axios.put("/user/updatePassword", { password });
+      if (res.data === "Password Character") {
+        appDispatch({
+          type: "errorFlashMessage",
+          value: "Password must contain alphabet, number and special character",
+        });
+      } else if (res.data === "Password Length") {
+        appDispatch({
+          type: "errorFlashMessage",
+          value:
+            "Password must be minimum 8 characters and maximum 10 characters",
+        });
+      } else if (res.data) {
+        appDispatch({ type: "successFlashMessage", value: "Updated" });
+      } else {
+        appDispatch({ type: "errorFlashMessage", value: "Error" });
       }
+      setPassword("");
+    } catch (err) {
+      console.log(err);
+      setPassword("");
     }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (email && password) {
+      updateEmail(email);
+      updatePassword(password);
+    } else if (email) {
+      updateEmail(email);
+    } else if (password) {
+      updatePassword(password);
+    } else {
+      appDispatch({
+        type: "errorFlashMessage",
+        value: "Key in new email/password to update!",
+      });
+    }
+    //TODO: check for errors, if no error then reset
     e.target.reset();
   }
   return (

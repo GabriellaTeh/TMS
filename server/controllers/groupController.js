@@ -29,9 +29,9 @@ exports.checkUserGroup = async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(" ")[1];
   }
-  // if (!token) {
-  //   return res.send(false);
-  // }
+  if (!token) {
+    return res.send(false);
+  }
   if (token) {
     try {
       const decoded = jwt.verify(token, "my_secret_key");

@@ -6,7 +6,7 @@ const validator = require("validator");
 //create default admin => /createAdmin
 exports.createAdmin = async (req, res, next) => {
   const username = "admin";
-  const password = "admin"; //TODO: change to match password validation
+  const password = "admin123!";
   const email = "admin@gmail.com";
   const group_name = "admin";
 
@@ -46,7 +46,7 @@ async function checkGroup(username, group_name) {
 
 // login user => /user/login
 exports.loginUser = async (req, res, next) => {
-  const username = req.body.username;
+  const username = req.body.username.toLowerCase();
   const password = req.body.password;
   if (username && password) {
     database.query(
@@ -82,6 +82,31 @@ exports.loginUser = async (req, res, next) => {
   }
 };
 
+function validatePassword(res, password) {
+  const regex = "^(?=.*[0-9])(?=.*[!@#$%^?/&*])[a-zA-Z0-9!@#$%^?/&*]";
+  if (password.length < 8 || password.length > 10) {
+    return res.send("Password Length");
+  }
+  if (!password.match(regex)) {
+    return res.send("Password Character");
+  }
+}
+function validateEmail(res, email) {
+  if (!validator.isEmail(email)) {
+    return res.send("Invalid Email");
+  }
+}
+
+function validateUsername(res, username) {
+  const regex = "^[a-zA-Z0-9]+$";
+  if (username.length < 3 || username.length > 20) {
+    return res.send("Username Length");
+  }
+  if (!username.match(regex)) {
+    return res.send("Username Character");
+  }
+}
+
 //admin creates new user => /user/createUser
 exports.createUser = async (req, res, next) => {
   const username = req.body.username;
@@ -89,20 +114,20 @@ exports.createUser = async (req, res, next) => {
   const email = req.body.email;
 
   if (username && password && email) {
-    const regex = "^(?=.*d)(?=.*[#$@!%&*?])[A-Za-zd#$@!%&*?]";
-    //TODO: username validation
-    if (!validator.isEmail(email)) {
-      return res.send("Invalid");
+    if (validateUsername(res, username)) {
+      return;
     }
-    if (password.length < 8 || password.length > 10) {
-      return res.send("Length");
-    } else if (!password.match(regex)) {
-      return res.send("Character");
+    if (validateEmail(res, email)) {
+      return;
     }
+    if (validatePassword(res, password)) {
+      return;
+    }
+    const usernameLower = username.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
     database.query(
       "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)",
-      [username, hashedPassword, email],
+      [usernameLower, hashedPassword, email],
       function (error, results) {
         if (error) {
           console.log(error);
@@ -186,8 +211,8 @@ exports.updateEmail = (req, res, next) => {
     const email = req.body.email;
 
     if (email) {
-      if (!validator.isEmail(email)) {
-        return res.send("Invalid");
+      if (validateEmail(res, email)) {
+        return;
       }
       database.query(
         "UPDATE accounts SET email = ? WHERE username = ?",
@@ -231,11 +256,8 @@ exports.updatePassword = async (req, res, next) => {
     const password = req.body.password;
 
     if (password) {
-      const regex = "^(?=.*d)(?=.*[#$@!%&*?])[A-Za-zd#$@!%&*?]";
-      if (password.length < 8 || password.length > 10) {
-        return res.send("Length");
-      } else if (!password.match(regex)) {
-        return res.send("Character");
+      if (validatePassword(res, password)) {
+        return;
       }
       const hashedPassword = await bcrypt.hash(password, 10);
       database.query(
@@ -268,11 +290,8 @@ exports.updatePassword = async (req, res, next) => {
 exports.updatePasswordAdmin = async (req, res, next) => {
   const password = req.body.password;
   if (password) {
-    const regex = "^(?=.*d)(?=.*[#$@!%&*?])[A-Za-zd#$@!%&*?]";
-    if (password.length < 8 || password.length > 10) {
-      return res.send("Length");
-    } else if (!password.match(regex)) {
-      return res.send("Character");
+    if (validatePassword(res, password)) {
+      return;
     }
     const hashedPassword = await bcrypt(password, 10);
     database.query(
@@ -302,8 +321,8 @@ exports.updateEmailAdmin = (req, res, next) => {
   const email = req.body.email;
 
   if (email) {
-    if (!validator.isEmail(email)) {
-      return res.send("Invalid");
+    if (validateEmail(res, email)) {
+      return;
     }
     database.query(
       "UPDATE accounts SET email = ? WHERE username = ?",
