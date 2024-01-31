@@ -97,6 +97,9 @@ function validatePassword(res, password) {
   }
 }
 function validateEmail(res, email) {
+  if (email === "") {
+    return;
+  }
   if (!validator.isEmail(email)) {
     return res.send("Invalid Email");
   }
@@ -137,7 +140,7 @@ exports.createUser = async (req, res, next) => {
   const password = req.body.password;
   const email = req.body.email;
 
-  if (username && password && email) {
+  if (username && password) {
     if (validateUsername(res, username)) {
       return;
     }
@@ -163,7 +166,7 @@ exports.createUser = async (req, res, next) => {
         }
       );
     } else {
-      res.json({ message: "User exists" });
+      res.send("User exists");
     }
   } else {
     res.send(false);
