@@ -1,14 +1,30 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import StateContext from "../StateContext";
 import HeaderHomeUser from "./HeaderHomeUser";
 import HeaderOthers from "./HeaderOthers";
 import HeaderHomeAdmin from "./HeaderHomeAdmin";
+import Axios from "axios";
 
 function Header() {
   const appState = useContext(StateContext);
   const location = useLocation();
   const path = location.pathname;
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  async function checkAdmin() {
+    try {
+      const group_name = "admin";
+      const response = await Axios.post("/user/checkGroup", { group_name });
+      setIsAdmin(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    checkAdmin();
+  }, [appState.loggedIn]);
 
   return (
     <>
@@ -22,7 +38,11 @@ function Header() {
           {!appState.loggedIn ? (
             ""
           ) : path === "/home" ? (
-            <HeaderHomeUser />
+            isAdmin ? (
+              <HeaderHomeAdmin />
+            ) : (
+              <HeaderHomeUser />
+            )
           ) : (
             <HeaderOthers />
           )}
