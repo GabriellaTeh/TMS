@@ -208,6 +208,7 @@ exports.viewProfile = (req, res, next) => {
         if (results) {
           res.status(200).json({
             token: token,
+            username: results[0].username,
             email: results[0].email,
             message: "View profile success",
           });
