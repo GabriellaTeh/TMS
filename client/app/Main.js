@@ -22,6 +22,7 @@ function Main() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("token")),
     token: localStorage.getItem("token"),
+    editing: localStorage.getItem("edit"),
     successFlashMessages: [],
     errorFlashMessages: [],
   };
@@ -37,7 +38,12 @@ function Main() {
         return;
       case "logout":
         draft.loggedIn = false;
-        draft.edit = false;
+        return;
+      case "editing":
+        draft.editing = true;
+        return;
+      case "editDone":
+        draft.editing = false;
         return;
       case "successFlashMessage":
         draft.successFlashMessages.push(action.value);
@@ -53,8 +59,10 @@ function Main() {
   useEffect(() => {
     if (state.loggedIn) {
       localStorage.setItem("token", state.token);
+      localStorage.setItem("editing", false);
     } else {
       localStorage.removeItem("token");
+      localStorage.removeItem("editing");
       Axios.defaults.headers.common["Authorization"] = null;
     }
   }, [state.loggedIn, state.token]);

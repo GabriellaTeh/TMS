@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import StateContext from "../StateContext";
 import { Helmet } from "react-helmet";
 import DispatchContext from "../DispatchContext";
+import UserManagementView from "./UserManagementView";
+import UserManagementEdit from "./UserManagementEdit";
 import Axios from "axios";
 
 function UserManagement() {
@@ -124,6 +126,11 @@ function UserManagement() {
           </div>
         </div>
       </form>
+      {appState.editing === true ? (
+        <UserManagementEdit />
+      ) : (
+        <UserManagementView />
+      )}
     </>
   );
 }
