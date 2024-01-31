@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -35,6 +35,11 @@ function Login(props) {
       });
     }
   }
+
+  useEffect(() => {
+    appDispatch({ type: "logout" });
+  }, []);
+
   return (
     <div className="container py-md-5">
       <Helmet>

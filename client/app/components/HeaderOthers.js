@@ -22,7 +22,7 @@ function HeaderOthers() {
         Home
       </button>{" "}
       <button onClick={handleLogout} className="btn btn-sm btn-secondary">
-        Sign Out
+        Log Out
       </button>
     </div>
   );
