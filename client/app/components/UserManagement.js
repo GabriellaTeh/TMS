@@ -65,7 +65,11 @@ function UserManagement() {
   }
 
   function getUserGroups(id) {
-    console.log(groups);
+    groups.forEach((user) => {
+      if (user.userId == id) {
+        return user.groupNames;
+      }
+    });
   }
 
   function handleEdit() {
@@ -129,7 +133,7 @@ function UserManagement() {
                     <Select
                       isMulti
                       placeholder="No groups"
-                      options={getUserGroups(user.id)}
+                      defaultValue={getUserGroups(user.id)}
                     />
                   </td>
                   <td>
