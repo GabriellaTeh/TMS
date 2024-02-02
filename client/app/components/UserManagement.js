@@ -46,10 +46,26 @@ function UserManagement() {
           });
         }
       });
-      setGroups(processedData);
+
+      const for_options = [];
+      processedData.forEach((user) => {
+        const options = [];
+        user.group_name.forEach((group) => {
+          options.push({
+            value: group,
+            label: group,
+          });
+        });
+        for_options.push({ userId: user.userId, groupNames: options });
+      });
+      setGroups(for_options);
     } catch (err) {
       console.log(err);
     }
+  }
+
+  function getUserGroups(id) {
+    console.log(groups);
   }
 
   function handleEdit() {
@@ -110,7 +126,11 @@ function UserManagement() {
                     <input type="text" readOnly={true} value={user.email} />
                   </td>
                   <td>
-                    <Select isMulti placeholder="No groups" />
+                    <Select
+                      isMulti
+                      placeholder="No groups"
+                      options={getUserGroups(user.id)}
+                    />
                   </td>
                   <td>
                     <ToggleSwitchView
