@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet";
 import DispatchContext from "../DispatchContext";
 import CreateUser from "./CreateUser";
 import Axios from "axios";
+import Select from "react-select";
 import ToggleSwitchView from "./ToggleSwitchView";
 
 function UserManagement() {
@@ -27,12 +28,37 @@ function UserManagement() {
     }
   }
 
+  async function getAllGroups() {
+    try {
+      const response = await Axios.get("/groups");
+      const processedData = [];
+      response.data.forEach((group) => {
+        const existingUser = processedData.find(
+          (user) => user.userId === group.userId
+        );
+
+        if (existingUser) {
+          existingUser.group_name.push(group.group_name);
+        } else {
+          processedData.push({
+            userId: group.userId,
+            group_name: [group.group_name],
+          });
+        }
+      });
+      setGroups(processedData);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   function handleEdit() {
     setEdit(true);
   }
 
   useEffect(() => {
     getUsers();
+    getAllGroups();
   }, []);
 
   useEffect(() => {
@@ -73,7 +99,7 @@ function UserManagement() {
           <tbody>
             {users.map((user) => {
               return (
-                <tr key={user.username}>
+                <tr key={user.id}>
                   <td>
                     <input type="text" readOnly={true} value={user.username} />
                   </td>
@@ -84,11 +110,7 @@ function UserManagement() {
                     <input type="text" readOnly={true} value={user.email} />
                   </td>
                   <td>
-                    <input
-                      type="text"
-                      readOnly={true}
-                      // value={getUserGroups(user.id)}
-                    />
+                    <Select isMulti placeholder="No groups" />
                   </td>
                   <td>
                     <ToggleSwitchView
