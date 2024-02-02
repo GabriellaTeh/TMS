@@ -58,12 +58,12 @@ exports.addUserToGroup = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const username = req.body.username;
+    const userId = req.body.id;
     const group_name = req.body.group_name;
 
     database.query(
-      "INSERT INTO tms.groups (group_name, username) VALUES (?, ?)",
-      [group_name, username],
+      "INSERT INTO tms.groups (group_name, id) VALUES (?, ?)",
+      [group_name, userId],
       function (err, results) {
         if (err) {
           console.log(err);
@@ -91,12 +91,12 @@ exports.removeUserFromGroup = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const username = req.body.username;
+    const userId = req.body.id;
     const group_name = req.body.group_name;
 
     database.query(
-      "DELETE FROM tms.groups WHERE group_name = ? AND username = ?",
-      [group_name, username],
+      "DELETE FROM tms.groups WHERE group_name = ? AND id = ?",
+      [group_name, userId],
       function (err, results) {
         if (err) {
           console.log(err);
@@ -125,15 +125,15 @@ exports.getUserGroups = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
-    const username = decoded.username;
+    const userId = decoded.id;
     database.query(
-      "SELECT group_name FROM tms.groups WHERE username = ?",
-      [username],
+      "SELECT group_name FROM tms.groups WHERE id = ?",
+      [userId],
       function (err, results) {
         if (err) {
           console.log(err);
         } else {
-          res.status(200).json({ groups: results });
+          res.json(results);
         }
       }
     );

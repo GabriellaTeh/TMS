@@ -1,9 +1,11 @@
 import React, { useEffect, useContext, useState } from "react";
 import DispatchContext from "../DispatchContext";
+import Axios from "axios";
 
 function UserManagementView() {
   const appDispatch = useContext(DispatchContext);
   const [users, setUsers] = useState([]);
+  const [userGroups, setUserGroups] = useState([]);
 
   async function getUsers() {
     try {
@@ -17,9 +19,28 @@ function UserManagementView() {
     }
   }
 
+  async function getUserGroups() {
+    try {
+      const response = await Axios.get("/group/user");
+      console.log(response.data);
+
+      if (response.data) {
+        setUserGroups(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   function handleEdit() {
     appDispatch({ type: "editing" });
   }
+
+  useEffect(() => {
+    getUsers();
+    getUserGroups();
+  }, []);
+
   return (
     <>
       <div className="mt-3">
@@ -48,6 +69,37 @@ function UserManagementView() {
               </th>
             </tr>
           </thead>
+          <tbody>
+            {users.map((user) => {
+              return (
+                <tr key={user.username}>
+                  <td>
+                    <input type="text" readOnly={true} value={user.username} />
+                  </td>
+                  <td>
+                    <input
+                      type="password"
+                      readOnly={true}
+                      value={user.password}
+                    />
+                  </td>
+                  <td>
+                    <input type="text" readOnly={true} value={user.email} />
+                  </td>
+                  <td>
+                    <input type="text" readOnly={true} value={"group"} />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      readOnly={true}
+                      value={user.isActive === 1 ? true : false}
+                    />
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
     </>

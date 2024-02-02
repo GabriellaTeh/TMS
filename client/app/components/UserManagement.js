@@ -87,8 +87,8 @@ function UserManagement() {
       <Helmet>
         <title>Manage Users</title>
       </Helmet>
-      <form onSubmit={handleCreateUser} className="mb-0 pt-2 pt-md-0">
-        <div className="row align-items-center">
+      <form onSubmit={handleCreateUser}>
+        <div className="row container align-items-center">
           <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
             <input
               onChange={(e) => setUsername(e.target.value)}
