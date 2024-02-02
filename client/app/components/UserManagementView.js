@@ -1,9 +1,12 @@
 import React, { useEffect, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
+import ToggleSwitchView from "./ToggleSwitchView";
 
 function UserManagementView() {
   const appDispatch = useContext(DispatchContext);
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [userGroups, setUserGroups] = useState([]);
 
@@ -33,8 +36,10 @@ function UserManagementView() {
   }
 
   function handleEdit() {
-    appDispatch({ type: "editing" });
+    navigate("/edit");
   }
+
+  function handleUpdateActive() {}
 
   useEffect(() => {
     getUsers();
@@ -87,14 +92,10 @@ function UserManagementView() {
                     <input type="text" readOnly={true} value={user.email} />
                   </td>
                   <td>
-                    <input type="text" readOnly={true} value={"group"} />
+                    <input type="text" readOnly={true} value={[]} />
                   </td>
                   <td>
-                    <input
-                      type="text"
-                      readOnly={true}
-                      value={user.isActive === 1 ? true : false}
-                    />
+                    <ToggleSwitchView value={user.isActive} />
                   </td>
                 </tr>
               );

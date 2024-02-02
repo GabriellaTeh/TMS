@@ -17,12 +17,12 @@ import EditProfile from "./components/EditProfile";
 import SuccessFlashMessage from "./components/SuccessFlashMessage";
 import ErrorFlashMessage from "./components/ErrorFlashMessage";
 import UserManagement from "./components/UserManagement";
+import UserManagementEdit from "./components/UserManagementEdit";
 
 function Main() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("token")),
     token: localStorage.getItem("token"),
-    editing: localStorage.getItem("edit"),
     successFlashMessages: [],
     errorFlashMessages: [],
   };
@@ -39,12 +39,6 @@ function Main() {
       case "logout":
         draft.loggedIn = false;
         return;
-      case "editing":
-        draft.editing = true;
-        return;
-      case "editDone":
-        draft.editing = false;
-        return;
       case "successFlashMessage":
         draft.successFlashMessages.push(action.value);
         return;
@@ -59,10 +53,8 @@ function Main() {
   useEffect(() => {
     if (state.loggedIn) {
       localStorage.setItem("token", state.token);
-      localStorage.setItem("editing", false);
     } else {
       localStorage.removeItem("token");
-      localStorage.removeItem("editing");
       Axios.defaults.headers.common["Authorization"] = null;
     }
   }, [state.loggedIn, state.token]);
@@ -80,6 +72,7 @@ function Main() {
               <Route path="/home" element={<Homepage />}></Route>
               <Route path="/profile" element={<EditProfile />}></Route>
               <Route path="/manage" element={<UserManagement />}></Route>
+              <Route path="/edit" element={<UserManagementEdit />}></Route>
             </Routes>
           </BrowserRouter>
         </DispatchContext.Provider>
