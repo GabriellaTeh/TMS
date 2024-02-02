@@ -29,7 +29,7 @@ exports.createAdmin = async (req, res, next) => {
 async function CheckGroup(userid, groupname) {
   return new Promise((resolve, reject) => {
     database.query(
-      "SELECT * FROM tms.groups WHERE id = ? AND group_name = ?",
+      "SELECT * FROM tms.groups WHERE userId = ? AND group_name = ?",
       [userid, groupname],
       function (err, results) {
         if (err) {

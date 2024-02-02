@@ -3,75 +3,37 @@ import { useNavigate } from "react-router-dom";
 import StateContext from "../StateContext";
 import { Helmet } from "react-helmet";
 import DispatchContext from "../DispatchContext";
-import UserManagementView from "./UserManagementView";
+import CreateUser from "./CreateUser";
 import Axios from "axios";
+import ToggleSwitchView from "./ToggleSwitchView";
 
 function UserManagement() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
 
-  async function handleCreateUser(e) {
-    e.preventDefault();
+  const [edit, setEdit] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [groups, setGroups] = useState([]);
+
+  async function getUsers() {
     try {
-      if (username && password) {
-        if (!email) {
-          setEmail("");
-        }
-        const response = await Axios.post("/user/createUser", {
-          username,
-          password,
-          email,
-        });
-        if (response.data === "Username Length") {
-          appDispatch({
-            type: "errorFlashMessage",
-            value:
-              "Username must be minimum 3 characters and maximum 20 characters",
-          });
-        } else if (response.data === "Username Character") {
-          appDispatch({
-            type: "errorFlashMessage",
-            value: "Username can only contains alphanumeric characters",
-          });
-        } else if (response.data === "Password Character") {
-          appDispatch({
-            type: "errorFlashMessage",
-            value:
-              "Password must contain alphabet, number and special character",
-          });
-        } else if (response.data === "Password Length") {
-          appDispatch({
-            type: "errorFlashMessage",
-            value:
-              "Password must be minimum 8 characters and maximum 10 characters",
-          });
-        } else if (response.data === "Invalid Email") {
-          appDispatch({ type: "errorFlashMessage", value: "Invalid Email" });
-        } else if (response.data === "User exists") {
-          appDispatch({
-            type: "errorFlashMessage",
-            value: "User already exists",
-          });
-        } else if (response.data) {
-          appDispatch({ type: "successFlashMessage", value: "User created" });
-          e.target.reset();
-        } else {
-          appDispatch({ type: "errorFlashMessage", value: "Error" });
-        }
-      } else {
-        appDispatch({
-          type: "errorFlashMessage",
-          value: "Username and Password required!",
-        });
+      const response = await Axios.get("/users");
+      if (response.data) {
+        setUsers(response.data);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   }
+
+  function handleEdit() {
+    setEdit(true);
+  }
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   useEffect(() => {
     if (!appState.loggedIn) {
@@ -86,46 +48,67 @@ function UserManagement() {
       <Helmet>
         <title>Manage Users</title>
       </Helmet>
-      <form onSubmit={handleCreateUser}>
-        <div className="row container align-items-center">
-          <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-            <input
-              onChange={(e) => setUsername(e.target.value)}
-              className="form-control form-control-sm"
-              type="text"
-              placeholder="Username"
-              autoComplete="off"
-            />
-          </div>
-          <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              className="form-control form-control-sm"
-              type="password"
-              placeholder="Password"
-            />
-          </div>
-          <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              className="form-control form-control-sm"
-              type="text"
-              placeholder="Email"
-            />
-          </div>
-          <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-            <input
-              className="form-control form-control-sm"
-              type="password"
-              placeholder="Groups"
-            />
-          </div>
-          <div className="col-md-auto">
-            <button className="btn btn-success btn-sm">Create User</button>
-          </div>
-        </div>
-      </form>
-      <UserManagementView />
+      <CreateUser />
+      <div className="mt-3">
+        <table id="userTable" className="table table-hover">
+          <thead>
+            <tr>
+              <th className="col-2" scope="col">
+                Username
+              </th>
+              <th className="col-2" scope="col" data-editable="true">
+                Password
+              </th>
+              <th className="col-2" scope="col">
+                Email
+              </th>
+              <th className="col-auto" scope="col">
+                Groups
+              </th>
+              <th className="col-sm-2" scope="col">
+                Active
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => {
+              return (
+                <tr key={user.username}>
+                  <td>
+                    <input type="text" readOnly={true} value={user.username} />
+                  </td>
+                  <td>
+                    <input type="password" readOnly={true} value="......." />
+                  </td>
+                  <td>
+                    <input type="text" readOnly={true} value={user.email} />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      readOnly={true}
+                      // value={getUserGroups(user.id)}
+                    />
+                  </td>
+                  <td>
+                    <ToggleSwitchView
+                      value={user.isActive === 1 ? true : false}
+                    />
+                  </td>
+                  <td>
+                    <button
+                      onClick={handleEdit}
+                      className="btn btn-primary btn-sm"
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }

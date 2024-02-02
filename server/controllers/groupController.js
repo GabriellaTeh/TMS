@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 async function CheckGroup(userid, groupname) {
   return new Promise((resolve, reject) => {
     database.query(
-      "SELECT * FROM tms.groups WHERE id = ? AND group_name = ?",
+      "SELECT * FROM tms.groups WHERE userId = ? AND group_name = ?",
       [userid, groupname],
       function (err, results) {
         if (err) {
@@ -62,7 +62,7 @@ exports.addUserToGroup = (req, res, next) => {
     const group_name = req.body.group_name;
 
     database.query(
-      "INSERT INTO tms.groups (group_name, id) VALUES (?, ?)",
+      "INSERT INTO tms.groups (group_name, userId) VALUES (?, ?)",
       [group_name, userId],
       function (err, results) {
         if (err) {
@@ -95,7 +95,7 @@ exports.removeUserFromGroup = (req, res, next) => {
     const group_name = req.body.group_name;
 
     database.query(
-      "DELETE FROM tms.groups WHERE group_name = ? AND id = ?",
+      "DELETE FROM tms.groups WHERE group_name = ? AND userId = ?",
       [group_name, userId],
       function (err, results) {
         if (err) {
@@ -124,10 +124,9 @@ exports.getUserGroups = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const decoded = jwt.verify(token, "my_secret_key");
-    const userId = decoded.id;
+    const userId = req.body.id;
     database.query(
-      "SELECT group_name FROM tms.groups WHERE id = ?",
+      "SELECT group_name FROM tms.groups WHERE userId = ?",
       [userId],
       function (err, results) {
         if (err) {
@@ -146,12 +145,12 @@ exports.getUserGroups = (req, res, next) => {
 //get all groups that users are in => /groups
 exports.getGroups = (req, res, next) => {
   database.query(
-    "SELECT * FROM tms.groups ORDER BY username",
+    "SELECT * FROM tms.groups ORDER BY userId",
     function (err, results) {
       if (err) {
         console.log(err);
       } else {
-        res.status(200).json({ groups: results });
+        res.json(results);
       }
     }
   );
