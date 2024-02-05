@@ -118,6 +118,16 @@ function validateUsername(res, username) {
   }
 }
 
+function validateGroup(res, group_name) {
+  const regex = "^[a-zA-Z0-9]+$";
+  if (group_name.length < 3 || group_name.length > 20) {
+    return res.send("Group Length");
+  }
+  if (!group_name.match(regex)) {
+    return res.send("Group Character");
+  }
+}
+
 async function findUser(username) {
   return new Promise((resolve, reject) => {
     database.query(
@@ -142,7 +152,7 @@ exports.createUser = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
   const email = req.body.email;
-  let groups = req.body.group;
+  const groups = req.body.groupNames;
 
   if (username && password) {
     if (validateUsername(res, username)) {
@@ -154,10 +164,11 @@ exports.createUser = async (req, res, next) => {
     if (validatePassword(res, password)) {
       return;
     }
-    //TODO: validate group
-    if (!groups) {
-      groups = "";
-    }
+    groups.forEach((group) => {
+      if (validateGroup(res, group)) {
+        return;
+      }
+    });
     const usernameLower = username.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
     const userExists = await findUser(usernameLower);

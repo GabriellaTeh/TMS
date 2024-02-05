@@ -1,12 +1,15 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
+import CreatableSelect from "react-select/creatable";
 
 function CreateUser() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [groups, setGroups] = useState([]);
   const appDispatch = useContext(DispatchContext);
+  const selectInputRef = useRef();
 
   async function handleCreateUser(e) {
     e.preventDefault();
@@ -15,10 +18,17 @@ function CreateUser() {
         if (!email) {
           setEmail("");
         }
+        let groupNames = [];
+        if (groups) {
+          groups.forEach((group) => {
+            groupNames.push(group.value);
+          });
+        }
         const response = await Axios.post("/user/createUser", {
           username,
           password,
           email,
+          groupNames,
         });
         if (response.data === "Username Length") {
           appDispatch({
@@ -50,6 +60,17 @@ function CreateUser() {
             type: "errorFlashMessage",
             value: "User already exists",
           });
+        } else if (response.data === "Group Length") {
+          appDispatch({
+            type: "errorFlashMessage",
+            value:
+              "Group name must be minimum 3 characters and maximum 20 characters",
+          });
+        } else if (response.data === "Group Character") {
+          appDispatch({
+            type: "errorFlashMessage",
+            value: "Group name can only contain alphanumeric characters",
+          });
         } else if (response.data) {
           appDispatch({ type: "successFlashMessage", value: "User created" });
           e.target.reset();
@@ -62,6 +83,7 @@ function CreateUser() {
           value: "Username and Password required!",
         });
       }
+      selectInputRef.current.clearValue();
     } catch (error) {
       console.log(error);
     }
@@ -96,10 +118,11 @@ function CreateUser() {
             />
           </div>
           <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-            <input
-              className="form-control form-control-sm"
-              type="password"
+            <CreatableSelect
+              ref={selectInputRef}
+              isMulti
               placeholder="Groups"
+              onChange={(newValue) => setGroups(newValue)}
             />
           </div>
           <div className="col-md-auto">
