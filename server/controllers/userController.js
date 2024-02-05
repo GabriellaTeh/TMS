@@ -142,7 +142,7 @@ exports.createUser = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
   const email = req.body.email;
-  const groups = req.body.group;
+  let groups = req.body.group;
 
   if (username && password) {
     if (validateUsername(res, username)) {
@@ -155,6 +155,9 @@ exports.createUser = async (req, res, next) => {
       return;
     }
     //TODO: validate group
+    if (!groups) {
+      groups = "";
+    }
     const usernameLower = username.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
     const userExists = await findUser(usernameLower);
