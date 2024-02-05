@@ -14,6 +14,7 @@ function UserManagement() {
 
   const [users, setUsers] = useState([]);
   const [groups, setGroups] = useState([]);
+  const [groupList, setGroupList] = useState([]);
 
   async function getUsersTable() {
     try {
@@ -21,11 +22,18 @@ function UserManagement() {
       if (response.data) {
         setUsers(response.data);
         const options = [];
+        const list = [];
         response.data.forEach((user) => {
           const userGroups = user.groupNames.split(",");
           userGroups.pop();
           const userOptions = [];
           userGroups.forEach((group) => {
+            if (!list.includes(group)) {
+              list.push({
+                value: group,
+                label: group,
+              });
+            }
             userOptions.push({
               value: group,
               label: group,
@@ -34,6 +42,7 @@ function UserManagement() {
           options.push({ user: user.id, groups: userOptions });
         });
         setGroups(options);
+        setGroupList(list);
       }
     } catch (err) {
       console.log(err);
@@ -95,6 +104,7 @@ function UserManagement() {
                   email={user.email}
                   isActive={user.isActive}
                   groups={findGroups(user.id)}
+                  groupList={groupList}
                 />
               );
             })}

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import Select from "react-select";
+import CreatableSelect, { useCreatable } from "react-select/creatable";
 import Axios from "axios";
 import ToggleSwitchEdit from "./ToggleSwitchEdit";
 import ToggleSwitchView from "./ToggleSwitchView";
@@ -10,7 +10,9 @@ function UserRowEdit(props) {
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
   const [isActive, setIsActive] = useState(props.isActive);
+  const [groups, setGroups] = useState([]);
   const username = props.username;
+  const id = props.id;
 
   function handleSave() {
     if (email && password) {
@@ -26,8 +28,29 @@ function UserRowEdit(props) {
     } else {
       disableUser(username);
     }
+    updateUserGroups(groups);
     props.setEdit(false);
   }
+
+  function updateUserGroups(groups) {
+    groups.forEach(async (group) => {
+      if (group.__isNew__) {
+        const group_name = group.value;
+        const response = await Axios.post("/group/addUser", {
+          id,
+          group_name,
+        });
+        if (response.data) {
+          console.log("added user group");
+        }
+      }
+      //TODO: detect deletion
+    });
+  }
+
+  useEffect(() => {
+    console.log(groups);
+  }, [groups]);
 
   async function activateUser(username) {
     try {
@@ -102,10 +125,6 @@ function UserRowEdit(props) {
     }
   }
 
-  useEffect(() => {
-    console.log(isActive);
-  }, []);
-
   return (
     <>
       <tr key={props.id}>
@@ -128,13 +147,14 @@ function UserRowEdit(props) {
         </td>
         <td>
           {props.isDefaultAdmin ? (
-            <Select isMulti isDisabled defaultValue={props.groups} />
+            <CreatableSelect isMulti isDisabled defaultValue={props.groups} />
           ) : (
-            <Select
+            <CreatableSelect
               isMulti
               placeholder="No groups"
               options={props.groups}
               defaultValue={props.groups}
+              onChange={(newValue) => setGroups(newValue)}
             />
           )}
         </td>
