@@ -387,19 +387,18 @@ exports.updateEmailAdmin = (req, res, next) => {
 //admin update isActive to false => /user/disableUser
 exports.disableUser = (req, res, next) => {
   const isActive = false;
+  const username = req.body.username;
 
-  if (isActive) {
+  if (username) {
     database.query(
       "UPDATE accounts SET isActive = ? WHERE username = ?",
-      [isActive],
+      [isActive, username],
       function (err, results) {
         if (err) {
           console.log(err);
         } else {
           if (results) {
-            res
-              .status(200)
-              .json({ token: token, message: "isActive updated by admin" });
+            res.status(200).json({ message: "isActive updated by admin" });
           } else {
             res.send(false);
           }
@@ -414,19 +413,18 @@ exports.disableUser = (req, res, next) => {
 //admin update isActive to true => /user/activateUser
 exports.activateUser = (req, res, next) => {
   const isActive = true;
+  const username = req.body.username;
 
-  if (isActive) {
+  if (username) {
     database.query(
       "UPDATE accounts SET isActive = ? WHERE username = ?",
-      [isActive],
+      [isActive, username],
       function (err, results) {
         if (err) {
           console.log(err);
         } else {
           if (results) {
-            res
-              .status(200)
-              .json({ token: token, message: "isActive updated by admin" });
+            res.status(200).json({ message: "isActive updated by admin" });
           } else {
             res.send(false);
           }

@@ -9,7 +9,7 @@ function UserRowEdit(props) {
   const appDispatch = useContext(DispatchContext);
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
-  const [isActive, setIsActive] = useState();
+  const [isActive, setIsActive] = useState(props.isActive);
   const username = props.username;
 
   function handleSave() {
@@ -21,7 +21,36 @@ function UserRowEdit(props) {
     } else if (password) {
       updatePassword(username, password);
     }
+    if (isActive) {
+      activateUser(username);
+    } else {
+      disableUser(username);
+    }
     props.setEdit(false);
+  }
+
+  async function activateUser(username) {
+    try {
+      const response = await Axios.put("/user/activateUser", { username });
+
+      if (response.data) {
+        console.log("success");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function disableUser(username) {
+    try {
+      const response = await Axios.put("/user/disableUser", { username });
+
+      if (response.data) {
+        console.log("success");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async function updateEmail(username, email) {
@@ -73,6 +102,10 @@ function UserRowEdit(props) {
     }
   }
 
+  useEffect(() => {
+    console.log(isActive);
+  }, []);
+
   return (
     <>
       <tr key={props.id}>
@@ -109,7 +142,10 @@ function UserRowEdit(props) {
           {props.isDefaultAdmin ? (
             <ToggleSwitchView value={props.isActive === 1 ? true : false} />
           ) : (
-            <ToggleSwitchEdit value={props.isActive === 1 ? true : false} />
+            <ToggleSwitchEdit
+              value={props.isActive === 1 ? true : false}
+              setIsActive={setIsActive}
+            />
           )}
         </td>
         <td>
