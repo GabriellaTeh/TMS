@@ -17,48 +17,12 @@ function UserManagement() {
   const [users, setUsers] = useState([]);
   const [groups, setGroups] = useState([]);
 
-  async function getUsers() {
+  async function getUsersTable() {
     try {
       const response = await Axios.get("/users");
       if (response.data) {
         setUsers(response.data);
       }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function getAllGroups() {
-    try {
-      const response = await Axios.get("/groups");
-      const processedData = [];
-      response.data.forEach((group) => {
-        const existingUser = processedData.find(
-          (user) => user.userId === group.userId
-        );
-
-        if (existingUser) {
-          existingUser.group_name.push(group.group_name);
-        } else {
-          processedData.push({
-            userId: group.userId,
-            group_name: [group.group_name],
-          });
-        }
-      });
-
-      const for_options = [];
-      processedData.forEach((user) => {
-        const options = [];
-        user.group_name.forEach((group) => {
-          options.push({
-            value: group,
-            label: group,
-          });
-        });
-        for_options.push({ userId: user.userId, groupNames: options });
-      });
-      setGroups(for_options);
     } catch (err) {
       console.log(err);
     }
@@ -77,8 +41,7 @@ function UserManagement() {
   }
 
   useEffect(() => {
-    getUsers();
-    getAllGroups();
+    getUsersTable();
   }, []);
 
   useEffect(() => {
@@ -133,7 +96,8 @@ function UserManagement() {
                     <Select
                       isMulti
                       placeholder="No groups"
-                      defaultValue={getUserGroups(user.id)}
+                      //TODO: display groups
+                      options={groups[0]}
                     />
                   </td>
                   <td>

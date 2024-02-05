@@ -21,7 +21,6 @@ const {
   addUserToGroup,
   getUserGroups,
   removeUserFromGroup,
-  getGroups,
   checkUserGroup,
 } = require("../controllers/groupController");
 
@@ -60,7 +59,6 @@ router
   .post(isAuthenticatedUser, authorizedAdmin, addUserToGroup);
 router
   .route("/group/removeUser")
-  .delete(isAuthenticatedUser, authorizedAdmin, removeUserFromGroup);
-router.route("/groups").get(isAuthenticatedUser, getGroups);
+  .post(isAuthenticatedUser, authorizedAdmin, removeUserFromGroup);
 
 module.exports = router;

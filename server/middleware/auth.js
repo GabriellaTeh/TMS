@@ -50,16 +50,20 @@ exports.authorizedAdmin = async (req, res, next) => {
     try {
       const decoded = jwt.verify(token, "my_secret_key");
       const id = decoded.id;
-      const group_name = "admin";
       database.query(
-        "SELECT group_name FROM tms.groups WHERE id = ? AND group_name = ? ",
-        [id, group_name],
+        "SELECT * FROM accounts WHERE id = ? ",
+        [id],
         function (err, results) {
           if (err) {
             console.log(err);
           } else if (results.length === 1) {
             //valid token and active user
-            next();
+            const groups = results[0].groupNames.split(",");
+            if (groups.includes("admin")) {
+              next();
+            } else {
+              res.json(false);
+            }
           } else {
             res.json({ message: "User inactive" });
           }

@@ -5,14 +5,19 @@ const jwt = require("jsonwebtoken");
 async function CheckGroup(userid, groupname) {
   return new Promise((resolve, reject) => {
     database.query(
-      "SELECT * FROM tms.groups WHERE userId = ? AND group_name = ?",
-      [userid, groupname],
+      "SELECT * FROM accounts WHERE id = ?",
+      [userid],
       function (err, results) {
         if (err) {
           resolve(false);
         }
         if (results.length === 1) {
-          resolve(true);
+          const groups = results[0].groupNames.split(",");
+          if (groups.includes(groupname)) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
         } else {
           resolve(false);
         }
@@ -59,10 +64,10 @@ exports.addUserToGroup = (req, res, next) => {
   }
   try {
     const userId = req.body.id;
-    const group_name = req.body.group_name;
+    const group_name = req.body.group_name + ",";
 
     database.query(
-      "INSERT INTO tms.groups (group_name, userId) VALUES (?, ?)",
+      "UPDATE accounts SET groupNames = CONCAT(groupNames, ?) WHERE id = ?",
       [group_name, userId],
       function (err, results) {
         if (err) {
@@ -93,15 +98,28 @@ exports.removeUserFromGroup = (req, res, next) => {
   try {
     const userId = req.body.id;
     const group_name = req.body.group_name;
-
     database.query(
-      "DELETE FROM tms.groups WHERE group_name = ? AND userId = ?",
-      [group_name, userId],
+      "SELECT * FROM accounts where id = ?",
+      [userId],
       function (err, results) {
         if (err) {
           console.log(err);
         } else {
-          res.status(200).json({ message: "Removed user from group" });
+          const groups = results[0].groupNames.split(",");
+          const index = groups.indexOf(group_name);
+          groups.splice(index, index);
+          const newGroup = groups.join();
+          database.query(
+            "UPDATE accounts SET groupNames = ? WHERE id = ?",
+            [newGroup, userId],
+            function (err, results) {
+              if (err) {
+                console.log(err);
+              } else {
+                res.status(200).json({ message: "Removed user from group" });
+              }
+            }
+          );
         }
       }
     );
@@ -126,7 +144,7 @@ exports.getUserGroups = (req, res, next) => {
   try {
     const userId = req.body.id;
     database.query(
-      "SELECT group_name FROM tms.groups WHERE userId = ?",
+      "SELECT groupNames FROM accounts WHERE id = ?",
       [userId],
       function (err, results) {
         if (err) {
@@ -140,18 +158,4 @@ exports.getUserGroups = (req, res, next) => {
     console.log(error);
     res.send(false);
   }
-};
-
-//get all groups that users are in => /groups
-exports.getGroups = (req, res, next) => {
-  database.query(
-    "SELECT * FROM tms.groups ORDER BY userId",
-    function (err, results) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json(results);
-      }
-    }
-  );
 };

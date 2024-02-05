@@ -8,13 +8,12 @@ exports.createAdmin = async (req, res, next) => {
   const username = "admin";
   const password = "admin123!";
   const email = "admin@gmail.com";
-  const group_name = "admin";
-  const userId = 1;
+  const group = "admin,";
 
   const hashedPassword = await bcrypt.hash(password, 10);
   database.query(
-    "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?); INSERT INTO tms.groups (group_name, userId) VALUES (?, ?)",
-    [username, hashedPassword, email, group_name, userId],
+    "INSERT INTO accounts (username, password, email, groupNames) VALUES (?, ?, ?, ?);",
+    [username, hashedPassword, email, group],
     function (error, results) {
       if (error) {
         console.log(error);
@@ -29,13 +28,19 @@ exports.createAdmin = async (req, res, next) => {
 async function CheckGroup(userid, groupname) {
   return new Promise((resolve, reject) => {
     database.query(
-      "SELECT * FROM tms.groups WHERE userId = ? AND group_name = ?",
-      [userid, groupname],
+      "SELECT * FROM accounts WHERE id = ?",
+      [userid],
       function (err, results) {
         if (err) {
           resolve(false);
         }
         if (results.length === 1) {
+          const groups = results[0].groupNames.split(",");
+          if (groups.includes(groupname)) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
           resolve(true);
         } else {
           resolve(false);
@@ -137,6 +142,7 @@ exports.createUser = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
   const email = req.body.email;
+  const groups = req.body.group;
 
   if (username && password) {
     if (validateUsername(res, username)) {
@@ -148,13 +154,14 @@ exports.createUser = async (req, res, next) => {
     if (validatePassword(res, password)) {
       return;
     }
+    //TODO: validate group
     const usernameLower = username.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
     const userExists = await findUser(usernameLower);
     if (!userExists) {
       database.query(
-        "INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)",
-        [usernameLower, hashedPassword, email],
+        "INSERT INTO accounts (username, password, email, groupNames) VALUES (?, ?, ?, ?)",
+        [usernameLower, hashedPassword, email, groups],
         function (error, results) {
           if (error) {
             console.log(error);
