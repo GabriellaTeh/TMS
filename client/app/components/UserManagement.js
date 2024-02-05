@@ -5,8 +5,6 @@ import { Helmet } from "react-helmet";
 import DispatchContext from "../DispatchContext";
 import CreateUser from "./CreateUser";
 import Axios from "axios";
-import Select from "react-select";
-import ToggleSwitchView from "./ToggleSwitchView";
 import UserRow from "./UserRow";
 
 function UserManagement() {
@@ -14,7 +12,6 @@ function UserManagement() {
   const appDispatch = useContext(DispatchContext);
   const navigate = useNavigate();
 
-  const [edit, setEdit] = useState(false);
   const [users, setUsers] = useState([]);
   const [groups, setGroups] = useState([]);
 

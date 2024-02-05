@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import ToggleSwitchEdit from "./ToggleSwitchEdit";
+import ToggleSwitchView from "./ToggleSwitchView";
 
 function UserRowEdit(props) {
   const [password, setPassword] = useState();
@@ -26,15 +27,23 @@ function UserRowEdit(props) {
           />
         </td>
         <td>
-          <Select
-            isMulti
-            placeholder="No groups"
-            options={props.groups}
-            defaultValue={props.groups}
-          />
+          {props.isDefaultAdmin ? (
+            <Select isMulti isDisabled defaultValue={props.groups} />
+          ) : (
+            <Select
+              isMulti
+              placeholder="No groups"
+              options={props.groups}
+              defaultValue={props.groups}
+            />
+          )}
         </td>
         <td>
-          <ToggleSwitchEdit value={props.isActive === 1 ? true : false} />
+          {props.isDefaultAdmin ? (
+            <ToggleSwitchView value={props.isActive === 1 ? true : false} />
+          ) : (
+            <ToggleSwitchEdit value={props.isActive === 1 ? true : false} />
+          )}
         </td>
         <td>
           <button

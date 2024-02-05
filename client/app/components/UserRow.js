@@ -5,14 +5,12 @@ import UserRowEdit from "./UserRowEdit";
 
 function UserRow(props) {
   const [edit, setEdit] = useState(false);
+  const isDefaultAdmin = props.username === "admin";
 
   function handleEdit() {
     setEdit(true);
   }
 
-  function handleSave() {
-    setEdit(false);
-  }
   return (
     <>
       {edit ? (
@@ -23,6 +21,7 @@ function UserRow(props) {
           isActive={props.isActive}
           groups={props.groups}
           setEdit={setEdit}
+          isDefaultAdmin={isDefaultAdmin}
         />
       ) : (
         <tr key={props.id}>
