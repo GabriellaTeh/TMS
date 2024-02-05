@@ -12,7 +12,7 @@ function UserRowEdit(props) {
   const [isActive, setIsActive] = useState();
   const username = props.username;
 
-  async function handleSave() {
+  function handleSave() {
     if (email && password) {
       updateEmail(username, email);
       updatePassword(username, password);
@@ -22,7 +22,6 @@ function UserRowEdit(props) {
       updatePassword(username, password);
     }
     props.setEdit(false);
-    window.location.reload();
   }
 
   async function updateEmail(username, email) {
@@ -31,17 +30,18 @@ function UserRowEdit(props) {
         username,
         email,
       });
-      if (response.data === "Invalid email") {
+      if (response.data === "Invalid Email") {
         appDispatch({ type: "errorFlashMessage", value: "Invalid email" });
       } else if (response.data) {
         appDispatch({ type: "successFlashMessage", value: "Updated" });
       } else {
         appDispatch({ type: "errorFlashMessage", value: "Error" });
       }
+      setEmail("");
     } catch (err) {
       console.log(err);
+      setEmail("");
     }
-    setEmail("");
   }
 
   async function updatePassword(username, password) {
@@ -66,10 +66,11 @@ function UserRowEdit(props) {
       } else {
         appDispatch({ type: "errorFlashMessage", value: "Error" });
       }
+      setPassword("");
     } catch (err) {
       console.log(err);
+      setPassword("");
     }
-    setPassword("");
   }
 
   return (
@@ -88,7 +89,7 @@ function UserRowEdit(props) {
         <td>
           <input
             type="text"
-            value={props.email}
+            defaultValue={props.email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </td>
