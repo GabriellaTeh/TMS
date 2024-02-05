@@ -7,6 +7,7 @@ import CreateUser from "./CreateUser";
 import Axios from "axios";
 import Select from "react-select";
 import ToggleSwitchView from "./ToggleSwitchView";
+import UserRow from "./UserRow";
 
 function UserManagement() {
   const appState = useContext(StateContext);
@@ -47,10 +48,6 @@ function UserManagement() {
     if (group) {
       return group.groups;
     }
-  }
-
-  function handleEdit() {
-    setEdit(true);
   }
 
   useEffect(() => {
@@ -95,39 +92,13 @@ function UserManagement() {
           <tbody>
             {users.map((user) => {
               return (
-                <tr key={user.id}>
-                  <td>
-                    <input type="text" readOnly={true} value={user.username} />
-                  </td>
-                  <td>
-                    <input type="password" readOnly={true} value="......." />
-                  </td>
-                  <td>
-                    <input type="text" readOnly={true} value={user.email} />
-                  </td>
-                  <td>
-                    <Select
-                      isMulti
-                      isDisabled
-                      placeholder="No groups"
-                      options={findGroups(user.id)}
-                      defaultValue={findGroups(user.id)}
-                    />
-                  </td>
-                  <td>
-                    <ToggleSwitchView
-                      value={user.isActive === 1 ? true : false}
-                    />
-                  </td>
-                  <td>
-                    <button
-                      onClick={handleEdit}
-                      className="btn btn-primary btn-sm"
-                    >
-                      Edit
-                    </button>
-                  </td>
-                </tr>
+                <UserRow
+                  id={user.id}
+                  username={user.username}
+                  email={user.email}
+                  isActive={user.isActive}
+                  groups={findGroups(user.id)}
+                />
               );
             })}
           </tbody>
