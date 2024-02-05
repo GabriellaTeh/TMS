@@ -40,12 +40,23 @@ function UserRowEdit(props) {
           id,
           group_name,
         });
-        if (response.data) {
+        if (response.data === "Group Length") {
+          appDispatch({
+            type: "errorFlashMessage",
+            value:
+              "Group name must be minimum 3 characters and maximum 20 characters",
+          });
+        } else if (response.data === "Group Character") {
+          appDispatch({
+            type: "errorFlashMessage",
+            value: "Group name can only contain alphanumeric characters",
+          });
+        } else if (response.data) {
           console.log("added user group");
         }
       }
-      //TODO: detect deletion
     });
+    //TODO: detect deletion
   }
 
   useEffect(() => {

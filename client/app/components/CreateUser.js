@@ -29,7 +29,7 @@ function CreateUser() {
         } else if (response.data === "Username Character") {
           appDispatch({
             type: "errorFlashMessage",
-            value: "Username can only contains alphanumeric characters",
+            value: "Username can only contain alphanumeric characters",
           });
         } else if (response.data === "Password Character") {
           appDispatch({

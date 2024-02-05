@@ -50,6 +50,16 @@ exports.checkUserGroup = async (req, res, next) => {
   }
 };
 
+function validateGroup(res, group_name) {
+  const regex = "^[a-zA-Z0-9]+$";
+  if (group_name.length < 3 || group_name.length > 20) {
+    return res.send("Group Length");
+  }
+  if (!group_name.match(regex)) {
+    return res.send("Group Character");
+  }
+}
+
 //add user to group => /group/addUser
 exports.addUserToGroup = (req, res, next) => {
   let token;
@@ -64,11 +74,15 @@ exports.addUserToGroup = (req, res, next) => {
   }
   try {
     const userId = req.body.id;
-    const group_name = req.body.group_name + ",";
+    const group_name = req.body.group_name;
+    if (validateGroup(res, group_name)) {
+      return;
+    }
+    const validatedGroup = group_name + ",";
 
     database.query(
       "UPDATE accounts SET groupNames = CONCAT(groupNames, ?) WHERE id = ?",
-      [group_name, userId],
+      [validatedGroup, userId],
       function (err, results) {
         if (err) {
           console.log(err);
