@@ -329,22 +329,21 @@ exports.updatePassword = async (req, res, next) => {
 //admin update password => /user/updatePasswordAdmin
 exports.updatePasswordAdmin = async (req, res, next) => {
   const password = req.body.password;
+  const username = req.body.username;
   if (password) {
     if (validatePassword(res, password)) {
       return;
     }
-    const hashedPassword = await bcrypt(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     database.query(
       "UPDATE accounts SET password = ? WHERE username = ?",
-      [hashedPassword],
+      [hashedPassword, username],
       function (err, results) {
         if (err) {
           console.log(err);
         } else {
           if (results) {
-            res
-              .status(200)
-              .json({ token: token, message: "Password updated by admin" });
+            res.status(200).json({ message: "Password updated by admin" });
           } else {
             res.send(false);
           }
@@ -359,6 +358,7 @@ exports.updatePasswordAdmin = async (req, res, next) => {
 //admin update email => /user/updateEmailAdmin
 exports.updateEmailAdmin = (req, res, next) => {
   const email = req.body.email;
+  const username = req.body.username;
 
   if (email) {
     if (validateEmail(res, email)) {
@@ -366,15 +366,13 @@ exports.updateEmailAdmin = (req, res, next) => {
     }
     database.query(
       "UPDATE accounts SET email = ? WHERE username = ?",
-      [email],
+      [email, username],
       function (err, results) {
         if (err) {
           console.log(err);
         } else {
           if (results) {
-            res
-              .status(200)
-              .json({ token: token, message: "Email updated by admin" });
+            res.status(200).json({ message: "Email updated by admin" });
           } else {
             res.send(false);
           }
