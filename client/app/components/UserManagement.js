@@ -22,18 +22,31 @@ function UserManagement() {
       const response = await Axios.get("/users");
       if (response.data) {
         setUsers(response.data);
+        const options = [];
+        response.data.forEach((user) => {
+          const userGroups = user.groupNames.split(",");
+          userGroups.pop();
+          const userOptions = [];
+          userGroups.forEach((group) => {
+            userOptions.push({
+              value: group,
+              label: group,
+            });
+          });
+          options.push({ user: user.id, groups: userOptions });
+        });
+        setGroups(options);
       }
     } catch (err) {
       console.log(err);
     }
   }
 
-  function getUserGroups(id) {
-    groups.forEach((user) => {
-      if (user.userId == id) {
-        return user.groupNames;
-      }
-    });
+  function findGroups(userId) {
+    const group = groups.find((group) => group.user === userId);
+    if (group) {
+      return group.groups;
+    }
   }
 
   function handleEdit() {
@@ -96,8 +109,8 @@ function UserManagement() {
                     <Select
                       isMulti
                       placeholder="No groups"
-                      //TODO: display groups
-                      options={groups[0]}
+                      options={findGroups(user.id)}
+                      defaultValue={findGroups(user.id)}
                     />
                   </td>
                   <td>
