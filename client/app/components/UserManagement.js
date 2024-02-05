@@ -108,6 +108,7 @@ function UserManagement() {
                   <td>
                     <Select
                       isMulti
+                      isDisabled
                       placeholder="No groups"
                       options={findGroups(user.id)}
                       defaultValue={findGroups(user.id)}
