@@ -10,7 +10,7 @@ function UserRowEdit(props) {
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
   const [isActive, setIsActive] = useState(props.isActive);
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState(props.groups);
   const username = props.username;
   const id = props.id;
   const origGroups = props.groups;
