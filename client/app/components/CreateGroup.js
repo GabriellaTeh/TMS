@@ -50,6 +50,7 @@ function CreateGroup() {
         <div className="row container align-items-center">
           <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
             <input
+              style={{ width: "200px", float: "right" }}
               onChange={(e) => setGroup(e.target.value)}
               className="form-control form-control-sm"
               type="text"

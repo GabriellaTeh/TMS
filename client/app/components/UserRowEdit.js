@@ -32,6 +32,10 @@ function UserRowEdit(props) {
     props.setEdit(false);
   }
 
+  function handleCancel() {
+    props.setEdit(false);
+  }
+
   async function updateUserGroups(groups) {
     //delete all
     const res = await Axios.post("/group/removeUser", { id });
@@ -172,6 +176,9 @@ function UserRowEdit(props) {
         <td>
           <button onClick={handleSave} className="btn btn-primary btn-sm">
             Save
+          </button>{" "}
+          <button onClick={handleCancel} className="btn btn-danger btn-sm">
+            Cancel
           </button>
         </td>
       </tr>

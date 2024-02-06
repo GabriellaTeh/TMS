@@ -94,7 +94,7 @@ function UserManagement() {
               <th className="col-2" scope="col">
                 Username
               </th>
-              <th className="col-2" scope="col" data-editable="true">
+              <th className="col-2" scope="col">
                 Password
               </th>
               <th className="col-2" scope="col">
@@ -103,9 +103,10 @@ function UserManagement() {
               <th className="col-auto" scope="col">
                 Groups
               </th>
-              <th className="col-sm-2" scope="col">
+              <th className="col-auto" scope="col">
                 Active
               </th>
+              <th className="col-auto" scope="col"></th>
             </tr>
           </thead>
           <tbody>
