@@ -164,18 +164,19 @@ exports.createUser = async (req, res, next) => {
     if (validatePassword(res, password)) {
       return;
     }
-    groups.forEach((group) => {
-      if (validateGroup(res, group)) {
+    for (let i = 0; i < groups.length; i++) {
+      if (validateGroup(res, groups[i])) {
         return;
       }
-    });
+    }
+    const groupList = groups.join() + ",";
     const usernameLower = username.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
     const userExists = await findUser(usernameLower);
     if (!userExists) {
       database.query(
         "INSERT INTO accounts (username, password, email, groupNames) VALUES (?, ?, ?, ?)",
-        [usernameLower, hashedPassword, email, groups],
+        [usernameLower, hashedPassword, email, groupList],
         function (error, results) {
           if (error) {
             console.log(error);

@@ -153,6 +153,7 @@ function UserRowEdit(props) {
           <input
             type="text"
             defaultValue={props.email}
+            placeholder="New email"
             onChange={(e) => setEmail(e.target.value)}
           />
         </td>
