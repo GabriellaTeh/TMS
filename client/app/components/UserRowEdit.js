@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import Axios from "axios";
 import ToggleSwitchEdit from "./ToggleSwitchEdit";
@@ -39,20 +40,13 @@ function UserRowEdit(props) {
   async function updateUserGroups(groups) {
     //delete all
     const res = await Axios.post("/group/removeUser", { id });
-    if (res.data) {
-      console.log("removed user groups");
-    }
     //addition
     groups.forEach(async (group) => {
-      console.log(group.value);
       const group_name = group.value;
       const response = await Axios.post("/group/addUser", {
         id,
         group_name,
       });
-      if (response.data) {
-        console.log("added user group");
-      }
     });
   }
 
@@ -71,10 +65,6 @@ function UserRowEdit(props) {
   async function disableUser(username) {
     try {
       const response = await Axios.put("/user/disableUser", { username });
-
-      if (response.data) {
-        console.log("success");
-      }
     } catch (err) {
       console.log(err);
     }

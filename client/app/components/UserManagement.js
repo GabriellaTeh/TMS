@@ -72,11 +72,21 @@ function UserManagement() {
     getUsersTable();
   }, []);
 
+  async function checkAdmin() {
+    const group_name = "admin";
+    const response = await Axios.post("/user/checkGroup", { group_name });
+    if (!response.data) {
+      navigate("/home");
+    }
+  }
+
   useEffect(() => {
     if (!appState.loggedIn) {
       appDispatch({ type: "logout" });
       appDispatch({ type: "errorFlashMessage", value: "Please log in" });
       navigate("/");
+    } else {
+      checkAdmin();
     }
   }, []);
 

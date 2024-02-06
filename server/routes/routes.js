@@ -38,7 +38,7 @@ router.route("/group/user").get(isAuthenticatedUser, getUserGroups);
 router.route("/user/checkGroup").post(isAuthenticatedUser, checkUserGroup);
 
 //admin
-router.route("/users").get(isAuthenticatedUser, viewUsers);
+router.route("/users").get(isAuthenticatedUser, authorizedAdmin, viewUsers);
 router
   .route("/user/createUser")
   .post(isAuthenticatedUser, authorizedAdmin, createUser);
@@ -54,15 +54,13 @@ router
 router
   .route("/user/activateUser")
   .put(isAuthenticatedUser, authorizedAdmin, activateUser);
-router.route("/groups").get(isAuthenticatedUser, authorizedAdmin, getGroups);
+router.route("/groups").get(isAuthenticatedUser, getGroups);
 
 //admin group functions
-router
-  .route("/group/addUser")
-  .post(isAuthenticatedUser, authorizedAdmin, addUserToGroup);
+router.route("/group/addUser").post(isAuthenticatedUser, addUserToGroup);
 router
   .route("/group/removeUser")
-  .post(isAuthenticatedUser, authorizedAdmin, removeUserFromGroup);
+  .post(isAuthenticatedUser, removeUserFromGroup);
 router
   .route("/group/createGroup")
   .post(isAuthenticatedUser, authorizedAdmin, createGroup);

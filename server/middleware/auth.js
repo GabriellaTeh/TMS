@@ -59,7 +59,7 @@ exports.authorizedAdmin = async (req, res, next) => {
           } else if (results.length === 1) {
             //valid token and active user
             const groups = results[0].groupNames.split(",");
-            if (groups.includes("admin")) {
+            if (groups.includes("admin") && results[0].isActive === 1) {
               next();
             } else {
               res.json(false);
