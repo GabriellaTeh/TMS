@@ -16,8 +16,6 @@ import Header from "./components/Header";
 import DispatchContext from "./DispatchContext";
 import StateContext from "./StateContext";
 import EditProfile from "./components/EditProfile";
-import SuccessFlashMessage from "./components/SuccessFlashMessage";
-import ErrorFlashMessage from "./components/ErrorFlashMessage";
 import UserManagement from "./components/UserManagement";
 
 function Main() {
@@ -65,8 +63,6 @@ function Main() {
       <StateContext.Provider value={state}>
         <DispatchContext.Provider value={dispatch}>
           <BrowserRouter>
-            <SuccessFlashMessage messages={state.successFlashMessages} />
-            <ErrorFlashMessage messages={state.errorFlashMessages} />
             <Header />
             <Routes>
               <Route path="/" element={<Login />}></Route>
@@ -75,7 +71,7 @@ function Main() {
               <Route path="/manage" element={<UserManagement />}></Route>
               <Route path={"*"} element={<Navigate to="/" />}></Route>
             </Routes>
-            <ToastContainer position="top-right" autoClose={1250} />
+            <ToastContainer position="top-center" autoClose={1250} />
           </BrowserRouter>
         </DispatchContext.Provider>
       </StateContext.Provider>
