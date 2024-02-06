@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useImmerReducer } from "use-immer";
+import { ToastContainer, toast } from "react-toastify";
+import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 Axios.defaults.baseURL = "http://localhost:8080";
 Axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
@@ -39,10 +41,10 @@ function Main() {
         draft.loggedIn = false;
         return;
       case "successFlashMessage":
-        draft.successFlashMessages.push(action.value);
+        toast.success(action.value);
         return;
       case "errorFlashMessage":
-        draft.errorFlashMessages.push(action.value);
+        toast.error(action.value);
         return;
     }
   }
@@ -73,6 +75,7 @@ function Main() {
               <Route path="/manage" element={<UserManagement />}></Route>
               <Route path={"*"} element={<Navigate to="/" />}></Route>
             </Routes>
+            <ToastContainer position="top-right" autoClose={1250} />
           </BrowserRouter>
         </DispatchContext.Provider>
       </StateContext.Provider>

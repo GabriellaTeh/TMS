@@ -2,9 +2,10 @@ import React, { useContext, useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import DispatchContext from "../DispatchContext";
 
-function Login(props) {
+function Login() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const navigate = useNavigate();
