@@ -162,15 +162,11 @@ exports.addUserToGroup = (req, res, next) => {
   }
   try {
     const userId = req.body.id;
-    const group_name = req.body.group_name;
-    if (validateGroup(res, group_name)) {
-      return;
-    }
-    const validatedGroup = group_name + ",";
+    const group_name = req.body.group_name + ",";
 
     database.query(
       "UPDATE accounts SET groupNames = CONCAT(groupNames, ?) WHERE id = ?",
-      [validatedGroup, userId],
+      [group_name, userId],
       function (err, results) {
         if (err) {
           console.log(err);

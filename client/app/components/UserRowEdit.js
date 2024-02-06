@@ -13,7 +13,6 @@ function UserRowEdit(props) {
   const [groups, setGroups] = useState(props.groups);
   const username = props.username;
   const id = props.id;
-  const origGroups = props.groups;
 
   function handleSave() {
     if (email && password) {
@@ -36,49 +35,36 @@ function UserRowEdit(props) {
   async function updateUserGroups(groups) {
     //addition
     groups.forEach(async (group) => {
-      if (group.__isNew__) {
-        const group_name = group.value;
-        const response = await Axios.post("/group/addUser", {
-          id,
-          group_name,
-        });
-        if (response.data === "Group Length") {
-          appDispatch({
-            type: "errorFlashMessage",
-            value:
-              "Group name must be minimum 3 characters and maximum 20 characters",
-          });
-        } else if (response.data === "Group Character") {
-          appDispatch({
-            type: "errorFlashMessage",
-            value: "Group name can only contain alphanumeric characters",
-          });
-        } else if (response.data) {
-          console.log("added user group");
-        }
+      const group_name = group.value;
+      const response = await Axios.post("/group/addUser", {
+        id,
+        group_name,
+      });
+      if (response.data) {
+        console.log("added user group");
       }
     });
     //deletion
-    for (let i = 0; i < origGroups.length; i++) {
-      const group_name = origGroups[i].value;
-      let found = false;
-      for (let j = 0; j < groups.length; j++) {
-        if (groups[j].value === group_name) {
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
-        console.log(group_name);
-        const response = await Axios.post("/group/removeUser", {
-          id,
-          group_name,
-        });
-        if (response.data) {
-          console.log("removed user group");
-        }
-      }
-    }
+    // for (let i = 0; i < origGroups.length; i++) {
+    //   const group_name = origGroups[i].value;
+    //   let found = false;
+    //   for (let j = 0; j < groups.length; j++) {
+    //     if (groups[j].value === group_name) {
+    //       found = true;
+    //       break;
+    //     }
+    //   }
+    //   if (!found) {
+    //     console.log(group_name);
+    //     const response = await Axios.post("/group/removeUser", {
+    //       id,
+    //       group_name,
+    //     });
+    //     if (response.data) {
+    //       console.log("removed user group");
+    //     }
+    //   }
+    // }
   }
 
   async function activateUser(username) {
