@@ -17,24 +17,36 @@ function UserManagement() {
   const [groups, setGroups] = useState([]);
   const [groupList, setGroupList] = useState([]);
 
+  async function getGroupsList() {
+    try {
+      const response = await Axios.get("/groups");
+      if (response.data) {
+        const options = [];
+        response.data.forEach((group) => {
+          options.push({
+            value: group.name,
+            label: group.name,
+          });
+        });
+        setGroupList(options);
+        console.log(options);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async function getUsersTable() {
     try {
       const response = await Axios.get("/users");
       if (response.data) {
         setUsers(response.data);
         const options = [];
-        const list = [];
         response.data.forEach((user) => {
           const userGroups = user.groupNames.split(",");
           userGroups.pop();
           const userOptions = [];
           userGroups.forEach((group) => {
-            if (!list.includes(group)) {
-              list.push({
-                value: group,
-                label: group,
-              });
-            }
             userOptions.push({
               value: group,
               label: group,
@@ -43,7 +55,6 @@ function UserManagement() {
           options.push({ user: user.id, groups: userOptions });
         });
         setGroups(options);
-        setGroupList(list);
       }
     } catch (err) {
       console.log(err);
@@ -58,6 +69,7 @@ function UserManagement() {
   }
 
   useEffect(() => {
+    getGroupsList();
     getUsersTable();
   }, []);
 

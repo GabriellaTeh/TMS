@@ -20,6 +20,7 @@ function UserRow(props) {
           email={props.email}
           isActive={props.isActive}
           groups={props.groups}
+          groupList={props.groupList}
           setEdit={setEdit}
           isDefaultAdmin={isDefaultAdmin}
         />
@@ -40,6 +41,7 @@ function UserRow(props) {
               isDisabled
               placeholder="No groups"
               defaultValue={props.groups}
+              options={props.groupList}
             />
           </td>
           <td>

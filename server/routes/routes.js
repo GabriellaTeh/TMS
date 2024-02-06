@@ -22,6 +22,7 @@ const {
   getUserGroups,
   removeUserFromGroup,
   checkUserGroup,
+  getGroups,
 } = require("../controllers/groupController");
 
 //admin insert
@@ -52,6 +53,7 @@ router
 router
   .route("/user/activateUser")
   .put(isAuthenticatedUser, authorizedAdmin, activateUser);
+router.route("/groups").get(isAuthenticatedUser, authorizedAdmin, getGroups);
 
 //admin group functions
 router

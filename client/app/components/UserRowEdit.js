@@ -184,6 +184,7 @@ function UserRowEdit(props) {
               placeholder="No groups"
               defaultValue={props.groups}
               onChange={(newValue) => setGroups(newValue)}
+              options={props.groupList}
             />
           )}
         </td>

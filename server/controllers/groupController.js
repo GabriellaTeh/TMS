@@ -1,6 +1,32 @@
 const database = require("../config/db");
 const jwt = require("jsonwebtoken");
 
+//get all groups in db => /groups
+exports.getGroups = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  try {
+    database.query("SELECT * FROM tms.groups", function (err, results) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.json(results);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    res.send(false);
+  }
+};
+
 //returns true/false
 async function CheckGroup(userid, groupname) {
   return new Promise((resolve, reject) => {
