@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useImmerReducer } from "use-immer";
 import Axios from "axios";
 Axios.defaults.baseURL = "http://localhost:8080";
@@ -71,6 +71,7 @@ function Main() {
               <Route path="/home" element={<Homepage />}></Route>
               <Route path="/profile" element={<EditProfile />}></Route>
               <Route path="/manage" element={<UserManagement />}></Route>
+              <Route path={"*"} element={<Navigate to="/" />}></Route>
             </Routes>
           </BrowserRouter>
         </DispatchContext.Provider>
