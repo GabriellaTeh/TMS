@@ -1,6 +1,68 @@
 const database = require("../config/db");
 const jwt = require("jsonwebtoken");
 
+exports.createGroup = async (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  try {
+    const group_name = req.body.group;
+
+    if (group_name) {
+      if (validateGroup(res, group_name)) {
+        return;
+      }
+      const groupExists = await findGroup(group_name);
+      if (!groupExists) {
+        database.query(
+          "INSERT INTO tms.groups (name) VALUES (?)",
+          [group_name],
+          function (error, results) {
+            if (error) {
+              console.log(error);
+            } else {
+              res.json({ message: "Create group successful" });
+            }
+          }
+        );
+      } else {
+        res.send("Group exists");
+      }
+    } else {
+      res.send(false);
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(false);
+  }
+};
+
+async function findGroup(group) {
+  return new Promise((resolve, reject) => {
+    database.query(
+      "SELECT * FROM tms.groups WHERE name = ?",
+      [group],
+      function (err, results) {
+        if (err) {
+          resolve(false);
+        }
+        if (results.length === 0) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      }
+    );
+  });
+}
+
 //get all groups in db => /groups
 exports.getGroups = (req, res, next) => {
   let token;

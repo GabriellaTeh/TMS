@@ -9,6 +9,7 @@ function CreateUser(props) {
   const [email, setEmail] = useState("");
   const [groups, setGroups] = useState([]);
   const appDispatch = useContext(DispatchContext);
+  const selectInputRef = useRef();
 
   async function handleCreateUser(e) {
     e.preventDefault();
@@ -119,6 +120,7 @@ function CreateUser(props) {
             </div>
             <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
               <Select
+                ref={selectInputRef}
                 isMulti
                 placeholder="Groups"
                 onChange={(newValue) => setGroups(newValue)}

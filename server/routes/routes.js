@@ -23,6 +23,7 @@ const {
   removeUserFromGroup,
   checkUserGroup,
   getGroups,
+  createGroup,
 } = require("../controllers/groupController");
 
 //admin insert
@@ -62,5 +63,8 @@ router
 router
   .route("/group/removeUser")
   .post(isAuthenticatedUser, authorizedAdmin, removeUserFromGroup);
+router
+  .route("/group/createGroup")
+  .post(isAuthenticatedUser, authorizedAdmin, createGroup);
 
 module.exports = router;
