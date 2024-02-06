@@ -1,15 +1,14 @@
 import React, { useState, useContext, useRef } from "react";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
-import CreatableSelect from "react-select/creatable";
+import Select from "react-select";
 
-function CreateUser() {
+function CreateUser(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [groups, setGroups] = useState([]);
   const appDispatch = useContext(DispatchContext);
-  const selectInputRef = useRef();
 
   async function handleCreateUser(e) {
     e.preventDefault();
@@ -119,11 +118,11 @@ function CreateUser() {
               />
             </div>
             <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-              <CreatableSelect
-                ref={selectInputRef}
+              <Select
                 isMulti
                 placeholder="Groups"
                 onChange={(newValue) => setGroups(newValue)}
+                options={props.groupList}
               />
             </div>
             <div className="col-md-auto">

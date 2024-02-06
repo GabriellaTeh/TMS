@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import CreatableSelect, { useCreatable } from "react-select/creatable";
+import Select from "react-select";
 import Axios from "axios";
 import ToggleSwitchEdit from "./ToggleSwitchEdit";
 import ToggleSwitchView from "./ToggleSwitchView";
@@ -177,9 +177,9 @@ function UserRowEdit(props) {
         </td>
         <td>
           {props.isDefaultAdmin ? (
-            <CreatableSelect isMulti isDisabled defaultValue={props.groups} />
+            <Select isMulti isDisabled defaultValue={props.groups} />
           ) : (
-            <CreatableSelect
+            <Select
               isMulti
               placeholder="No groups"
               defaultValue={props.groups}

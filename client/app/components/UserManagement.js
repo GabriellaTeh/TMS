@@ -86,8 +86,8 @@ function UserManagement() {
       <Helmet>
         <title>Manage Users</title>
       </Helmet>
-      <CreateGroup />
-      <CreateUser />
+      <CreateGroup groupList={groupList} />
+      <CreateUser groupList={groupList} />
       <div className="mt-3">
         <table id="userTable" className="table table-hover">
           <thead>

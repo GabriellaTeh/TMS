@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 
-function CreateGroup() {
+function CreateGroup(props) {
   const [groups, setGroups] = useState();
-  function handleCreateGroup() {}
+  function handleCreateGroup() {
+    //if in props.groupList show error message
+    //validate group else show error
+  }
+
   return (
     <>
       <form onSubmit={handleCreateGroup}>
         <div className="row container align-items-center">
           <CreatableSelect
-            isMuli
+            isMulti
             placeholder="Groups"
             onChange={(newValue) => setGroups(newValue)}
           />
