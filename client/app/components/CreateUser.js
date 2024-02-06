@@ -92,7 +92,7 @@ function CreateUser(props) {
     <>
       <div className="mt-3">
         <form onSubmit={handleCreateUser}>
-          <div className="row container align-items-center">
+          <div className="row align-items-center" style={{ width: "100%" }}>
             <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
               <input
                 onChange={(e) => setUsername(e.target.value)}

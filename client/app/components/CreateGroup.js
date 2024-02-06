@@ -47,7 +47,7 @@ function CreateGroup() {
   return (
     <>
       <form onSubmit={handleCreateGroup}>
-        <div className="row container align-items-center">
+        <div className="row" style={{ width: "100%" }}>
           <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
             <input
               style={{ width: "200px", float: "right" }}
