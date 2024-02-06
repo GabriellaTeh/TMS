@@ -90,46 +90,48 @@ function CreateUser() {
   }
   return (
     <>
-      <form onSubmit={handleCreateUser}>
-        <div className="row container align-items-center">
-          <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-            <input
-              onChange={(e) => setUsername(e.target.value)}
-              className="form-control form-control-sm"
-              type="text"
-              placeholder="Username"
-              autoComplete="off"
-            />
+      <div className="mt-3">
+        <form onSubmit={handleCreateUser}>
+          <div className="row container align-items-center">
+            <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+              <input
+                onChange={(e) => setUsername(e.target.value)}
+                className="form-control form-control-sm"
+                type="text"
+                placeholder="Username"
+                autoComplete="off"
+              />
+            </div>
+            <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+              <input
+                onChange={(e) => setPassword(e.target.value)}
+                className="form-control form-control-sm"
+                type="password"
+                placeholder="Password"
+              />
+            </div>
+            <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                className="form-control form-control-sm"
+                type="text"
+                placeholder="Email"
+              />
+            </div>
+            <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+              <CreatableSelect
+                ref={selectInputRef}
+                isMulti
+                placeholder="Groups"
+                onChange={(newValue) => setGroups(newValue)}
+              />
+            </div>
+            <div className="col-md-auto">
+              <button className="btn btn-success btn-sm">Create User</button>
+            </div>
           </div>
-          <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              className="form-control form-control-sm"
-              type="password"
-              placeholder="Password"
-            />
-          </div>
-          <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              className="form-control form-control-sm"
-              type="text"
-              placeholder="Email"
-            />
-          </div>
-          <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-            <CreatableSelect
-              ref={selectInputRef}
-              isMulti
-              placeholder="Groups"
-              onChange={(newValue) => setGroups(newValue)}
-            />
-          </div>
-          <div className="col-md-auto">
-            <button className="btn btn-success btn-sm">Create User</button>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </>
   );
 }

@@ -9,11 +9,12 @@ exports.createAdmin = async (req, res, next) => {
   const password = "admin123!";
   const email = "admin@gmail.com";
   const group = "admin,";
+  const group_name = "admin";
 
   const hashedPassword = await bcrypt.hash(password, 10);
   database.query(
-    "INSERT INTO accounts (username, password, email, groupNames) VALUES (?, ?, ?, ?);",
-    [username, hashedPassword, email, group],
+    "INSERT INTO accounts (username, password, email, groupNames) VALUES (?, ?, ?, ?); INSERT INTO tms.groups (name) VALUES (?)",
+    [username, hashedPassword, email, group, group_name],
     function (error, results) {
       if (error) {
         console.log(error);

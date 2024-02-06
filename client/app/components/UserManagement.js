@@ -4,6 +4,7 @@ import StateContext from "../StateContext";
 import { Helmet } from "react-helmet";
 import DispatchContext from "../DispatchContext";
 import CreateUser from "./CreateUser";
+import CreateGroup from "./CreateGroup";
 import Axios from "axios";
 import UserRow from "./UserRow";
 
@@ -73,6 +74,7 @@ function UserManagement() {
       <Helmet>
         <title>Manage Users</title>
       </Helmet>
+      <CreateGroup />
       <CreateUser />
       <div className="mt-3">
         <table id="userTable" className="table table-hover">
