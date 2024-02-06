@@ -60,8 +60,8 @@ function UserRowEdit(props) {
   }
 
   useEffect(() => {
-    console.log(groups);
-  }, [groups]);
+    console.log(groups.length);
+  }, []);
 
   async function activateUser(username) {
     try {

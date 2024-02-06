@@ -169,7 +169,12 @@ exports.createUser = async (req, res, next) => {
         return;
       }
     }
-    const groupList = groups.join() + ",";
+    let groupList;
+    if (groups.length > 0) {
+      groupList = groups.join() + ",";
+    } else {
+      groupList = "";
+    }
     const usernameLower = username.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
     const userExists = await findUser(usernameLower);
