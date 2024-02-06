@@ -124,7 +124,12 @@ exports.removeUserFromGroup = (req, res, next) => {
           const groups = results[0].groupNames.split(",");
           const index = groups.indexOf(group_name);
           groups.splice(index, index);
-          const newGroup = groups.join();
+          let newGroup;
+          if (groups.length > 0) {
+            newGroup = groups.join() + ",";
+          } else {
+            newGroup = "";
+          }
           database.query(
             "UPDATE accounts SET groupNames = ? WHERE id = ?",
             [newGroup, userId],

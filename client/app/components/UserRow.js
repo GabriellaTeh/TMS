@@ -39,7 +39,6 @@ function UserRow(props) {
               isMulti
               isDisabled
               placeholder="No groups"
-              options={props.groups}
               defaultValue={props.groups}
             />
           </td>

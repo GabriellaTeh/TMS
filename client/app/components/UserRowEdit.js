@@ -13,6 +13,8 @@ function UserRowEdit(props) {
   const [groups, setGroups] = useState([]);
   const username = props.username;
   const id = props.id;
+  const origGroups = props.groups;
+  console.log(origGroups);
 
   function handleSave() {
     if (email && password) {
@@ -32,7 +34,8 @@ function UserRowEdit(props) {
     props.setEdit(false);
   }
 
-  function updateUserGroups(groups) {
+  async function updateUserGroups(groups) {
+    //addition
     groups.forEach(async (group) => {
       if (group.__isNew__) {
         const group_name = group.value;
@@ -56,12 +59,28 @@ function UserRowEdit(props) {
         }
       }
     });
-    //TODO: detect deletion
+    //deletion
+    for (let i = 0; i < origGroups.length; i++) {
+      const group_name = origGroups[i].value;
+      let found = false;
+      for (let j = 0; j < groups.length; j++) {
+        if (groups[j].value === group_name) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        console.log(group_name);
+        const response = await Axios.post("/group/removeUser", {
+          id,
+          group_name,
+        });
+        if (response.data) {
+          console.log("removed user group");
+        }
+      }
+    }
   }
-
-  useEffect(() => {
-    console.log(groups.length);
-  }, []);
 
   async function activateUser(username) {
     try {
@@ -164,7 +183,6 @@ function UserRowEdit(props) {
             <CreatableSelect
               isMulti
               placeholder="No groups"
-              options={props.groups}
               defaultValue={props.groups}
               onChange={(newValue) => setGroups(newValue)}
             />
