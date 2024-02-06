@@ -29,7 +29,6 @@ function UserManagement() {
           });
         });
         setGroupList(options);
-        console.log(options);
       }
     } catch (err) {
       console.log(err);

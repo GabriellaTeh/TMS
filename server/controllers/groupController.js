@@ -197,35 +197,15 @@ exports.removeUserFromGroup = (req, res, next) => {
   }
   try {
     const userId = req.body.id;
-    const group_name = req.body.group_name;
+    const empty = "";
     database.query(
-      "SELECT * FROM accounts where id = ?",
-      [userId],
+      "UPDATE accounts SET groupNames = ? WHERE id = ?",
+      [empty, userId],
       function (err, results) {
         if (err) {
           console.log(err);
         } else {
-          const groups = results[0].groupNames.split(",");
-          groups.pop();
-          const index = groups.indexOf(group_name);
-          groups.splice(index, 1);
-          let newGroup;
-          if (groups.length > 0) {
-            newGroup = groups.join() + ",";
-          } else {
-            newGroup = "";
-          }
-          database.query(
-            "UPDATE accounts SET groupNames = ? WHERE id = ?",
-            [newGroup, userId],
-            function (err, results) {
-              if (err) {
-                console.log(err);
-              } else {
-                res.status(200).json({ message: "Removed user from group" });
-              }
-            }
-          );
+          res.status(200).json({ message: "Removed user from group" });
         }
       }
     );

@@ -33,8 +33,14 @@ function UserRowEdit(props) {
   }
 
   async function updateUserGroups(groups) {
+    //delete all
+    const res = await Axios.post("/group/removeUser", { id });
+    if (res.data) {
+      console.log("removed user groups");
+    }
     //addition
     groups.forEach(async (group) => {
+      console.log(group.value);
       const group_name = group.value;
       const response = await Axios.post("/group/addUser", {
         id,
@@ -44,27 +50,6 @@ function UserRowEdit(props) {
         console.log("added user group");
       }
     });
-    //deletion
-    // for (let i = 0; i < origGroups.length; i++) {
-    //   const group_name = origGroups[i].value;
-    //   let found = false;
-    //   for (let j = 0; j < groups.length; j++) {
-    //     if (groups[j].value === group_name) {
-    //       found = true;
-    //       break;
-    //     }
-    //   }
-    //   if (!found) {
-    //     console.log(group_name);
-    //     const response = await Axios.post("/group/removeUser", {
-    //       id,
-    //       group_name,
-    //     });
-    //     if (response.data) {
-    //       console.log("removed user group");
-    //     }
-    //   }
-    // }
   }
 
   async function activateUser(username) {
