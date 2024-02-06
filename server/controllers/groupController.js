@@ -122,8 +122,9 @@ exports.removeUserFromGroup = (req, res, next) => {
           console.log(err);
         } else {
           const groups = results[0].groupNames.split(",");
+          groups.pop();
           const index = groups.indexOf(group_name);
-          groups.splice(index, index);
+          groups.splice(index, 1);
           let newGroup;
           if (groups.length > 0) {
             newGroup = groups.join() + ",";

@@ -14,7 +14,6 @@ function UserRowEdit(props) {
   const username = props.username;
   const id = props.id;
   const origGroups = props.groups;
-  console.log(origGroups);
 
   function handleSave() {
     if (email && password) {
