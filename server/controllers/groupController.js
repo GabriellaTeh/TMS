@@ -1,6 +1,20 @@
 const database = require("../config/db");
 const jwt = require("jsonwebtoken");
 
+function validateGroup(res, group_name) {
+  const regex = "^[a-zA-Z0-9]+$";
+  let error = false;
+  if (group_name.length < 3 || group_name.length > 20) {
+    res.write("GroupLength ");
+    error = true;
+  }
+  if (!group_name.match(regex)) {
+    res.write("GroupCharacter ");
+    error = true;
+  }
+  return error;
+}
+
 exports.createGroup = async (req, res, next) => {
   let token;
   if (
@@ -17,6 +31,7 @@ exports.createGroup = async (req, res, next) => {
 
     if (group_name) {
       if (validateGroup(res, group_name)) {
+        res.send();
         return;
       }
       const groupExists = await findGroup(group_name);
@@ -28,12 +43,12 @@ exports.createGroup = async (req, res, next) => {
             if (error) {
               console.log(error);
             } else {
-              res.json({ message: "Create group successful" });
+              res.write("Success");
             }
           }
         );
       } else {
-        res.send("Group exists");
+        res.write("GroupExists ");
       }
     } else {
       res.send(false);
@@ -42,6 +57,7 @@ exports.createGroup = async (req, res, next) => {
     console.log(err);
     res.send(false);
   }
+  res.end();
 };
 
 async function findGroup(group) {
@@ -137,16 +153,6 @@ exports.checkUserGroup = async (req, res, next) => {
     }
   }
 };
-
-function validateGroup(res, group_name) {
-  const regex = "^[a-zA-Z0-9]+$";
-  if (group_name.length < 3 || group_name.length > 20) {
-    return res.send("Group Length");
-  }
-  if (!group_name.match(regex)) {
-    return res.send("Group Character");
-  }
-}
 
 //add user to group => /group/addUser
 exports.addUserToGroup = (req, res, next) => {

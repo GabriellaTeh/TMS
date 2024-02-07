@@ -11,31 +11,35 @@ function CreateGroup(props) {
     try {
       if (group) {
         const response = await Axios.post("/group/createGroup", { group });
-        if (response.data === "Group Length") {
-          appDispatch({
-            type: "errorMessage",
-            value:
-              "Group name must be at least 3 characters and at most 20 characters.",
-          });
-        } else if (response.data === "Group Character") {
-          appDispatch({
-            type: "errorMessage",
-            value: "Group name can only contain alphanumeric characters.",
-          });
-        } else if (response.data === "Group exists") {
-          appDispatch({
-            type: "errorMessage",
-            value: "Group already exists.",
-          });
-        } else if (response.data) {
+        const data = response.data.split(" ");
+        data.pop();
+        if (data.length > 0) {
+          if (data.includes("GroupLength")) {
+            appDispatch({
+              type: "errorMessage",
+              value:
+                "Group name must be at least 3 characters and at most 20 characters.",
+            });
+          }
+          if (data.includes("GroupCharacter")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Group name can only contain alphanumeric characters.",
+            });
+          }
+          if (data.includes("GroupExists")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Group already exists.",
+            });
+          }
+        } else {
           appDispatch({
             type: "successMessage",
             value: "Group created.",
           });
           props.setRefresh(true);
           e.target.reset();
-        } else {
-          appDispatch({ type: "errorMessage", value: "Error" });
         }
       } else {
         appDispatch({
