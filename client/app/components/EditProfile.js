@@ -45,6 +45,11 @@ function EditProfile() {
       const response = await Axios.put("/user/updateEmail", { email });
       if (response.data === "Invalid Email") {
         appDispatch({ type: "errorFlashMessage", value: "Invalid Email" });
+      } else if (response.data === "Email taken") {
+        appDispatch({
+          type: "errorFlashMessage",
+          value: "Email taken. Please choose another email.",
+        });
       } else if (response.data) {
         setEmail("");
         getUserDetails();

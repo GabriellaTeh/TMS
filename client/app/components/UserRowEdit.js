@@ -91,6 +91,11 @@ function UserRowEdit(props) {
       });
       if (response.data === "Invalid Email") {
         appDispatch({ type: "errorFlashMessage", value: "Invalid email" });
+      } else if (response.data === "Email taken") {
+        appDispatch({
+          type: "errorFlashMessage",
+          value: "Email taken. Please choose another email.",
+        });
       } else if (response.data) {
         appDispatch({ type: "successFlashMessage", value: "Updated" });
       } else {

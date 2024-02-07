@@ -61,7 +61,10 @@ function CreateUser(props) {
             value: "User already exists",
           });
         } else if (response.data === "Email taken") {
-          appDispatch({ type: "errorFlashMessage", value: "Email taken" });
+          appDispatch({
+            type: "errorFlashMessage",
+            value: "Email taken. Please choose another email.",
+          });
         } else if (response.data === "Group Length") {
           appDispatch({
             type: "errorFlashMessage",

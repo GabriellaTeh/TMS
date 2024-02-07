@@ -277,7 +277,7 @@ exports.viewProfile = (req, res, next) => {
 };
 
 //update email => /user/updateEmail
-exports.updateEmail = (req, res, next) => {
+exports.updateEmail = async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -297,21 +297,31 @@ exports.updateEmail = (req, res, next) => {
       if (validateEmail(res, email)) {
         return;
       }
-      database.query(
-        "UPDATE accounts SET email = ? WHERE id = ?",
-        [email, userId],
-        function (err, results) {
-          if (err) {
-            console.log(err);
-          } else {
-            if (results) {
-              res.status(200).json({ token: token, message: "Email updated" });
+      let emailExists = false;
+      if (email.length > 0) {
+        emailExists = await findEmail(email);
+      }
+      if (!emailExists) {
+        database.query(
+          "UPDATE accounts SET email = ? WHERE id = ?",
+          [email, userId],
+          function (err, results) {
+            if (err) {
+              console.log(err);
             } else {
-              res.send(false);
+              if (results) {
+                res
+                  .status(200)
+                  .json({ token: token, message: "Email updated" });
+              } else {
+                res.send(false);
+              }
             }
           }
-        }
-      );
+        );
+      } else {
+        res.send("Email taken");
+      }
     } else {
       res.send(false);
     }
@@ -399,7 +409,7 @@ exports.updatePasswordAdmin = async (req, res, next) => {
 };
 
 //admin update email => /user/updateEmailAdmin
-exports.updateEmailAdmin = (req, res, next) => {
+exports.updateEmailAdmin = async (req, res, next) => {
   const email = req.body.email;
   const username = req.body.username;
 
@@ -407,21 +417,29 @@ exports.updateEmailAdmin = (req, res, next) => {
     if (validateEmail(res, email)) {
       return;
     }
-    database.query(
-      "UPDATE accounts SET email = ? WHERE username = ?",
-      [email, username],
-      function (err, results) {
-        if (err) {
-          console.log(err);
-        } else {
-          if (results) {
-            res.status(200).json({ message: "Email updated by admin" });
+    let emailExists = false;
+    if (email.length > 0) {
+      emailExists = await findEmail(email);
+    }
+    if (!emailExists) {
+      database.query(
+        "UPDATE accounts SET email = ? WHERE username = ?",
+        [email, username],
+        function (err, results) {
+          if (err) {
+            console.log(err);
           } else {
-            res.send(false);
+            if (results) {
+              res.status(200).json({ message: "Email updated by admin" });
+            } else {
+              res.send(false);
+            }
           }
         }
-      }
-    );
+      );
+    } else {
+      res.send("Email taken");
+    }
   } else {
     res.send(false);
   }
