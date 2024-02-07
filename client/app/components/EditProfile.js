@@ -23,7 +23,7 @@ function EditProfile() {
       }
     } catch (err) {
       console.log(err);
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid." });
       appDispatch({ type: "logout" });
       navigate("/");
     }
@@ -32,7 +32,7 @@ function EditProfile() {
   useEffect(() => {
     if (!appState.loggedIn) {
       appDispatch({ type: "logout" });
-      appDispatch({ type: "errorFlashMessage", value: "Please log in" });
+      appDispatch({ type: "errorFlashMessage", value: "Please log in." });
       navigate("/");
     }
   }, []);
@@ -44,7 +44,7 @@ function EditProfile() {
   async function updateEmail(email) {
     try {
       const response = await Axios.put("/user/updateEmail", { email });
-      if (response.data === "Invalid Email") {
+      if (response.data === "Invalid email format.") {
         appDispatch({ type: "errorFlashMessage", value: "Invalid Email" });
       } else if (response.data === "Email taken") {
         appDispatch({
@@ -54,7 +54,7 @@ function EditProfile() {
       } else if (response.data) {
         setEmail("");
         getUserDetails();
-        appDispatch({ type: "successFlashMessage", value: "Updated" });
+        appDispatch({ type: "successFlashMessage", value: "Updated." });
       } else {
         appDispatch({ type: "errorFlashMessage", value: "Error" });
       }
@@ -71,16 +71,17 @@ function EditProfile() {
       if (res.data === "Password Character") {
         appDispatch({
           type: "errorFlashMessage",
-          value: "Password must contain alphabet, number and special character",
+          value:
+            "Password must contain alphabet, number and special character.",
         });
       } else if (res.data === "Password Length") {
         appDispatch({
           type: "errorFlashMessage",
           value:
-            "Password must be minimum 8 characters and maximum 10 characters",
+            "Password must be at least 8 characters and at most 10 characters",
         });
       } else if (res.data) {
-        appDispatch({ type: "successFlashMessage", value: "Updated" });
+        appDispatch({ type: "successFlashMessage", value: "Updated." });
       } else {
         appDispatch({ type: "errorFlashMessage", value: "Error" });
       }
@@ -103,7 +104,7 @@ function EditProfile() {
     } else {
       appDispatch({
         type: "errorFlashMessage",
-        value: "Key in new email/password to update!",
+        value: "Key in new email/password to update.",
       });
     }
     e.target.reset();

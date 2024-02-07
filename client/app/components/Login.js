@@ -22,14 +22,14 @@ function Login() {
       } else {
         appDispatch({
           type: "errorFlashMessage",
-          value: "Incorrect username/password",
+          value: "Incorrect username/password.",
         });
       }
     } catch (err) {
       console.log("there was a error");
       appDispatch({
         type: "errorFlashMessage",
-        value: "Incorrect username/password",
+        value: "Incorrect username/password.",
       });
     }
   }

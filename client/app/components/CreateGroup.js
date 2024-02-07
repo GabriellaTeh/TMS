@@ -15,19 +15,22 @@ function CreateGroup(props) {
           appDispatch({
             type: "errorFlashMessage",
             value:
-              "Group name must be minimum 3 characters and maximum 20 characters",
+              "Group name must be at least 3 characters and at most 20 characters.",
           });
         } else if (response.data === "Group Character") {
           appDispatch({
             type: "errorFlashMessage",
-            value: "Group name can only contain alphanumeric characters",
+            value: "Group name can only contain alphanumeric characters.",
           });
         } else if (response.data === "Group exists") {
-          appDispatch({ type: "errorFlashMessage", value: "Group exists" });
+          appDispatch({
+            type: "errorFlashMessage",
+            value: "Group already exists.",
+          });
         } else if (response.data) {
           appDispatch({
             type: "successFlashMessage",
-            value: "Group created!",
+            value: "Group created.",
           });
           props.setRefresh(true);
           e.target.reset();
@@ -37,7 +40,7 @@ function CreateGroup(props) {
       } else {
         appDispatch({
           type: "errorFlashMessage",
-          value: "Please enter group name!",
+          value: "Please enter group name.",
         });
       }
     } catch (err) {

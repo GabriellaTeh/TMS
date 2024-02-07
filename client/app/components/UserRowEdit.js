@@ -85,14 +85,17 @@ function UserRowEdit(props) {
         email,
       });
       if (response.data === "Invalid Email") {
-        appDispatch({ type: "errorFlashMessage", value: "Invalid email" });
+        appDispatch({
+          type: "errorFlashMessage",
+          value: "Invalid email format.",
+        });
       } else if (response.data === "Email taken") {
         appDispatch({
           type: "errorFlashMessage",
           value: "Email taken. Please choose another email.",
         });
       } else if (response.data) {
-        appDispatch({ type: "successFlashMessage", value: "Updated" });
+        appDispatch({ type: "successFlashMessage", value: "Updated." });
       } else {
         appDispatch({ type: "errorFlashMessage", value: "Error" });
       }
@@ -112,16 +115,17 @@ function UserRowEdit(props) {
       if (response.data === "Password Character") {
         appDispatch({
           type: "errorFlashMessage",
-          value: "Password must contain alphabet, number and special character",
+          value:
+            "Password must contain alphabet, number and special character.",
         });
       } else if (response.data === "Password Length") {
         appDispatch({
           type: "errorFlashMessage",
           value:
-            "Password must be minimum 8 characters and maximum 10 characters",
+            "Password must be at least 8 characters and at most 10 character.",
         });
       } else if (response.data) {
-        appDispatch({ type: "successFlashMessage", value: "Updated" });
+        appDispatch({ type: "successFlashMessage", value: "Updated." });
       } else {
         appDispatch({ type: "errorFlashMessage", value: "Error" });
       }

@@ -34,31 +34,34 @@ function CreateUser(props) {
           appDispatch({
             type: "errorFlashMessage",
             value:
-              "Username must be minimum 3 characters and maximum 20 characters",
+              "Username must be at least 3 characters and at most 20 characters.",
           });
         } else if (response.data === "Username Character") {
           appDispatch({
             type: "errorFlashMessage",
-            value: "Username can only contain alphanumeric characters",
+            value: "Username can only contain alphanumeric characters.",
           });
         } else if (response.data === "Password Character") {
           appDispatch({
             type: "errorFlashMessage",
             value:
-              "Password must contain alphabet, number and special character",
+              "Password must contain alphabet, number and special character.",
           });
         } else if (response.data === "Password Length") {
           appDispatch({
             type: "errorFlashMessage",
             value:
-              "Password must be minimum 8 characters and maximum 10 characters",
+              "Password must be at least 8 characters and at most 10 characters.",
           });
         } else if (response.data === "Invalid Email") {
-          appDispatch({ type: "errorFlashMessage", value: "Invalid Email" });
+          appDispatch({
+            type: "errorFlashMessage",
+            value: "Invalid email format.",
+          });
         } else if (response.data === "User exists") {
           appDispatch({
             type: "errorFlashMessage",
-            value: "User already exists",
+            value: "User already exists.",
           });
         } else if (response.data === "Email taken") {
           appDispatch({
@@ -69,15 +72,15 @@ function CreateUser(props) {
           appDispatch({
             type: "errorFlashMessage",
             value:
-              "Group name must be minimum 3 characters and maximum 20 characters",
+              "Group name must be at least 3 characters and at most 20 characters.",
           });
         } else if (response.data === "Group Character") {
           appDispatch({
             type: "errorFlashMessage",
-            value: "Group name can only contain alphanumeric characters",
+            value: "Group name can only contain alphanumeric characters.",
           });
         } else if (response.data) {
-          appDispatch({ type: "successFlashMessage", value: "User created" });
+          appDispatch({ type: "successFlashMessage", value: "User created." });
           props.setRefresh(true);
           e.target.reset();
         } else {
@@ -86,7 +89,7 @@ function CreateUser(props) {
       } else {
         appDispatch({
           type: "errorFlashMessage",
-          value: "Username and Password required!",
+          value: "Username and Password required.",
         });
       }
       selectInputRef.current.clearValue();
