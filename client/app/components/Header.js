@@ -22,8 +22,6 @@ function Header() {
       setIsAdmin(response.data);
     } catch (err) {
       console.log(err);
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
-      navigate("/");
     }
   }
 

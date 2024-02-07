@@ -34,8 +34,6 @@ function UserManagement() {
       }
     } catch (err) {
       console.log(err);
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
-      navigate("/");
     }
   }
 
@@ -64,6 +62,7 @@ function UserManagement() {
     } catch (err) {
       console.log(err);
       appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      appDispatch({ type: "logout" });
       navigate("/");
     }
   }
@@ -83,8 +82,7 @@ function UserManagement() {
         navigate("/home");
       }
     } catch (err) {
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
-      navigate("/");
+      console.log(err);
     }
   }
 

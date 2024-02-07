@@ -45,8 +45,6 @@ function UserRowEdit(props) {
       const res = await Axios.post("/group/removeUser", { id });
     } catch (err) {
       console.log(err);
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
-      navigate("/");
     }
     //addition
     groups.forEach(async (group) => {
@@ -57,8 +55,7 @@ function UserRowEdit(props) {
           group_name,
         });
       } catch (err) {
-        appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
-        navigate("/");
+        console.log(err);
       }
     });
   }
@@ -68,8 +65,6 @@ function UserRowEdit(props) {
       const response = await Axios.put("/user/activateUser", { username });
     } catch (err) {
       console.log(err);
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
-      navigate("/");
     }
   }
 
@@ -78,8 +73,6 @@ function UserRowEdit(props) {
       const response = await Axios.put("/user/disableUser", { username });
     } catch (err) {
       console.log(err);
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
-      navigate("/");
     }
   }
 
@@ -105,8 +98,6 @@ function UserRowEdit(props) {
     } catch (err) {
       console.log(err);
       setEmail("");
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
-      navigate("/");
     }
   }
 
@@ -136,8 +127,6 @@ function UserRowEdit(props) {
     } catch (err) {
       console.log(err);
       setPassword("");
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
-      navigate("/");
     }
   }
 

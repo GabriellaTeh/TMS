@@ -13,6 +13,7 @@ const {
   disableUser,
   activateUser,
   createAdmin,
+  verifyUser,
 } = require("../controllers/userController");
 
 const { isAuthenticatedUser, authorizedAdmin } = require("../middleware/auth");
@@ -31,6 +32,7 @@ router.route("/createAdmin").post(createAdmin);
 
 //user
 router.route("/user/login").post(loginUser);
+router.route("/verify").get(verifyUser);
 router.route("/user/profile").get(isAuthenticatedUser, viewProfile);
 router.route("/user/updateEmail").put(isAuthenticatedUser, updateEmail);
 router.route("/user/updatePassword").put(isAuthenticatedUser, updatePassword);

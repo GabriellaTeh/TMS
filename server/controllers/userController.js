@@ -25,6 +25,25 @@ exports.createAdmin = async (req, res, next) => {
   );
 };
 
+exports.verifyUser = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  try {
+    jwt.verify(token, "my_secret_key");
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ message: "Invalid token" });
+  }
+};
+
 //returns true/false
 async function CheckGroup(userid, groupname) {
   return new Promise((resolve, reject) => {

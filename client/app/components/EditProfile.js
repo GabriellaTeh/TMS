@@ -24,6 +24,7 @@ function EditProfile() {
     } catch (err) {
       console.log(err);
       appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      appDispatch({ type: "logout" });
       navigate("/");
     }
   }

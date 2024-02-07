@@ -52,10 +52,8 @@ function Main() {
 
   useEffect(() => {
     if (state.loggedIn) {
-      // localStorage.setItem("token", state.token);
       Cookies.set("token", state.token);
     } else {
-      // localStorage.removeItem("token");
       Cookies.remove("token");
       Axios.defaults.headers.common["Authorization"] = null;
     }
