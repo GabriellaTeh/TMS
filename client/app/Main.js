@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useImmerReducer } from "use-immer";
 import { ToastContainer, toast } from "react-toastify";
+import Cookies from "js-cookie";
 import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 Axios.defaults.baseURL = "http://localhost:8080";
