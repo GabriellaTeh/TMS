@@ -15,7 +15,7 @@ function Homepage() {
       const response = await Axios.get("/verify");
     } catch (err) {
       console.log(err);
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid." });
+      appDispatch({ type: "errorMessage", value: "Token invalid." });
       appDispatch({ type: "logout" });
       navigate("/");
     }
@@ -24,7 +24,7 @@ function Homepage() {
   useEffect(() => {
     if (!appState.loggedIn) {
       appDispatch({ type: "logout" });
-      appDispatch({ type: "errorFlashMessage", value: "Please log in." });
+      appDispatch({ type: "errorMessage", value: "Please log in." });
       navigate("/");
     } else {
       verifyToken();

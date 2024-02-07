@@ -23,7 +23,7 @@ function EditProfile() {
       }
     } catch (err) {
       console.log(err);
-      appDispatch({ type: "errorFlashMessage", value: "Token invalid." });
+      appDispatch({ type: "errorMessage", value: "Token invalid." });
       appDispatch({ type: "logout" });
       navigate("/");
     }
@@ -32,7 +32,7 @@ function EditProfile() {
   useEffect(() => {
     if (!appState.loggedIn) {
       appDispatch({ type: "logout" });
-      appDispatch({ type: "errorFlashMessage", value: "Please log in." });
+      appDispatch({ type: "errorMessage", value: "Please log in." });
       navigate("/");
     }
   }, []);
@@ -45,18 +45,18 @@ function EditProfile() {
     try {
       const response = await Axios.put("/user/updateEmail", { email });
       if (response.data === "Invalid email format.") {
-        appDispatch({ type: "errorFlashMessage", value: "Invalid Email" });
+        appDispatch({ type: "errorMessage", value: "Invalid Email" });
       } else if (response.data === "Email taken") {
         appDispatch({
-          type: "errorFlashMessage",
+          type: "errorMessage",
           value: "Email taken. Please choose another email.",
         });
       } else if (response.data) {
         setEmail("");
         getUserDetails();
-        appDispatch({ type: "successFlashMessage", value: "Updated." });
+        appDispatch({ type: "successMessage", value: "Updated." });
       } else {
-        appDispatch({ type: "errorFlashMessage", value: "Error" });
+        appDispatch({ type: "errorMessage", value: "Error" });
       }
       setEmail("");
     } catch (err) {
@@ -70,20 +70,20 @@ function EditProfile() {
       const res = await Axios.put("/user/updatePassword", { password });
       if (res.data === "Password Character") {
         appDispatch({
-          type: "errorFlashMessage",
+          type: "errorMessage",
           value:
             "Password must contain alphabet, number and special character.",
         });
       } else if (res.data === "Password Length") {
         appDispatch({
-          type: "errorFlashMessage",
+          type: "errorMessage",
           value:
             "Password must be at least 8 characters and at most 10 characters",
         });
       } else if (res.data) {
-        appDispatch({ type: "successFlashMessage", value: "Updated." });
+        appDispatch({ type: "successMessage", value: "Updated." });
       } else {
-        appDispatch({ type: "errorFlashMessage", value: "Error" });
+        appDispatch({ type: "errorMessage", value: "Error" });
       }
       setPassword("");
     } catch (err) {
@@ -103,7 +103,7 @@ function EditProfile() {
       updatePassword(password);
     } else {
       appDispatch({
-        type: "errorFlashMessage",
+        type: "errorMessage",
         value: "Key in new email/password to update.",
       });
     }

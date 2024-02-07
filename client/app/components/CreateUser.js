@@ -32,63 +32,63 @@ function CreateUser(props) {
         });
         if (response.data === "Username Length") {
           appDispatch({
-            type: "errorFlashMessage",
+            type: "errorMessage",
             value:
               "Username must be at least 3 characters and at most 20 characters.",
           });
         } else if (response.data === "Username Character") {
           appDispatch({
-            type: "errorFlashMessage",
+            type: "errorMessage",
             value: "Username can only contain alphanumeric characters.",
           });
         } else if (response.data === "Password Character") {
           appDispatch({
-            type: "errorFlashMessage",
+            type: "errorMessage",
             value:
               "Password must contain alphabet, number and special character.",
           });
         } else if (response.data === "Password Length") {
           appDispatch({
-            type: "errorFlashMessage",
+            type: "errorMessage",
             value:
               "Password must be at least 8 characters and at most 10 characters.",
           });
         } else if (response.data === "Invalid Email") {
           appDispatch({
-            type: "errorFlashMessage",
+            type: "errorMessage",
             value: "Invalid email format.",
           });
         } else if (response.data === "User exists") {
           appDispatch({
-            type: "errorFlashMessage",
+            type: "errorMessage",
             value: "User already exists.",
           });
         } else if (response.data === "Email taken") {
           appDispatch({
-            type: "errorFlashMessage",
+            type: "errorMessage",
             value: "Email taken. Please choose another email.",
           });
         } else if (response.data === "Group Length") {
           appDispatch({
-            type: "errorFlashMessage",
+            type: "errorMessage",
             value:
               "Group name must be at least 3 characters and at most 20 characters.",
           });
         } else if (response.data === "Group Character") {
           appDispatch({
-            type: "errorFlashMessage",
+            type: "errorMessage",
             value: "Group name can only contain alphanumeric characters.",
           });
         } else if (response.data) {
-          appDispatch({ type: "successFlashMessage", value: "User created." });
+          appDispatch({ type: "successMessage", value: "User created." });
           props.setRefresh(true);
           e.target.reset();
         } else {
-          appDispatch({ type: "errorFlashMessage", value: "Error" });
+          appDispatch({ type: "errorMessage", value: "Error" });
         }
       } else {
         appDispatch({
-          type: "errorFlashMessage",
+          type: "errorMessage",
           value: "Username and Password required.",
         });
       }

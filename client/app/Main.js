@@ -39,10 +39,10 @@ function Main() {
       case "logout":
         draft.loggedIn = false;
         return;
-      case "successFlashMessage":
+      case "successMessage":
         toast.success(action.value);
         return;
-      case "errorFlashMessage":
+      case "errorMessage":
         toast.error(action.value);
         return;
     }
