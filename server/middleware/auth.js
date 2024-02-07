@@ -13,7 +13,7 @@ exports.isAuthenticatedUser = (req, res, next) => {
     res.status(401).json({ message: "Unauthorized" });
   } else {
     try {
-      const decoded = jwt.verify(token, "my_secret_key");
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
       const username = decoded.username;
 
       database.query(
@@ -48,7 +48,7 @@ exports.authorizedAdmin = async (req, res, next) => {
     res.status(401).json({ message: "Unauthorized" });
   } else {
     try {
-      const decoded = jwt.verify(token, "my_secret_key");
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
       const username = decoded.username;
       database.query(
         "SELECT * FROM accounts WHERE username = ? ",

@@ -127,7 +127,7 @@ exports.checkUserGroup = async (req, res, next) => {
   }
   if (token) {
     try {
-      const decoded = jwt.verify(token, "my_secret_key");
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
       const username = decoded.username;
       const group_name = req.body.group_name;
       const result = await CheckGroup(username, group_name);

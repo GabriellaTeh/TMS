@@ -37,7 +37,7 @@ exports.verifyUser = (req, res, next) => {
     return res.send(false);
   }
   try {
-    jwt.verify(token, "my_secret_key");
+    jwt.verify(token, process.env.JWT_SECRET_KEY);
   } catch (err) {
     console.log(err);
     res.status(401).json({ message: "Invalid token" });
@@ -87,9 +87,13 @@ exports.loginUser = async (req, res, next) => {
           const match = await bcrypt.compare(password, results[0].password);
           const active = results[0].isActive === 1;
           if (match && active) {
-            const token = jwt.sign({ username: username }, "my_secret_key", {
-              expiresIn: "3d",
-            });
+            const token = jwt.sign(
+              { username: username },
+              process.env.JWT_SECRET_KEY,
+              {
+                expiresIn: "3d",
+              }
+            );
             const isAdmin = await CheckGroup(username, "admin");
             res.status(200).json({
               token: token,
@@ -265,7 +269,7 @@ exports.viewProfile = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const decoded = jwt.verify(token, "my_secret_key");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const username = decoded.username;
     database.query(
       "SELECT * FROM accounts WHERE username = ?",
@@ -306,7 +310,7 @@ exports.updateEmail = async (req, res, next) => {
     return res.send(false);
   }
   try {
-    const decoded = jwt.verify(token, "my_secret_key");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const username = decoded.username;
     const email = req.body.email;
 
@@ -361,7 +365,7 @@ exports.updatePassword = async (req, res, next) => {
     return res.send(false);
   }
   try {
-    const decoded = jwt.verify(token, "my_secret_key");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const username = decoded.username;
     const password = req.body.password;
 
