@@ -33,6 +33,8 @@ function UserManagement() {
       }
     } catch (err) {
       console.log(err);
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      navigate("/");
     }
   }
 
@@ -60,6 +62,8 @@ function UserManagement() {
       }
     } catch (err) {
       console.log(err);
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      navigate("/");
     }
   }
 
@@ -67,6 +71,19 @@ function UserManagement() {
     const group = groups.find((group) => group.user === userId);
     if (group) {
       return group.groups;
+    }
+  }
+
+  async function checkAdmin() {
+    const group_name = "admin";
+    try {
+      const response = await Axios.post("/user/checkGroup", { group_name });
+      if (!response.data) {
+        navigate("/home");
+      }
+    } catch (err) {
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      navigate("/");
     }
   }
 
@@ -78,14 +95,6 @@ function UserManagement() {
       setRefresh(false);
     }
   }, [refresh]);
-
-  async function checkAdmin() {
-    const group_name = "admin";
-    const response = await Axios.post("/user/checkGroup", { group_name });
-    if (!response.data) {
-      navigate("/home");
-    }
-  }
 
   useEffect(() => {
     if (!appState.loggedIn) {

@@ -20,11 +20,11 @@ function EditProfile() {
       if (response.data) {
         setUsername(response.data.username);
         setUserEmail(response.data.email);
-      } else {
-        //TODO: dispatch msg for expired token
       }
     } catch (err) {
       console.log(err);
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      navigate("/");
     }
   }
 

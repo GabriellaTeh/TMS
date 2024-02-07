@@ -41,26 +41,35 @@ function UserRowEdit(props) {
 
   async function updateUserGroups(groups) {
     //delete all
-    const res = await Axios.post("/group/removeUser", { id });
-    //addition
-    for (let i = 0; i < groups.length; i++) {
-      const group_name = groups[i].value;
-      const response = await Axios.post("/group/addUser", {
-        id,
-        group_name,
-      });
+    try {
+      const res = await Axios.post("/group/removeUser", { id });
+    } catch (err) {
+      console.log(err);
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      navigate("/");
     }
+    //addition
+    groups.forEach(async (group) => {
+      const group_name = group.value;
+      try {
+        const response = await Axios.post("/group/addUser", {
+          id,
+          group_name,
+        });
+      } catch (err) {
+        appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+        navigate("/");
+      }
+    });
   }
 
   async function activateUser(username) {
     try {
       const response = await Axios.put("/user/activateUser", { username });
-
-      if (response.data) {
-        console.log("success");
-      }
     } catch (err) {
       console.log(err);
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      navigate("/");
     }
   }
 
@@ -69,6 +78,8 @@ function UserRowEdit(props) {
       const response = await Axios.put("/user/disableUser", { username });
     } catch (err) {
       console.log(err);
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      navigate("/");
     }
   }
 
@@ -89,6 +100,8 @@ function UserRowEdit(props) {
     } catch (err) {
       console.log(err);
       setEmail("");
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      navigate("/");
     }
   }
 
@@ -118,6 +131,8 @@ function UserRowEdit(props) {
     } catch (err) {
       console.log(err);
       setPassword("");
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      navigate("/");
     }
   }
 

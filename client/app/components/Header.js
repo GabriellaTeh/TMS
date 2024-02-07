@@ -1,14 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import StateContext from "../StateContext";
 import HeaderHomeUser from "./HeaderHomeUser";
 import HeaderOthers from "./HeaderOthers";
 import HeaderHomeAdmin from "./HeaderHomeAdmin";
 import Axios from "axios";
+import DispatchContext from "../DispatchContext";
 
 function Header() {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
   const location = useLocation();
+  const navigate = useNavigate();
   const path = location.pathname;
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -19,6 +22,8 @@ function Header() {
       setIsAdmin(response.data);
     } catch (err) {
       console.log(err);
+      appDispatch({ type: "errorFlashMessage", value: "Token invalid" });
+      navigate("/");
     }
   }
 
