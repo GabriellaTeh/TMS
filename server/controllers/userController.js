@@ -148,6 +148,25 @@ async function findUser(username) {
   });
 }
 
+async function findEmail(email) {
+  return new Promise((resolve, reject) => {
+    database.query(
+      "SELECT * FROM accounts WHERE email = ?",
+      [email],
+      function (err, results) {
+        if (err) {
+          resolve(false);
+        }
+        if (results.length === 0) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      }
+    );
+  });
+}
+
 //admin creates new user => /user/createUser
 exports.createUser = async (req, res, next) => {
   const username = req.body.username;
@@ -179,7 +198,8 @@ exports.createUser = async (req, res, next) => {
     const usernameLower = username.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
     const userExists = await findUser(usernameLower);
-    if (!userExists) {
+    const emailExists = await findEmail(email);
+    if (!userExists && !emailExists) {
       database.query(
         "INSERT INTO accounts (username, password, email, groupNames) VALUES (?, ?, ?, ?)",
         [usernameLower, hashedPassword, email, groupList],
@@ -191,8 +211,10 @@ exports.createUser = async (req, res, next) => {
           }
         }
       );
-    } else {
+    } else if (userExists) {
       res.send("User exists");
+    } else if (emailExists) {
+      res.send("Email taken");
     }
   } else {
     res.send(false);
