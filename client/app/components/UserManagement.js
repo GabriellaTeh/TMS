@@ -19,6 +19,7 @@ function UserManagement() {
   const [refresh, setRefresh] = useState(true);
 
   async function getGroupsList() {
+    setGroupList([]);
     try {
       const response = await Axios.get("/groups");
       if (response.data) {
@@ -91,7 +92,6 @@ function UserManagement() {
     if (refresh) {
       getGroupsList();
       getUsersTable();
-      console.log("triggered");
       setRefresh(false);
     }
   }, [refresh]);
@@ -111,8 +111,8 @@ function UserManagement() {
       <Helmet>
         <title>Manage Users</title>
       </Helmet>
-      <CreateGroup />
-      <CreateUser groupList={groupList} />
+      <CreateGroup setRefresh={setRefresh} />
+      <CreateUser groupList={groupList} setRefresh={setRefresh} />
       <div className="mt-3">
         <table id="userTable" className="table table-hover">
           <thead>

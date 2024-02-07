@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Axios from "axios";
 import DispatchContext from "../DispatchContext";
 
-function CreateGroup() {
+function CreateGroup(props) {
   const [group, setGroup] = useState("");
   const appDispatch = useContext(DispatchContext);
 
@@ -29,6 +29,7 @@ function CreateGroup() {
             type: "successFlashMessage",
             value: "Group created!",
           });
+          props.setRefresh(true);
           e.target.reset();
         } else {
           appDispatch({ type: "errorFlashMessage", value: "Error" });
