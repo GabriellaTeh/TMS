@@ -10,44 +10,46 @@ function UserRowEdit(props) {
   const appDispatch = useContext(DispatchContext);
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
-  const [isActive, setIsActive] = useState(props.isActive);
-  const [groups, setGroups] = useState(props.groups);
+  const [isActive, setIsActive] = useState(true);
+  const [groups, setGroups] = useState([]);
   const username = props.username;
   const id = props.id;
 
-  function handleSave() {
+  async function handleSave() {
     if (email && password) {
-      updateEmail(username, email);
-      updatePassword(username, password);
+      await updateEmail(username, email);
+      await updatePassword(username, password);
     } else if (email) {
-      updateEmail(username, email);
+      await updateEmail(username, email);
     } else if (password) {
-      updatePassword(username, password);
+      await updatePassword(username, password);
     }
     if (isActive) {
-      activateUser(username);
+      await activateUser(username);
     } else {
-      disableUser(username);
+      await disableUser(username);
     }
-    updateUserGroups(groups);
+    await updateUserGroups(groups);
     props.setEdit(false);
+    props.setRefresh(true);
   }
 
   function handleCancel() {
     props.setEdit(false);
+    props.setRefresh(true);
   }
 
   async function updateUserGroups(groups) {
     //delete all
     const res = await Axios.post("/group/removeUser", { id });
     //addition
-    groups.forEach(async (group) => {
-      const group_name = group.value;
+    for (let i = 0; i < groups.length; i++) {
+      const group_name = groups[i].value;
       const response = await Axios.post("/group/addUser", {
         id,
         group_name,
       });
-    });
+    }
   }
 
   async function activateUser(username) {

@@ -23,6 +23,7 @@ function UserRow(props) {
           groupList={props.groupList}
           setEdit={setEdit}
           isDefaultAdmin={isDefaultAdmin}
+          setRefresh={props.setRefresh}
         />
       ) : (
         <tr key={props.id}>

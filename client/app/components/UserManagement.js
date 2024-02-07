@@ -16,6 +16,7 @@ function UserManagement() {
   const [users, setUsers] = useState([]);
   const [groups, setGroups] = useState([]);
   const [groupList, setGroupList] = useState([]);
+  const [refresh, setRefresh] = useState(true);
 
   async function getGroupsList() {
     try {
@@ -36,6 +37,8 @@ function UserManagement() {
   }
 
   async function getUsersTable() {
+    setUsers([]);
+    setGroups([]);
     try {
       const response = await Axios.get("/users");
       if (response.data) {
@@ -68,9 +71,13 @@ function UserManagement() {
   }
 
   useEffect(() => {
-    getGroupsList();
-    getUsersTable();
-  }, []);
+    if (refresh) {
+      getGroupsList();
+      getUsersTable();
+      console.log("triggered");
+      setRefresh(false);
+    }
+  }, [refresh]);
 
   async function checkAdmin() {
     const group_name = "admin";
@@ -129,6 +136,7 @@ function UserManagement() {
                   isActive={user.isActive}
                   groups={findGroups(user.id)}
                   groupList={groupList}
+                  setRefresh={setRefresh}
                 />
               );
             })}

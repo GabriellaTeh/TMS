@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 Axios.defaults.baseURL = "http://localhost:8080";
-Axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+Axios.defaults.headers.common["Authorization"] = `Bearer ${Cookies.get(
   "token"
 )}`;
 
@@ -21,8 +21,8 @@ import UserManagement from "./components/UserManagement";
 
 function Main() {
   const initialState = {
-    loggedIn: Boolean(localStorage.getItem("token")),
-    token: localStorage.getItem("token"),
+    loggedIn: Boolean(Cookies.get("token")),
+    token: Cookies.get("token"),
     successFlashMessages: [],
     errorFlashMessages: [],
   };
@@ -52,9 +52,11 @@ function Main() {
 
   useEffect(() => {
     if (state.loggedIn) {
-      localStorage.setItem("token", state.token);
+      // localStorage.setItem("token", state.token);
+      Cookies.set("token", state.token);
     } else {
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
+      Cookies.remove("token");
       Axios.defaults.headers.common["Authorization"] = null;
     }
   }, [state.loggedIn, state.token]);
