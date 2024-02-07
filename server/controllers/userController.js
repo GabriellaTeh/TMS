@@ -198,7 +198,10 @@ exports.createUser = async (req, res, next) => {
     const usernameLower = username.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
     const userExists = await findUser(usernameLower);
-    const emailExists = await findEmail(email);
+    let emailExists = false;
+    if (email.length > 0) {
+      emailExists = await findEmail(email);
+    }
     if (!userExists && !emailExists) {
       database.query(
         "INSERT INTO accounts (username, password, email, groupNames) VALUES (?, ?, ?, ?)",

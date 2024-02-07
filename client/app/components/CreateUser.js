@@ -75,6 +75,7 @@ function CreateUser(props) {
           });
         } else if (response.data) {
           appDispatch({ type: "successFlashMessage", value: "User created" });
+          props.setRefresh(true);
           e.target.reset();
         } else {
           appDispatch({ type: "errorFlashMessage", value: "Error" });
