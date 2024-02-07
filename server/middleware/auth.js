@@ -14,11 +14,11 @@ exports.isAuthenticatedUser = (req, res, next) => {
   } else {
     try {
       const decoded = jwt.verify(token, "my_secret_key");
-      const userId = decoded.id;
+      const username = decoded.username;
 
       database.query(
-        "SELECT * FROM accounts WHERE id = ?",
-        [userId],
+        "SELECT * FROM accounts WHERE username = ?",
+        [username],
         function (err, results) {
           if (err) {
           } else if (results[0].isActive === 1) {
@@ -49,10 +49,10 @@ exports.authorizedAdmin = async (req, res, next) => {
   } else {
     try {
       const decoded = jwt.verify(token, "my_secret_key");
-      const id = decoded.id;
+      const username = decoded.username;
       database.query(
-        "SELECT * FROM accounts WHERE id = ? ",
-        [id],
+        "SELECT * FROM accounts WHERE username = ? ",
+        [username],
         function (err, results) {
           if (err) {
             console.log(err);

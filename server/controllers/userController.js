@@ -48,7 +48,7 @@ exports.verifyUser = (req, res, next) => {
 async function CheckGroup(userid, groupname) {
   return new Promise((resolve, reject) => {
     database.query(
-      "SELECT * FROM accounts WHERE id = ?",
+      "SELECT * FROM accounts WHERE username = ?",
       [userid],
       function (err, results) {
         if (err) {
@@ -86,16 +86,14 @@ exports.loginUser = async (req, res, next) => {
         } else {
           const match = await bcrypt.compare(password, results[0].password);
           const active = results[0].isActive === 1;
-          const userid = results[0].id;
           if (match && active) {
-            const token = jwt.sign({ id: userid }, "my_secret_key", {
+            const token = jwt.sign({ username: username }, "my_secret_key", {
               expiresIn: "3d",
             });
-            const isAdmin = await CheckGroup(userid, "admin");
+            const isAdmin = await CheckGroup(username, "admin");
             res.status(200).json({
               token: token,
               username: username,
-              id: userid,
               admin: isAdmin,
             });
           } else {
@@ -268,10 +266,10 @@ exports.viewProfile = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
-    const userId = decoded.id;
+    const username = decoded.username;
     database.query(
-      "SELECT * FROM accounts WHERE id = ?",
-      [userId],
+      "SELECT * FROM accounts WHERE username = ?",
+      [username],
       function (err, results) {
         if (err) {
           console.log(err);
@@ -309,7 +307,7 @@ exports.updateEmail = async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
-    const userId = decoded.id;
+    const username = decoded.username;
     const email = req.body.email;
 
     if (email) {
@@ -322,8 +320,8 @@ exports.updateEmail = async (req, res, next) => {
       }
       if (!emailExists) {
         database.query(
-          "UPDATE accounts SET email = ? WHERE id = ?",
-          [email, userId],
+          "UPDATE accounts SET email = ? WHERE username = ?",
+          [email, username],
           function (err, results) {
             if (err) {
               console.log(err);
@@ -364,7 +362,7 @@ exports.updatePassword = async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, "my_secret_key");
-    const userId = decoded.id;
+    const username = decoded.username;
     const password = req.body.password;
 
     if (password) {
@@ -373,8 +371,8 @@ exports.updatePassword = async (req, res, next) => {
       }
       const hashedPassword = await bcrypt.hash(password, 10);
       database.query(
-        "UPDATE accounts SET password = ? WHERE id = ?",
-        [hashedPassword, userId],
+        "UPDATE accounts SET password = ? WHERE username = ?",
+        [hashedPassword, username],
         function (err, results) {
           if (err) {
             console.log(err);

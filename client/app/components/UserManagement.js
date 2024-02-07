@@ -55,7 +55,7 @@ function UserManagement() {
               label: group,
             });
           });
-          options.push({ user: user.id, groups: userOptions });
+          options.push({ user: user.username, groups: userOptions });
         });
         setGroups(options);
       }
@@ -137,11 +137,10 @@ function UserManagement() {
             {users.map((user) => {
               return (
                 <UserRow
-                  id={user.id}
                   username={user.username}
                   email={user.email}
                   isActive={user.isActive}
-                  groups={findGroups(user.id)}
+                  groups={findGroups(user.username)}
                   groupList={groupList}
                   setRefresh={setRefresh}
                 />

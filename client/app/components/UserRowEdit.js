@@ -13,7 +13,7 @@ function UserRowEdit(props) {
   const [isActive, setIsActive] = useState(true);
   const [groups, setGroups] = useState([]);
   const username = props.username;
-  const id = props.id;
+  const isDefaultAdmin = props.username === "admin";
 
   async function handleSave() {
     if (email && password) {
@@ -24,12 +24,14 @@ function UserRowEdit(props) {
     } else if (password) {
       await updatePassword(username, password);
     }
-    if (isActive) {
-      await activateUser(username);
-    } else {
-      await disableUser(username);
+    if (!isDefaultAdmin) {
+      if (isActive) {
+        await activateUser(username);
+      } else {
+        await disableUser(username);
+      }
+      await updateUserGroups(groups);
     }
-    await updateUserGroups(groups);
     props.setEdit(false);
     props.setRefresh(true);
   }
@@ -42,7 +44,7 @@ function UserRowEdit(props) {
   async function updateUserGroups(groups) {
     //delete all
     try {
-      const res = await Axios.post("/group/removeUser", { id });
+      const res = await Axios.post("/group/removeUser", { username });
     } catch (err) {
       console.log(err);
     }
@@ -51,7 +53,7 @@ function UserRowEdit(props) {
       const group_name = group.value;
       try {
         const response = await Axios.post("/group/addUser", {
-          id,
+          username,
           group_name,
         });
       } catch (err) {
@@ -132,7 +134,7 @@ function UserRowEdit(props) {
 
   return (
     <>
-      <tr key={props.id}>
+      <tr key={props.username}>
         <td>
           <input type="text" readOnly={true} value={props.username} />
         </td>

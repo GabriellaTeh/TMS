@@ -93,7 +93,7 @@ exports.getGroups = (req, res, next) => {
 async function CheckGroup(userid, groupname) {
   return new Promise((resolve, reject) => {
     database.query(
-      "SELECT * FROM accounts WHERE id = ?",
+      "SELECT * FROM accounts WHERE username = ?",
       [userid],
       function (err, results) {
         if (err) {
@@ -128,9 +128,9 @@ exports.checkUserGroup = async (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, "my_secret_key");
-      const userid = decoded.id;
+      const username = decoded.username;
       const group_name = req.body.group_name;
-      const result = await CheckGroup(userid, group_name);
+      const result = await CheckGroup(username, group_name);
       res.send(result);
     } catch (err) {
       console.log(err);
@@ -161,12 +161,12 @@ exports.addUserToGroup = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const userId = req.body.id;
+    const username = req.body.username;
     const group_name = req.body.group_name + ",";
 
     database.query(
-      "UPDATE accounts SET groupNames = CONCAT(groupNames, ?) WHERE id = ?",
-      [group_name, userId],
+      "UPDATE accounts SET groupNames = CONCAT(groupNames, ?) WHERE username = ?",
+      [group_name, username],
       function (err, results) {
         if (err) {
           console.log(err);
@@ -196,11 +196,11 @@ exports.removeUserFromGroup = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const userId = req.body.id;
+    const username = req.body.username;
     const empty = "";
     database.query(
-      "UPDATE accounts SET groupNames = ? WHERE id = ?",
-      [empty, userId],
+      "UPDATE accounts SET groupNames = ? WHERE username = ?",
+      [empty, username],
       function (err, results) {
         if (err) {
           console.log(err);
@@ -228,10 +228,10 @@ exports.getUserGroups = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const userId = req.body.id;
+    const username = req.body.username;
     database.query(
-      "SELECT groupNames FROM accounts WHERE id = ?",
-      [userId],
+      "SELECT groupNames FROM accounts WHERE username = ?",
+      [username],
       function (err, results) {
         if (err) {
           console.log(err);

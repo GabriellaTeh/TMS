@@ -9,7 +9,6 @@ import DispatchContext from "../DispatchContext";
 
 function Header() {
   const appState = useContext(StateContext);
-  const appDispatch = useContext(DispatchContext);
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname;

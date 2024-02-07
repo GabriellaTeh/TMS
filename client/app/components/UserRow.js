@@ -15,7 +15,6 @@ function UserRow(props) {
     <>
       {edit ? (
         <UserRowEdit
-          id={props.id}
           username={props.username}
           email={props.email}
           isActive={props.isActive}
@@ -26,7 +25,7 @@ function UserRow(props) {
           setRefresh={props.setRefresh}
         />
       ) : (
-        <tr key={props.id}>
+        <tr key={props.username}>
           <td>
             <input type="text" readOnly={true} value={props.username} />
           </td>
