@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import Axios from "axios";
 import ToggleSwitchEdit from "./ToggleSwitchEdit";
@@ -13,6 +12,7 @@ function UserRowEdit(props) {
   const [isActive, setIsActive] = useState(true);
   const [groups, setGroups] = useState([]);
   const [groupChanged, setGroupChanged] = useState(false);
+  const [activeChanged, setActiveChanged] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
   const username = props.username;
   const isDefaultAdmin = props.username === "admin";
@@ -27,10 +27,12 @@ function UserRowEdit(props) {
       await updatePassword(username, password);
     }
     if (!isDefaultAdmin) {
-      if (isActive) {
-        await activateUser(username);
-      } else {
-        await disableUser(username);
+      if (activeChanged) {
+        if (isActive) {
+          await activateUser(username);
+        } else {
+          await disableUser(username);
+        }
       }
       if (groupChanged) {
         await updateUserGroups(groups);
@@ -176,7 +178,10 @@ function UserRowEdit(props) {
             type="text"
             defaultValue={props.email}
             placeholder="New email"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setEmailChanged(true);
+            }}
           />
         </td>
         <td>
@@ -202,6 +207,7 @@ function UserRowEdit(props) {
             <ToggleSwitchEdit
               value={props.isActive === 1 ? true : false}
               setIsActive={setIsActive}
+              setActiveChanged={setActiveChanged}
             />
           )}
         </td>

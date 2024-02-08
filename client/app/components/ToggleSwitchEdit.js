@@ -8,6 +8,7 @@ function ToggleSwitchEdit(props) {
   function handleChange(val) {
     setChecked(val);
     props.setIsActive(val);
+    props.setActiveChanged(true);
   }
   return (
     <>
