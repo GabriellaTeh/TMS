@@ -60,10 +60,16 @@ function CreateUser(props) {
                 "Password must contain alphabet, number and special character.",
             });
           }
+          if (data.includes("InvalidEmail")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Invalid email format",
+            });
+          }
           if (data.includes("EmailTaken")) {
             appDispatch({
               type: "errorMessage",
-              value: "Invalid email format.",
+              value: "Email taken. Please choose another email.",
             });
           }
           if (data.includes("UserExists")) {
@@ -77,6 +83,8 @@ function CreateUser(props) {
             type: "successMessage",
             value: "User created.",
           });
+          props.setRefresh(true);
+          e.target.reset();
         }
       } else {
         appDispatch({

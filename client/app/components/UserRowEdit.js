@@ -84,20 +84,23 @@ function UserRowEdit(props) {
         username,
         email,
       });
-      if (response.data === "Invalid Email") {
-        appDispatch({
-          type: "errorMessage",
-          value: "Invalid email format.",
-        });
-      } else if (response.data === "Email taken") {
-        appDispatch({
-          type: "errorMessage",
-          value: "Email taken. Please choose another email.",
-        });
-      } else if (response.data) {
-        appDispatch({ type: "successMessage", value: "Updated." });
+      const data = response.data.split(" ");
+      data.pop();
+      if (data.length > 0) {
+        if (data.includes("InvalidEmail")) {
+          appDispatch({
+            type: "errorMessage",
+            value: "Invalid email formmat.",
+          });
+        }
+        if (data.includes("EmailTaken")) {
+          appDispatch({
+            type: "errorMessage",
+            value: "Email taken. Please choose another email.",
+          });
+        }
       } else {
-        appDispatch({ type: "errorMessage", value: "Error" });
+        appDispatch({ type: "successMessage", value: "Updated email." });
       }
       setEmail("");
     } catch (err) {
@@ -112,22 +115,24 @@ function UserRowEdit(props) {
         username,
         password,
       });
-      if (response.data === "Password Character") {
-        appDispatch({
-          type: "errorMessage",
-          value:
-            "Password must contain alphabet, number and special character.",
-        });
-      } else if (response.data === "Password Length") {
-        appDispatch({
-          type: "errorMessage",
-          value:
-            "Password must be at least 8 characters and at most 10 character.",
-        });
-      } else if (response.data) {
-        appDispatch({ type: "successMessage", value: "Updated." });
+      const data = response.data.split(" ");
+      data.pop();
+      if (data.length > 0) {
+        if (data.includes("PasswordCharacter")) {
+          appDispatch({
+            type: "errorMessage",
+            value: "Password must contain alphabet, number, special character.",
+          });
+        }
+        if (data.includes("PasswordLength")) {
+          appDispatch({
+            type: "errorMessage",
+            value:
+              "Password must be at least 8 characters and at most 10 characters long.",
+          });
+        }
       } else {
-        appDispatch({ type: "errorMessage", value: "Error" });
+        appDispatch({ type: "successMessage", value: "Updated password." });
       }
       setPassword("");
     } catch (err) {

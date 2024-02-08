@@ -51,7 +51,10 @@ function EditProfile() {
           appDispatch({ type: "errorMessage", value: "Invalid email format." });
         }
         if (data.includes("EmailTaken")) {
-          appDispatch({ type: "errorMessage", value: "Email already taken." });
+          appDispatch({
+            type: "errorMessage",
+            value: "Email taken. Please choose another email",
+          });
         }
       } else {
         setEmail("");
