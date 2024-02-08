@@ -62,7 +62,7 @@ function CreateGroup(props) {
               onChange={(e) => setGroup(e.target.value)}
               className="form-control form-control-sm"
               type="text"
-              placeholder="Group"
+              placeholder="Group Name"
             />
           </div>
           <div className="col-md-auto">
