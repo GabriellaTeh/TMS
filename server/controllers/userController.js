@@ -25,6 +25,43 @@ exports.createAdmin = async (req, res, next) => {
   );
 };
 
+exports.checkActiveUser = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const username = decoded.username;
+      database.query(
+        "SELECT * FROM accounts WHERE username = ?",
+        [username],
+        function (err, results) {
+          if (err) {
+            console.log(err);
+          } else if (results.length === 1) {
+            const activeStatus = results[0].isActive;
+            if (activeStatus === 1) {
+              res.send(true);
+            } else {
+              res.send(false);
+            }
+          }
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+};
+
 exports.verifyUser = (req, res, next) => {
   let token;
   if (

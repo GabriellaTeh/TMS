@@ -23,6 +23,26 @@ function EditProfile() {
       }
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  async function checkActive() {
+    try {
+      const response = await Axios.get("/checkActive");
+      if (!response.data) {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function verifyToken() {
+    try {
+      const response = await Axios.get("/verify");
+    } catch (err) {
+      console.log(err);
       appDispatch({ type: "errorMessage", value: "Token invalid." });
       appDispatch({ type: "logout" });
       navigate("/");
@@ -39,6 +59,8 @@ function EditProfile() {
 
   useEffect(() => {
     getUserDetails();
+    checkActive();
+    verifyToken();
   }, []);
 
   async function updateEmail(email) {

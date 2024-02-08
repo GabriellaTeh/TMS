@@ -21,6 +21,18 @@ function Homepage() {
     }
   }
 
+  async function checkActive() {
+    try {
+      const response = await Axios.get("/checkActive");
+      if (!response.data) {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     if (!appState.loggedIn) {
       appDispatch({ type: "logout" });
@@ -28,6 +40,7 @@ function Homepage() {
       navigate("/");
     } else {
       verifyToken();
+      checkActive();
     }
   }, []);
 

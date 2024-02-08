@@ -61,9 +61,6 @@ function UserManagement() {
       }
     } catch (err) {
       console.log(err);
-      appDispatch({ type: "errorMessage", value: "Token invalid." });
-      appDispatch({ type: "logout" });
-      navigate("/");
     }
   }
 
@@ -86,6 +83,29 @@ function UserManagement() {
     }
   }
 
+  async function verifyToken() {
+    try {
+      const response = await Axios.get("/verify");
+    } catch (err) {
+      console.log(err);
+      appDispatch({ type: "errorMessage", value: "Token invalid." });
+      appDispatch({ type: "logout" });
+      navigate("/");
+    }
+  }
+
+  async function checkActive() {
+    try {
+      const response = await Axios.get("/checkActive");
+      if (!response.data) {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     if (refresh) {
       getGroupsList();
@@ -100,7 +120,9 @@ function UserManagement() {
       appDispatch({ type: "errorMessage", value: "Please log in." });
       navigate("/");
     } else {
+      verifyToken();
       checkAdmin();
+      checkActive();
     }
   }, []);
 

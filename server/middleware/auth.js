@@ -25,7 +25,7 @@ exports.isAuthenticatedUser = (req, res, next) => {
             //valid token and active user
             next();
           } else {
-            res.json({ message: "User inactive" });
+            res.send("Inactive");
           }
         }
       );
@@ -62,7 +62,7 @@ exports.authorizedAdmin = async (req, res, next) => {
             if (groups.includes("admin") && results[0].isActive === 1) {
               next();
             } else {
-              res.json(false);
+              res.send("Unauthorized");
             }
           } else {
             res.json({ message: "User inactive" });

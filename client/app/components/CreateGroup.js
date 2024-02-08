@@ -1,45 +1,52 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import DispatchContext from "../DispatchContext";
 
 function CreateGroup(props) {
   const [group, setGroup] = useState("");
   const appDispatch = useContext(DispatchContext);
+  const navigate = useNavigate();
 
   async function handleCreateGroup(e) {
     e.preventDefault();
     try {
       if (group) {
         const response = await Axios.post("/group/createGroup", { group });
-        const data = response.data.split(" ");
-        data.pop();
-        if (data.length > 0) {
-          if (data.includes("GroupLength")) {
-            appDispatch({
-              type: "errorMessage",
-              value:
-                "Group name must be at least 3 characters and at most 20 characters long.",
-            });
-          }
-          if (data.includes("GroupCharacter")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Group name can only contain alphanumeric characters.",
-            });
-          }
-          if (data.includes("GroupExists")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Group already exists.",
-            });
-          }
-        } else {
-          appDispatch({
-            type: "successMessage",
-            value: "Group created.",
-          });
+        if (response.data === "Unauthorized") {
+          appDispatch({ type: "errorMessage", value: "Not authorized." });
           props.setRefresh(true);
-          e.target.reset();
+        } else {
+          const data = response.data.split(" ");
+          data.pop();
+          if (data.length > 0) {
+            if (data.includes("GroupLength")) {
+              appDispatch({
+                type: "errorMessage",
+                value:
+                  "Group name must be at least 3 characters and at most 20 characters long.",
+              });
+            }
+            if (data.includes("GroupCharacter")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Group name can only contain alphanumeric characters.",
+              });
+            }
+            if (data.includes("GroupExists")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Group already exists.",
+              });
+            }
+          } else {
+            appDispatch({
+              type: "successMessage",
+              value: "Group created.",
+            });
+            props.setRefresh(true);
+            e.target.reset();
+          }
         }
       } else {
         appDispatch({
