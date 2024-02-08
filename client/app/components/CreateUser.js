@@ -105,7 +105,7 @@ function CreateUser(props) {
             <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
               <input
                 onChange={(e) => setUsername(e.target.value)}
-                className="form-control form-control-sm"
+                className="form-control"
                 type="text"
                 placeholder="Username"
                 autoComplete="off"
@@ -114,7 +114,7 @@ function CreateUser(props) {
             <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
               <input
                 onChange={(e) => setPassword(e.target.value)}
-                className="form-control form-control-sm"
+                className="form-control"
                 type="password"
                 placeholder="Password"
               />
@@ -122,7 +122,7 @@ function CreateUser(props) {
             <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
               <input
                 onChange={(e) => setEmail(e.target.value)}
-                className="form-control form-control-sm"
+                className="form-control"
                 type="text"
                 placeholder="Email"
               />
