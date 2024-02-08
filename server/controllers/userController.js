@@ -482,7 +482,7 @@ exports.disableUser = (req, res, next) => {
           console.log(err);
         } else {
           if (results) {
-            res.write("Success ");
+            res.send(true);
           } else {
             res.send(false);
           }
@@ -492,7 +492,6 @@ exports.disableUser = (req, res, next) => {
   } else {
     res.send(false);
   }
-  res.end();
 };
 
 //admin update isActive to true => /user/activateUser
@@ -509,7 +508,7 @@ exports.activateUser = (req, res, next) => {
           console.log(err);
         } else {
           if (results) {
-            res.write("Success ");
+            res.send(true);
           } else {
             res.send(false);
           }
@@ -519,5 +518,4 @@ exports.activateUser = (req, res, next) => {
   } else {
     res.send(false);
   }
-  res.end();
 };

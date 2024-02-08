@@ -64,6 +64,7 @@ function UserRowEdit(props) {
         console.log(err);
       }
     });
+    appDispatch({ type: "successMessage", value: "Groups updated." });
   }
 
   async function activateUser(username) {
