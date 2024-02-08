@@ -18,7 +18,7 @@ function CreateGroup(props) {
             appDispatch({
               type: "errorMessage",
               value:
-                "Group name must be at least 3 characters and at most 20 characters.",
+                "Group name must be at least 3 characters and at most 20 characters long.",
             });
           }
           if (data.includes("GroupCharacter")) {

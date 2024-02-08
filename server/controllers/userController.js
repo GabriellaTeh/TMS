@@ -151,20 +151,6 @@ function validateUsername(res, username) {
   return error;
 }
 
-function validateGroup(res, group_name) {
-  const regex = "^[a-zA-Z0-9]+$";
-  let error = false;
-  if (group_name.length < 3 || group_name.length > 20) {
-    res.write("GroupLength ");
-    error = true;
-  }
-  if (!group_name.match(regex)) {
-    res.write("GroupCharacter ");
-    error = true;
-  }
-  return error;
-}
-
 async function findUser(username) {
   return new Promise((resolve, reject) => {
     database.query(
@@ -330,6 +316,7 @@ exports.updateEmail = async (req, res, next) => {
 
     if (email) {
       if (validateEmail(res, email)) {
+        res.send();
         return;
       }
       let emailExists = false;
@@ -345,9 +332,7 @@ exports.updateEmail = async (req, res, next) => {
               console.log(err);
             } else {
               if (results) {
-                res
-                  .status(200)
-                  .json({ token: token, message: "Email updated" });
+                res.write("Success ");
               } else {
                 res.send(false);
               }
@@ -355,7 +340,7 @@ exports.updateEmail = async (req, res, next) => {
           }
         );
       } else {
-        res.send("Email taken");
+        res.write("EmailTaken ");
       }
     } else {
       res.send(false);
@@ -364,6 +349,7 @@ exports.updateEmail = async (req, res, next) => {
     console.log(err);
     res.send(false);
   }
+  res.end();
 };
 
 //update password => /user/updatePassword
@@ -385,6 +371,7 @@ exports.updatePassword = async (req, res, next) => {
 
     if (password) {
       if (validatePassword(res, password)) {
+        res.send();
         return;
       }
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -396,9 +383,7 @@ exports.updatePassword = async (req, res, next) => {
             console.log(err);
           } else {
             if (results) {
-              res
-                .status(200)
-                .json({ token: token, message: "Password updated" });
+              res.write("Success ");
             } else {
               res.send(false);
             }
@@ -412,6 +397,7 @@ exports.updatePassword = async (req, res, next) => {
     console.log(err);
     res.send(false);
   }
+  res.end();
 };
 
 //admin update password => /user/updatePasswordAdmin
@@ -420,6 +406,7 @@ exports.updatePasswordAdmin = async (req, res, next) => {
   const username = req.body.username;
   if (password) {
     if (validatePassword(res, password)) {
+      res.send();
       return;
     }
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -431,7 +418,7 @@ exports.updatePasswordAdmin = async (req, res, next) => {
           console.log(err);
         } else {
           if (results) {
-            res.status(200).json({ message: "Password updated by admin" });
+            res.write("Success");
           } else {
             res.send(false);
           }
@@ -441,6 +428,7 @@ exports.updatePasswordAdmin = async (req, res, next) => {
   } else {
     res.send(false);
   }
+  res.end();
 };
 
 //admin update email => /user/updateEmailAdmin
@@ -450,6 +438,7 @@ exports.updateEmailAdmin = async (req, res, next) => {
 
   if (email) {
     if (validateEmail(res, email)) {
+      res.send();
       return;
     }
     let emailExists = false;
@@ -465,7 +454,7 @@ exports.updateEmailAdmin = async (req, res, next) => {
             console.log(err);
           } else {
             if (results) {
-              res.status(200).json({ message: "Email updated by admin" });
+              res.write("Success ");
             } else {
               res.send(false);
             }
@@ -473,11 +462,12 @@ exports.updateEmailAdmin = async (req, res, next) => {
         }
       );
     } else {
-      res.send("Email taken");
+      res.write("EmailTaken ");
     }
   } else {
     res.send(false);
   }
+  res.send();
 };
 
 //admin update isActive to false => /user/disableUser
@@ -494,7 +484,7 @@ exports.disableUser = (req, res, next) => {
           console.log(err);
         } else {
           if (results) {
-            res.status(200).json({ message: "isActive updated by admin" });
+            res.write("Success ");
           } else {
             res.send(false);
           }
@@ -504,6 +494,7 @@ exports.disableUser = (req, res, next) => {
   } else {
     res.send(false);
   }
+  res.end();
 };
 
 //admin update isActive to true => /user/activateUser
@@ -520,7 +511,7 @@ exports.activateUser = (req, res, next) => {
           console.log(err);
         } else {
           if (results) {
-            res.status(200).json({ message: "isActive updated by admin" });
+            res.write("Success ");
           } else {
             res.send(false);
           }
@@ -530,4 +521,5 @@ exports.activateUser = (req, res, next) => {
   } else {
     res.send(false);
   }
+  res.end();
 };

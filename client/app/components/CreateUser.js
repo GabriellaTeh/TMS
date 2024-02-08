@@ -31,14 +31,13 @@ function CreateUser(props) {
           groupNames,
         });
         const data = response.data.split(" ");
-        console.log(data);
         data.pop();
         if (data.length > 0) {
           if (data.includes("UsernameLength")) {
             appDispatch({
               type: "errorMessage",
               value:
-                "Username must be at least 3 characters and at most 20 characters.",
+                "Username must be at least 3 characters and at most 20 characters long.",
             });
           }
           if (data.includes("UsernameCharacter")) {
@@ -51,7 +50,7 @@ function CreateUser(props) {
             appDispatch({
               type: "errorMessage",
               value:
-                "Password must be at least 8 characters and at most 10 characters.",
+                "Password must be at least 8 characters and at most 10 characters long.",
             });
           }
           if (data.includes("PasswordCharacter")) {
