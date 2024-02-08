@@ -27,7 +27,7 @@ function HeaderHomeAdmin() {
         Manage Users
       </button>{" "}
       <button onClick={handleEditProfile} className="btn btn-sm btn-secondary">
-        Edit Profile
+        My Profile
       </button>{" "}
       <button onClick={handleLogout} className="btn btn-sm btn-secondary">
         Log Out

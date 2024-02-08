@@ -123,11 +123,12 @@ function EditProfile() {
         </Helmet>
         <div className="row align-items-center">
           <div className="col-lg-7 py-3 py-md-5">
-            <h1 className="display-3">My details</h1>
+            <h1 className="display-4">My details</h1>
             <p className="lead text-muted">Username: {username}</p>
             <p className="lead text-muted">Email: {userEmail}</p>
           </div>
           <div className="col-lg-5 pl-lg-5 pb-3 py-lg-5">
+            <h1>Edit details</h1>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label className="text-muted mb-1">
