@@ -12,6 +12,8 @@ function UserRowEdit(props) {
   const [email, setEmail] = useState();
   const [isActive, setIsActive] = useState(true);
   const [groups, setGroups] = useState([]);
+  const [groupChanged, setGroupChanged] = useState(false);
+  const [emailChanged, setEmailChanged] = useState(false);
   const username = props.username;
   const isDefaultAdmin = props.username === "admin";
 
@@ -30,7 +32,9 @@ function UserRowEdit(props) {
       } else {
         await disableUser(username);
       }
-      await updateUserGroups(groups);
+      if (groupChanged) {
+        await updateUserGroups(groups);
+      }
     }
     props.setEdit(false);
     props.setRefresh(true);
@@ -183,7 +187,10 @@ function UserRowEdit(props) {
               isMulti
               placeholder="No groups"
               defaultValue={props.groups}
-              onChange={(newValue) => setGroups(newValue)}
+              onChange={(newValue) => {
+                setGroups(newValue);
+                setGroupChanged(true);
+              }}
               options={props.groupList}
             />
           )}
