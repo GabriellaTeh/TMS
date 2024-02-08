@@ -16,10 +16,14 @@ function UserRowEdit(props) {
   const isDefaultAdmin = props.username === "admin";
 
   async function handleSave() {
-    if (password) {
+    if (email && password) {
+      await updateEmail(username, email);
+      await updatePassword(username, password);
+    } else if (email) {
+      await updateEmail(username, email);
+    } else if (password) {
       await updatePassword(username, password);
     }
-    await updateEmail(username, email);
     if (!isDefaultAdmin) {
       if (isActive) {
         await activateUser(username);
@@ -61,6 +65,12 @@ function UserRowEdit(props) {
   async function activateUser(username) {
     try {
       const response = await Axios.put("/user/activateUser", { username });
+      if (response.data) {
+        appDispatch({
+          type: "successMessage",
+          value: "Active status updated.",
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -69,6 +79,12 @@ function UserRowEdit(props) {
   async function disableUser(username) {
     try {
       const response = await Axios.put("/user/disableUser", { username });
+      if (response.data) {
+        appDispatch({
+          type: "successMessage",
+          value: "Active status updated.",
+        });
+      }
     } catch (err) {
       console.log(err);
     }

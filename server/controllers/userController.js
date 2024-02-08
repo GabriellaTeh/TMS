@@ -465,7 +465,7 @@ exports.updateEmailAdmin = async (req, res, next) => {
   } else {
     res.write("EmailTaken ");
   }
-  res.send();
+  res.end();
 };
 
 //admin update isActive to false => /user/disableUser
