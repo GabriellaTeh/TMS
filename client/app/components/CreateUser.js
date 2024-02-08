@@ -30,61 +30,54 @@ function CreateUser(props) {
           email,
           groupNames,
         });
-        if (response.data === "Username Length") {
-          appDispatch({
-            type: "errorMessage",
-            value:
-              "Username must be at least 3 characters and at most 20 characters.",
-          });
-        } else if (response.data === "Username Character") {
-          appDispatch({
-            type: "errorMessage",
-            value: "Username can only contain alphanumeric characters.",
-          });
-        } else if (response.data === "Password Character") {
-          appDispatch({
-            type: "errorMessage",
-            value:
-              "Password must contain alphabet, number and special character.",
-          });
-        } else if (response.data === "Password Length") {
-          appDispatch({
-            type: "errorMessage",
-            value:
-              "Password must be at least 8 characters and at most 10 characters.",
-          });
-        } else if (response.data === "Invalid Email") {
-          appDispatch({
-            type: "errorMessage",
-            value: "Invalid email format.",
-          });
-        } else if (response.data === "User exists") {
-          appDispatch({
-            type: "errorMessage",
-            value: "User already exists.",
-          });
-        } else if (response.data === "Email taken") {
-          appDispatch({
-            type: "errorMessage",
-            value: "Email taken. Please choose another email.",
-          });
-        } else if (response.data === "Group Length") {
-          appDispatch({
-            type: "errorMessage",
-            value:
-              "Group name must be at least 3 characters and at most 20 characters.",
-          });
-        } else if (response.data === "Group Character") {
-          appDispatch({
-            type: "errorMessage",
-            value: "Group name can only contain alphanumeric characters.",
-          });
-        } else if (response.data) {
-          appDispatch({ type: "successMessage", value: "User created." });
-          props.setRefresh(true);
-          e.target.reset();
+        const data = response.data.split(" ");
+        console.log(data);
+        data.pop();
+        if (data.length > 0) {
+          if (data.includes("UsernameLength")) {
+            appDispatch({
+              type: "errorMessage",
+              value:
+                "Username must be at least 3 characters and at most 20 characters.",
+            });
+          }
+          if (data.includes("UsernameCharacter")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Username can only contain alphanumeric characters.",
+            });
+          }
+          if (data.includes("PasswordLength")) {
+            appDispatch({
+              type: "errorMessage",
+              value:
+                "Password must be at least 8 characters and at most 10 characters.",
+            });
+          }
+          if (data.includes("PasswordCharacter")) {
+            appDispatch({
+              type: "errorMessage",
+              value:
+                "Password must contain alphabet, number and special character.",
+            });
+          }
+          if (data.includes("EmailTaken")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Invalid email format.",
+            });
+          }
+          if (data.includes("UserExists")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "User already exists.",
+            });
+          }
         } else {
-          appDispatch({ type: "errorMessage", value: "Error" });
+          appDispatch({
+            type: "successMessage",
+            value: "User created.",
+          });
         }
       } else {
         appDispatch({

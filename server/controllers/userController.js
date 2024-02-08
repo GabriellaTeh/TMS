@@ -114,40 +114,55 @@ exports.loginUser = async (req, res, next) => {
 
 function validatePassword(res, password) {
   const regex = "^(?=.*[0-9])(?=.*[!@#$%^?/&*])[a-zA-Z0-9!@#$%^?/&*]";
+  let error = false;
   if (password.length < 8 || password.length > 10) {
-    return res.send("Password Length");
+    res.write("PasswordLength ");
+    error = true;
   }
   if (!password.match(regex)) {
-    return res.send("Password Character");
+    res.write("PasswordCharacter ");
+    error = true;
   }
+  return error;
 }
+
 function validateEmail(res, email) {
-  if (email === "") {
-    return;
+  let error = false;
+  if (email !== "") {
+    if (!validator.isEmail(email)) {
+      res.write("InvalidEmail ");
+      error = true;
+    }
   }
-  if (!validator.isEmail(email)) {
-    return res.send("Invalid Email");
-  }
+  return error;
 }
 
 function validateUsername(res, username) {
   const regex = "^[a-zA-Z0-9]+$";
+  let error = false;
   if (username.length < 3 || username.length > 20) {
-    return res.send("Username Length");
+    res.write("UsernameLength ");
+    error = true;
   }
   if (!username.match(regex)) {
-    return res.send("Username Character");
+    res.write("UsernameCharacter ");
+    error = true;
   }
+  return error;
 }
 
 function validateGroup(res, group_name) {
   const regex = "^[a-zA-Z0-9]+$";
+  let error = false;
   if (group_name.length < 3 || group_name.length > 20) {
-    return res.send("Group Length");
+    res.write("GroupLength ");
+    error = true;
   }
   if (!group_name.match(regex)) {
-    return res.send("Group Character");
+    res.write("GroupCharacter ");
+    error = true;
   }
+  return error;
 }
 
 async function findUser(username) {
@@ -197,18 +212,16 @@ exports.createUser = async (req, res, next) => {
 
   if (username && password) {
     if (validateUsername(res, username)) {
+      res.send();
       return;
     }
     if (validateEmail(res, email)) {
+      res.send();
       return;
     }
     if (validatePassword(res, password)) {
+      res.send();
       return;
-    }
-    for (let i = 0; i < groups.length; i++) {
-      if (validateGroup(res, groups[i])) {
-        return;
-      }
     }
     let groupList;
     if (groups.length > 0) {
@@ -231,18 +244,19 @@ exports.createUser = async (req, res, next) => {
           if (error) {
             console.log(error);
           } else {
-            res.json({ message: "Create user successful" });
+            res.write("Success");
           }
         }
       );
     } else if (userExists) {
-      res.send("User exists");
+      res.write("UserExists ");
     } else if (emailExists) {
-      res.send("Email taken");
+      res.write("EmailTaken ");
     }
   } else {
     res.send(false);
   }
+  res.end();
 };
 
 //get all users => /users
