@@ -86,7 +86,7 @@ function UserRowEdit(props) {
         if (data.includes("InvalidEmail")) {
           appDispatch({
             type: "errorMessage",
-            value: "Invalid email formmat.",
+            value: "Invalid email format.",
           });
         }
         if (data.includes("EmailTaken")) {
@@ -96,7 +96,7 @@ function UserRowEdit(props) {
           });
         }
       } else {
-        appDispatch({ type: "successMessage", value: "Updated email." });
+        appDispatch({ type: "successMessage", value: "Email updated." });
       }
       setEmail("");
     } catch (err) {
@@ -117,7 +117,8 @@ function UserRowEdit(props) {
         if (data.includes("PasswordCharacter")) {
           appDispatch({
             type: "errorMessage",
-            value: "Password must contain alphabet, number, special character.",
+            value:
+              "Password must contain alphabet, number and special character.",
           });
         }
         if (data.includes("PasswordLength")) {
@@ -128,7 +129,7 @@ function UserRowEdit(props) {
           });
         }
       } else {
-        appDispatch({ type: "successMessage", value: "Updated password." });
+        appDispatch({ type: "successMessage", value: "Password updated." });
       }
       setPassword("");
     } catch (err) {

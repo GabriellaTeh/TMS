@@ -89,7 +89,7 @@ function CreateUser(props) {
       } else {
         appDispatch({
           type: "errorMessage",
-          value: "Username and Password required.",
+          value: "Username and password required.",
         });
       }
       selectInputRef.current.clearValue();

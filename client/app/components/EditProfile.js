@@ -53,13 +53,13 @@ function EditProfile() {
         if (data.includes("EmailTaken")) {
           appDispatch({
             type: "errorMessage",
-            value: "Email taken. Please choose another email",
+            value: "Email taken. Please choose another email.",
           });
         }
       } else {
         setEmail("");
         getUserDetails();
-        appDispatch({ type: "successMessage", value: "Updated Email." });
+        appDispatch({ type: "successMessage", value: "Email updated." });
       }
       setEmail("");
     } catch (err) {
@@ -85,11 +85,11 @@ function EditProfile() {
           appDispatch({
             type: "errorMessage",
             value:
-              "Password must be at least 8 characters and at most characters long.",
+              "Password must be at least 8 characters and at most 10 characters long.",
           });
         }
       } else {
-        appDispatch({ type: "successMessage", value: "Updated Password." });
+        appDispatch({ type: "successMessage", value: "Password updated." });
       }
       setPassword("");
     } catch (err) {
