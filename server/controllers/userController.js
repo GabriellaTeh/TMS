@@ -441,31 +441,29 @@ exports.updateEmailAdmin = async (req, res, next) => {
       res.send();
       return;
     }
-    let emailExists = false;
-    if (email.length > 0) {
-      emailExists = await findEmail(email);
-    }
-    if (!emailExists) {
-      database.query(
-        "UPDATE accounts SET email = ? WHERE username = ?",
-        [email, username],
-        function (err, results) {
-          if (err) {
-            console.log(err);
+  }
+  let emailExists = false;
+  if (email.length > 0) {
+    emailExists = await findEmail(email);
+  }
+  if (!emailExists) {
+    database.query(
+      "UPDATE accounts SET email = ? WHERE username = ?",
+      [email, username],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          if (results) {
+            res.write("Success ");
           } else {
-            if (results) {
-              res.write("Success ");
-            } else {
-              res.send(false);
-            }
+            res.send(false);
           }
         }
-      );
-    } else {
-      res.write("EmailTaken ");
-    }
+      }
+    );
   } else {
-    res.send(false);
+    res.write("EmailTaken ");
   }
   res.send();
 };

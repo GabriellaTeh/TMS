@@ -33,7 +33,12 @@ function UserRow(props) {
             <input type="password" readOnly={true} value="......." />
           </td>
           <td>
-            <input type="text" readOnly={true} value={props.email} />
+            <input
+              type="text"
+              readOnly={true}
+              value={props.email}
+              placeholder="No email"
+            />
           </td>
           <td>
             <Select
