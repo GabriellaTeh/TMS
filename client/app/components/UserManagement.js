@@ -107,14 +107,6 @@ function UserManagement() {
   }
 
   useEffect(() => {
-    if (refresh) {
-      getGroupsList();
-      getUsersTable();
-      setRefresh(false);
-    }
-  }, [refresh]);
-
-  useEffect(() => {
     if (!appState.loggedIn) {
       appDispatch({ type: "logout" });
       appDispatch({ type: "errorMessage", value: "Please log in." });
@@ -123,8 +115,13 @@ function UserManagement() {
       verifyToken();
       checkAdmin();
       checkActive();
+      if (refresh) {
+        getGroupsList();
+        getUsersTable();
+        setRefresh(false);
+      }
     }
-  }, []);
+  }, [refresh]);
 
   return (
     <>
