@@ -203,18 +203,22 @@ exports.removeUserFromGroup = (req, res, next) => {
   }
   try {
     const username = req.body.username;
-    const empty = "";
-    database.query(
-      "UPDATE accounts SET groupNames = ? WHERE username = ?",
-      [empty, username],
-      function (err, results) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.status(200).json({ message: "Removed user from group" });
+    if (username !== "admin") {
+      const empty = "";
+      database.query(
+        "UPDATE accounts SET groupNames = ? WHERE username = ?",
+        [empty, username],
+        function (err, results) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.status(200).json({ message: "Removed user from group" });
+          }
         }
-      }
-    );
+      );
+    } else {
+      res.json({ message: "Group cannot be removed for default admin." });
+    }
   } catch (error) {
     console.log(error);
     res.send(false);

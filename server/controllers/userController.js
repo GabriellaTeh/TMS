@@ -510,7 +510,7 @@ exports.disableUser = (req, res, next) => {
   const isActive = false;
   const username = req.body.username;
 
-  if (username) {
+  if (username && username !== "admin") {
     database.query(
       "UPDATE accounts SET isActive = ? WHERE username = ?",
       [isActive, username],
