@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactSwitch from "react-switch";
 
 function ToggleSwitchView(props) {
