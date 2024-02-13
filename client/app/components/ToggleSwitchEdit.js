@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ReactSwitch from "react-switch";
-import Axios from "axios";
 
 function ToggleSwitchEdit(props) {
   const [checked, setChecked] = useState(props.value);

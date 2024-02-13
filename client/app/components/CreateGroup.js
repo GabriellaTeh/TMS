@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
 import Axios from "axios";
 import DispatchContext from "../DispatchContext";
 
 function CreateGroup(props) {
   const [group, setGroup] = useState("");
   const appDispatch = useContext(DispatchContext);
-  const navigate = useNavigate();
 
   async function handleCreateGroup(e) {
     e.preventDefault();

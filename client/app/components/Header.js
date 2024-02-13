@@ -1,16 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import StateContext from "../StateContext";
 import HeaderHomeUser from "./HeaderHomeUser";
 import HeaderOthers from "./HeaderOthers";
 import HeaderHomeAdmin from "./HeaderHomeAdmin";
 import Axios from "axios";
-import DispatchContext from "../DispatchContext";
 
 function Header() {
   const appState = useContext(StateContext);
   const location = useLocation();
-  const navigate = useNavigate();
   const path = location.pathname;
   const [isAdmin, setIsAdmin] = useState(false);
 

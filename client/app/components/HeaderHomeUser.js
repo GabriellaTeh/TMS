@@ -1,5 +1,5 @@
-import React, { useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import DispatchContext from "../DispatchContext";
 
 function HeaderHomeUser() {

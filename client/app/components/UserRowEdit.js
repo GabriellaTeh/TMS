@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Select from "react-select";
 import Axios from "axios";
 import ToggleSwitchEdit from "./ToggleSwitchEdit";
