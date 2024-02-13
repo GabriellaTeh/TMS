@@ -26,6 +26,10 @@ function Header() {
     checkAdmin();
   }, [appState.loggedIn]);
 
+  useEffect(() => {
+    checkAdmin();
+  }, [appState.authChange]);
+
   return (
     <>
       <header className="header-bar bg-primary mb-3">

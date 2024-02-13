@@ -23,6 +23,7 @@ function Main() {
   const initialState = {
     loggedIn: Boolean(Cookies.get("token")),
     token: Cookies.get("token"),
+    authChange: false,
     successFlashMessages: [],
     errorFlashMessages: [],
   };
