@@ -45,7 +45,7 @@ function UserRow(props) {
               multiple
               size="small"
               readOnly
-              value={props.groups}
+              defaultValue={props.groups}
               options={[]}
               renderInput={(params) => <TextField {...params} />}
             />

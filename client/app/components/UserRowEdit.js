@@ -4,6 +4,7 @@ import Axios from "axios";
 import ToggleSwitchEdit from "./ToggleSwitchEdit";
 import ToggleSwitchView from "./ToggleSwitchView";
 import DispatchContext from "../DispatchContext";
+import { Autocomplete, TextField } from "@mui/material";
 
 function UserRowEdit(props) {
   const appDispatch = useContext(DispatchContext);
@@ -159,6 +160,11 @@ function UserRowEdit(props) {
     }
   }
 
+  function handleGroupChange(event, values) {
+    setGroups(values);
+    setGroupChanged(true);
+  }
+
   return (
     <>
       <tr key={props.username}>
@@ -185,7 +191,14 @@ function UserRowEdit(props) {
         </td>
         <td>
           {props.isDefaultAdmin ? (
-            <Select isMulti isDisabled defaultValue={props.groups} />
+            <Autocomplete
+              multiple
+              readOnly
+              size="small"
+              value={props.groups}
+              options={props.groupList}
+              renderInput={(params) => <TextField {...params} />}
+            />
           ) : (
             <Select
               isMulti
