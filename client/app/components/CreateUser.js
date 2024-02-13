@@ -135,7 +135,6 @@ function CreateUser(props) {
               <Autocomplete
                 multiple
                 size="small"
-                value={groups}
                 options={props.groupList}
                 getOptionLabel={(option) => option.value}
                 renderInput={(params) => (
