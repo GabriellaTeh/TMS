@@ -1,7 +1,8 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext } from "react";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
-import Select from "react-select";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 function CreateUser(props) {
   const [username, setUsername] = useState("");
@@ -9,7 +10,6 @@ function CreateUser(props) {
   const [email, setEmail] = useState("");
   const [groups, setGroups] = useState([]);
   const appDispatch = useContext(DispatchContext);
-  const selectInputRef = useRef();
 
   async function handleCreateUser(e) {
     e.preventDefault();
@@ -85,6 +85,7 @@ function CreateUser(props) {
           });
           props.setRefresh(true);
           e.target.reset();
+          setGroups([]);
         }
       } else {
         appDispatch({
@@ -92,11 +93,15 @@ function CreateUser(props) {
           value: "Username and password required.",
         });
       }
-      selectInputRef.current.clearValue();
     } catch (error) {
       console.log(error);
     }
   }
+
+  function handleGroupChange(event, values) {
+    setGroups(values);
+  }
+
   return (
     <>
       <div className="mt-3">
@@ -128,12 +133,18 @@ function CreateUser(props) {
               />
             </div>
             <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-              <Select
-                ref={selectInputRef}
-                isMulti
-                placeholder="Groups"
-                onChange={(newValue) => setGroups(newValue)}
+              <Autocomplete
+                multiple
+                size="small"
+                value={groups}
+                id="tags-outlined"
                 options={props.groupList}
+                getOptionLabel={(option) => option.value}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="Groups" />
+                )}
+                onChange={handleGroupChange}
+                sx={{ width: "350px" }}
               />
             </div>
             <div className="col-md-auto">
