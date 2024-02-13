@@ -24,8 +24,6 @@ function Main() {
     loggedIn: Boolean(Cookies.get("token")),
     token: Cookies.get("token"),
     authChange: false,
-    successFlashMessages: [],
-    errorFlashMessages: [],
   };
 
   function ourReducer(draft, action) {
