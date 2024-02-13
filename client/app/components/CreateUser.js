@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
+import { Autocomplete, TextField } from "@mui/material";
 
 function CreateUser(props) {
   const [username, setUsername] = useState("");

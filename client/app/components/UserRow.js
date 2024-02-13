@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Select from "react-select";
 import ToggleSwitchView from "./ToggleSwitchView";
 import UserRowEdit from "./UserRowEdit";
+import { Autocomplete, TextField } from "@mui/material";
 
 function UserRow(props) {
   const [edit, setEdit] = useState(false);
@@ -41,12 +41,13 @@ function UserRow(props) {
             />
           </td>
           <td>
-            <Select
-              isMulti
-              isDisabled
-              placeholder="No groups"
-              defaultValue={props.groups}
-              options={props.groupList}
+            <Autocomplete
+              multiple
+              size="small"
+              readOnly
+              value={props.groups}
+              options={[]}
+              renderInput={(params) => <TextField {...params} />}
             />
           </td>
           <td>
