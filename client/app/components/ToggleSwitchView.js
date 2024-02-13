@@ -1,10 +1,10 @@
 import React from "react";
-import ReactSwitch from "react-switch";
+import { Switch } from "@mui/material";
 
 function ToggleSwitchView(props) {
   return (
     <>
-      <ReactSwitch checked={props.value} checkedIcon={true} disabled={true} />
+      <Switch checked={props.value} disabled color="success" />
     </>
   );
 }

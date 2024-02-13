@@ -1,21 +1,17 @@
 import React, { useState } from "react";
-import ReactSwitch from "react-switch";
+import { Switch } from "@mui/material";
 
 function ToggleSwitchEdit(props) {
   const [checked, setChecked] = useState(props.value);
 
-  function handleChange(val) {
-    setChecked(val);
-    props.setIsActive(val);
+  function handleChange(event) {
+    setChecked(event.target.checked);
+    props.setIsActive(event.target.checked);
     props.setActiveChanged(true);
   }
   return (
     <>
-      <ReactSwitch
-        checked={checked}
-        onChange={handleChange}
-        checkedIcon={true}
-      />
+      <Switch checked={checked} onChange={handleChange} color="success" />
     </>
   );
 }
