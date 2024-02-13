@@ -34,11 +34,7 @@ function Header() {
     <>
       <header className="header-bar bg-primary mb-3">
         <div className="d-flex flex-column flex-md-row align-items-center p-3">
-          <h4 className="my-0 mr-md-auto font-weight-normal">
-            <a href="" className="text-white">
-              TMS
-            </a>
-          </h4>
+          <h4 className="my-0 mr-md-auto font-weight-normal text-white">TMS</h4>
           {!appState.loggedIn ? (
             ""
           ) : path === "/home" ? (
