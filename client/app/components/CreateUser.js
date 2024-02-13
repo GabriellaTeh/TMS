@@ -137,7 +137,6 @@ function CreateUser(props) {
                 multiple
                 size="small"
                 value={groups}
-                id="tags-outlined"
                 options={props.groupList}
                 getOptionLabel={(option) => option.value}
                 renderInput={(params) => (
