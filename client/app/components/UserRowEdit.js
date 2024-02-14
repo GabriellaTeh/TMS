@@ -15,7 +15,6 @@ function UserRowEdit(props) {
   const [activeChanged, setActiveChanged] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
   const username = props.username;
-  const isDefaultAdmin = props.username === "admin";
 
   async function handleSave() {
     if (password) {
@@ -24,7 +23,7 @@ function UserRowEdit(props) {
     if (emailChanged) {
       updateEmail(username, email);
     }
-    if (!isDefaultAdmin) {
+    if (!props.isDefaultAdmin) {
       if (activeChanged) {
         if (isActive) {
           await activateUser(username);
