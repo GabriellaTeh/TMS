@@ -200,15 +200,17 @@ function UserRowEdit(props) {
               renderInput={(params) => <TextField {...params} />}
             />
           ) : (
-            <Select
-              isMulti
-              placeholder="No groups"
+            <Autocomplete
+              multiple
+              size="small"
               defaultValue={props.groups}
-              onChange={(newValue) => {
-                setGroups(newValue);
-                setGroupChanged(true);
-              }}
               options={props.groupList}
+              getOptionLabel={(option) => option.label}
+              isOptionEqualToValue={(option, value) =>
+                option.label === value.label
+              }
+              renderInput={(params) => <TextField {...params} />}
+              onChange={handleGroupChange}
             />
           )}
         </td>
