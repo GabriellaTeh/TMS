@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Switch } from "@mui/material";
+import { Switch, Tooltip } from "@mui/material";
 
 function ToggleSwitchEdit(props) {
   const [checked, setChecked] = useState(props.value);
@@ -11,7 +11,9 @@ function ToggleSwitchEdit(props) {
   }
   return (
     <>
-      <Switch checked={checked} onChange={handleChange} color="success" />
+      <Tooltip title={checked ? "Disable" : "Activate"}>
+        <Switch checked={checked} onChange={handleChange} color="success" />
+      </Tooltip>
     </>
   );
 }
