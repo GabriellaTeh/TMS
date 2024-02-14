@@ -4,6 +4,7 @@ import StateContext from "../StateContext";
 import HeaderHomeUser from "./HeaderHomeUser";
 import HeaderHomeAdmin from "./HeaderHomeAdmin";
 import Axios from "axios";
+import { Tooltip } from "@mui/material";
 
 function Header() {
   const appState = useContext(StateContext);
@@ -32,9 +33,11 @@ function Header() {
       <header className="header-bar bg-primary mb-3">
         <div className="d-flex flex-column flex-md-row align-items-center p-3">
           <h4 className="my-0 mr-md-auto font-weight-normal">
-            <Link to="/home" className="text-white">
-              TMS
-            </Link>
+            <Tooltip title="Home" arrow>
+              <Link to="/home" className="text-white">
+                TMS
+              </Link>
+            </Tooltip>
           </h4>
           {!appState.loggedIn ? (
             ""
