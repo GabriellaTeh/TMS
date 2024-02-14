@@ -170,6 +170,11 @@ exports.addUserToGroup = (req, res, next) => {
     const username = req.body.username;
     const group_name = req.body.group_name + ",";
 
+    if (validateGroup(res, req.body.group_name)) {
+      res.send();
+      return;
+    }
+
     database.query(
       "UPDATE accounts SET groupNames = CONCAT(groupNames, ?) WHERE username = ?",
       [group_name, username],
