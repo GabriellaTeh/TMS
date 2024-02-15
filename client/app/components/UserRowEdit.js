@@ -166,9 +166,7 @@ function UserRowEdit(props) {
   return (
     <>
       <tr key={props.username}>
-        <td>
-          <input type="text" readOnly={true} value={props.username} />
-        </td>
+        <td>{props.username}</td>
         <td>
           <input
             type="password"

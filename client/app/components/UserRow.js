@@ -26,9 +26,7 @@ function UserRow(props) {
         />
       ) : (
         <tr key={props.username}>
-          <td>
-            <input type="text" readOnly={true} value={props.username} />
-          </td>
+          <td>{props.username}</td>
           <td>
             <input type="password" readOnly={true} value="......." />
           </td>
