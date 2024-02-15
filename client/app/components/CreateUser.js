@@ -4,9 +4,9 @@ import Axios from "axios";
 import { Autocomplete, TextField } from "@mui/material";
 
 function CreateUser(props) {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const [email, setEmail] = useState();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [groups, setGroups] = useState([]);
   const appDispatch = useContext(DispatchContext);
 
