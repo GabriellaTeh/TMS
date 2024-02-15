@@ -25,10 +25,7 @@ function UserManagement() {
       if (response.data) {
         const options = [];
         response.data.forEach((group) => {
-          options.push({
-            value: group.name,
-            label: group.name,
-          });
+          options.push(group.name);
         });
         setGroupList(options);
       }
@@ -50,10 +47,7 @@ function UserManagement() {
           userGroups.pop();
           const userOptions = [];
           userGroups.forEach((group) => {
-            userOptions.push({
-              value: group,
-              label: group,
-            });
+            userOptions.push(group);
           });
           options.push({ user: user.username, groups: userOptions });
         });

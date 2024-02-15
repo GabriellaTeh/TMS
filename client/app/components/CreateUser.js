@@ -136,7 +136,6 @@ function CreateUser(props) {
                 multiple
                 size="small"
                 options={props.groupList}
-                getOptionLabel={(option) => option.value}
                 renderInput={(params) => (
                   <TextField {...params} placeholder="Groups" />
                 )}

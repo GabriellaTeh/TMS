@@ -201,10 +201,6 @@ function UserRowEdit(props) {
               size="small"
               defaultValue={props.groups}
               options={props.groupList}
-              getOptionLabel={(option) => option.label}
-              isOptionEqualToValue={(option, value) =>
-                option.label === value.label
-              }
               renderInput={(params) => <TextField {...params} />}
               onChange={handleGroupChange}
             />
