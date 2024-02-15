@@ -66,33 +66,6 @@ function UserRowEdit(props) {
       console.log(err);
     }
   }
-  async function activateUser(username) {
-    try {
-      const response = await Axios.put("/user/activateUser", { username });
-      if (response.data) {
-        appDispatch({
-          type: "successMessage",
-          value: "Active status updated.",
-        });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function disableUser(username) {
-    try {
-      const response = await Axios.put("/user/disableUser", { username });
-      if (response.data) {
-        appDispatch({
-          type: "successMessage",
-          value: "Active status updated.",
-        });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   async function updateEmail(username, email) {
     try {
