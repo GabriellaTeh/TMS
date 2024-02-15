@@ -154,8 +154,7 @@ exports.checkUserGroup = async (req, res, next) => {
   }
 };
 
-//add user to group => /group/addUser
-exports.addUserToGroup = (req, res, next) => {
+exports.updateUserGroup = (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -166,67 +165,29 @@ exports.addUserToGroup = (req, res, next) => {
   if (!token) {
     return res.send(false);
   }
+
   try {
     const username = req.body.username;
-    const group_name = req.body.group_name + ",";
-
-    if (validateGroup(res, req.body.group_name)) {
-      res.send();
-      return;
+    const groups = req.body.groups;
+    let group_name = "";
+    if (groups.length > 0) {
+      group_name = groups.join() + ",";
     }
-
     database.query(
-      "UPDATE accounts SET groupNames = CONCAT(groupNames, ?) WHERE username = ?",
+      "UPDATE accounts SET groupNames = ? WHERE username = ?",
       [group_name, username],
-      function (err, results) {
+      function (err, result) {
         if (err) {
           console.log(err);
         } else {
-          if (results) {
-            res.status(200).json({ message: "Inserted user into group" });
+          if (result) {
+            res.status(200).json("updated groups");
           }
         }
       }
     );
-  } catch (error) {
-    console.log(error);
-    res.send(false);
-  }
-};
-
-//remove user from group => /group/removeUser
-exports.removeUserFromGroup = (req, res, next) => {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
-  }
-  if (!token) {
-    return res.send(false);
-  }
-  try {
-    const username = req.body.username;
-    if (username !== "admin") {
-      const empty = "";
-      database.query(
-        "UPDATE accounts SET groupNames = ? WHERE username = ?",
-        [empty, username],
-        function (err, results) {
-          if (err) {
-            console.log(err);
-          } else {
-            res.status(200).json({ message: "Removed user from group" });
-          }
-        }
-      );
-    } else {
-      res.json({ message: "Group cannot be removed for default admin." });
-    }
-  } catch (error) {
-    console.log(error);
-    res.send(false);
+  } catch (e) {
+    console.log(e);
   }
 };
 

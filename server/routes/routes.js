@@ -20,12 +20,11 @@ const {
 const { isAuthenticatedUser, authorizedAdmin } = require("../middleware/auth");
 
 const {
-  addUserToGroup,
   getUserGroups,
-  removeUserFromGroup,
   checkUserGroup,
   getGroups,
   createGroup,
+  updateUserGroup,
 } = require("../controllers/groupController");
 
 //admin insert
@@ -61,12 +60,9 @@ router
 router.route("/groups").get(isAuthenticatedUser, getGroups);
 
 //admin group functions
-router.route("/group/addUser").post(isAuthenticatedUser, addUserToGroup);
-router
-  .route("/group/removeUser")
-  .post(isAuthenticatedUser, removeUserFromGroup);
 router
   .route("/group/createGroup")
   .post(isAuthenticatedUser, authorizedAdmin, createGroup);
+router.route("/group/update").post(isAuthenticatedUser, updateUserGroup);
 
 module.exports = router;

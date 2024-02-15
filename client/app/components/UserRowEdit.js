@@ -45,24 +45,14 @@ function UserRowEdit(props) {
   }
 
   async function updateUserGroups(groups) {
-    //delete all
     try {
-      const res = await Axios.post("/group/removeUser", { username });
+      const response = await Axios.post("/group/update", { username, groups });
+      if (response.data) {
+        appDispatch({ type: "successMessage", value: "Groups updated." });
+      }
     } catch (err) {
       console.log(err);
     }
-    //addition
-    groups.forEach(async (group_name) => {
-      try {
-        const response = await Axios.post("/group/addUser", {
-          username,
-          group_name,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    });
-    appDispatch({ type: "successMessage", value: "Groups updated." });
   }
 
   async function activateUser(username) {
