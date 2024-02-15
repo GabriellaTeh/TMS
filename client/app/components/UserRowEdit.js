@@ -43,9 +43,7 @@ function UserRowEdit(props) {
   async function updateUserGroups(groups) {
     try {
       const response = await Axios.post("/group/update", { username, groups });
-      if (response.data === "Unauthorized") {
-      } else if (response.data === "Inactive") {
-      } else {
+      if (response.data) {
         appDispatch({ type: "successMessage", value: "Groups updated." });
       }
     } catch (err) {

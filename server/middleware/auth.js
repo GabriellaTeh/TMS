@@ -10,7 +10,7 @@ exports.isAuthenticatedUser = (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    res.status(401).json({ message: "Unauthorized" });
+    res.send(false);
   } else {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -25,12 +25,13 @@ exports.isAuthenticatedUser = (req, res, next) => {
             //valid token and active user
             next();
           } else {
-            res.send("Inactive");
+            // res.send("Inactive");
+            res.send(false);
           }
         }
       );
     } catch (err) {
-      res.status(401).json({ message: "Invalid token" });
+      res.send(false);
     }
   }
 };
@@ -45,7 +46,7 @@ exports.authorizedAdmin = async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    res.status(401).json({ message: "Unauthorized" });
+    res.send(false);
   } else {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -62,15 +63,15 @@ exports.authorizedAdmin = async (req, res, next) => {
             if (groups.includes("admin") && results[0].isActive === 1) {
               next();
             } else {
-              res.send("Unauthorized");
+              res.send(false);
             }
           } else {
-            res.json({ message: "User inactive" });
+            res.send(false);
           }
         }
       );
     } catch (err) {
-      res.status(401).json({ message: "Invalid token" });
+      res.send(false);
     }
   }
 };
