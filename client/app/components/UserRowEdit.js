@@ -10,7 +10,7 @@ function UserRowEdit(props) {
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
   const [isActive, setIsActive] = useState(true);
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState(props.groups);
   const [groupChanged, setGroupChanged] = useState(false);
   const [activeChanged, setActiveChanged] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
@@ -52,8 +52,7 @@ function UserRowEdit(props) {
       console.log(err);
     }
     //addition
-    groups.forEach(async (group) => {
-      const group_name = group.value;
+    groups.forEach(async (group_name) => {
       try {
         const response = await Axios.post("/group/addUser", {
           username,
