@@ -75,7 +75,7 @@ function EditProfile() {
         if (data.includes("EmailTaken")) {
           appDispatch({
             type: "errorMessage",
-            value: "Email taken. Please choose another email.",
+            value: "Invalid email.",
           });
         }
       } else {
