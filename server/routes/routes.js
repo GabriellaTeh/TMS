@@ -61,6 +61,8 @@ router.route("/groups").get(isAuthenticatedUser, getGroups);
 router
   .route("/group/createGroup")
   .post(isAuthenticatedUser, authorizedAdmin, createGroup);
-router.route("/group/update").post(isAuthenticatedUser, updateUserGroup);
+router
+  .route("/group/update")
+  .post(isAuthenticatedUser, authorizedAdmin, updateUserGroup);
 
 module.exports = router;

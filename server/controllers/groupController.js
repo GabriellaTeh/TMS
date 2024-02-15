@@ -188,6 +188,7 @@ exports.updateUserGroup = (req, res, next) => {
     );
   } catch (e) {
     console.log(e);
+    res.send(false);
   }
 };
 
