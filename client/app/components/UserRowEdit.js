@@ -214,10 +214,10 @@ function UserRowEdit(props) {
         </td>
         <td>
           {props.isDefaultAdmin ? (
-            <ToggleSwitchView value={props.isActive === 1 ? true : false} />
+            <ToggleSwitchView value={props.isActive === 1} />
           ) : (
             <ToggleSwitchEdit
-              value={props.isActive === 1 ? true : false}
+              value={props.isActive === 1}
               setIsActive={setIsActive}
               setActiveChanged={setActiveChanged}
             />
