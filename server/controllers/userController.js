@@ -504,9 +504,8 @@ exports.updateEmailAdmin = async (req, res, next) => {
   res.end();
 };
 
-//admin update isActive to false => /user/disableUser
-exports.disableUser = (req, res, next) => {
-  const isActive = false;
+exports.updateActive = (req, res, next) => {
+  const isActive = req.body.isActive;
   const username = req.body.username;
 
   if (username && username !== "admin") {
@@ -525,33 +524,5 @@ exports.disableUser = (req, res, next) => {
         }
       }
     );
-  } else {
-    res.send(false);
-  }
-};
-
-//admin update isActive to true => /user/activateUser
-exports.activateUser = (req, res, next) => {
-  const isActive = true;
-  const username = req.body.username;
-
-  if (username) {
-    database.query(
-      "UPDATE accounts SET isActive = ? WHERE username = ?",
-      [isActive, username],
-      function (err, results) {
-        if (err) {
-          console.log(err);
-        } else {
-          if (results) {
-            res.send(true);
-          } else {
-            res.send(false);
-          }
-        }
-      }
-    );
-  } else {
-    res.send(false);
   }
 };

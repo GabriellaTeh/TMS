@@ -15,6 +15,7 @@ const {
   createAdmin,
   verifyUser,
   checkActiveUser,
+  updateActive,
 } = require("../controllers/userController");
 
 const { isAuthenticatedUser, authorizedAdmin } = require("../middleware/auth");
@@ -52,11 +53,8 @@ router
   .route("/user/updatePasswordAdmin")
   .put(isAuthenticatedUser, authorizedAdmin, updatePasswordAdmin);
 router
-  .route("/user/disableUser")
-  .put(isAuthenticatedUser, authorizedAdmin, disableUser);
-router
-  .route("/user/activateUser")
-  .put(isAuthenticatedUser, authorizedAdmin, activateUser);
+  .route("/user/updateActive")
+  .post(isAuthenticatedUser, authorizedAdmin, updateActive);
 router.route("/groups").get(isAuthenticatedUser, getGroups);
 
 //admin group functions

@@ -25,11 +25,7 @@ function UserRowEdit(props) {
     }
     if (!props.isDefaultAdmin) {
       if (activeChanged) {
-        if (isActive) {
-          await activateUser(username);
-        } else {
-          await disableUser(username);
-        }
+        await updateActiveStatus(username, isActive);
       }
       if (groupChanged) {
         await updateUserGroups(groups);
@@ -54,7 +50,22 @@ function UserRowEdit(props) {
       console.log(err);
     }
   }
-
+  async function updateActiveStatus(username, isActive) {
+    try {
+      const response = await Axios.post("/user/updateActive", {
+        username,
+        isActive,
+      });
+      if (response.data) {
+        appDispatch({
+          type: "successMessage",
+          value: "Active status updated.",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
   async function activateUser(username) {
     try {
       const response = await Axios.put("/user/activateUser", { username });
