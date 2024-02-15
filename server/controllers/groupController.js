@@ -106,7 +106,7 @@ exports.getGroups = (req, res, next) => {
 };
 
 //returns true/false
-async function CheckGroup(userid, groupname) {
+async function Checkgroup(userid, groupname) {
   return new Promise((resolve, reject) => {
     database.query(
       "SELECT * FROM accounts WHERE username = ?",
@@ -146,7 +146,7 @@ exports.checkUserGroup = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
       const username = decoded.username;
       const group_name = req.body.group_name;
-      const result = await CheckGroup(username, group_name);
+      const result = await Checkgroup(username, group_name);
       res.send(result);
     } catch (err) {
       console.log(err);
