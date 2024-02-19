@@ -100,7 +100,6 @@ function UserManagement() {
       const response = await Axios.post("/user/checkGroup", { group_name });
       if (!response.data) {
         navigate("/home");
-        appState.authChange = true;
       } else {
         getGroupsList();
         getUsersTable();
