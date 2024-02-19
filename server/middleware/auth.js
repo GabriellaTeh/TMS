@@ -63,7 +63,7 @@ exports.authorizedAdmin = async (req, res, next) => {
             if (groups.includes("admin") && results[0].isActive === 1) {
               next();
             } else {
-              res.send("Admin");
+              res.send("Unauthorized");
             }
           } else {
             res.send(false);

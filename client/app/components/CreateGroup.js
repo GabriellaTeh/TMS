@@ -1,18 +1,28 @@
 import React, { useContext, useState } from "react";
 import Axios from "axios";
 import DispatchContext from "../DispatchContext";
+import { useNavigate } from "react-router-dom";
 
 function CreateGroup(props) {
   const [group, setGroup] = useState("");
   const appDispatch = useContext(DispatchContext);
+  const navigate = useNavigate();
 
   async function handleCreateGroup(e) {
     e.preventDefault();
     try {
       if (group) {
         const response = await Axios.post("/group/createGroup", { group });
-        if (response.data === "Unauthorized") {
+        if (response.data === "Inactive") {
+          navigate("/");
+          appDispatch({ type: "errorMessage", value: "Inactive." });
+        } else if (response.data === "Jwt") {
+          appDispatch({ type: "errorMessage", value: "Token invalid." });
+          appDispatch({ type: "logout" });
+          navigate("/");
+        } else if (response.data === "Unauthorized") {
           appDispatch({ type: "errorMessage", value: "Not authorized." });
+          navigate("/home");
           props.setRefresh(true);
         } else {
           const data = response.data.split(" ");
