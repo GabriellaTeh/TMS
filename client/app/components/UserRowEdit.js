@@ -43,7 +43,17 @@ function UserRowEdit(props) {
   async function updateUserGroups(groups) {
     try {
       const response = await Axios.post("/group/update", { username, groups });
-      if (response.data) {
+      if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Unauthorized") {
+        appDispatch({ type: "errorMessage", value: "Not authorized." });
+        navigate("/home");
+      } else if (response.data) {
         appDispatch({ type: "successMessage", value: "Groups updated." });
       }
     } catch (err) {
@@ -56,7 +66,17 @@ function UserRowEdit(props) {
         username,
         isActive,
       });
-      if (response.data) {
+      if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Unauthorized") {
+        appDispatch({ type: "errorMessage", value: "Not authorized." });
+        navigate("/home");
+      } else if (response.data) {
         appDispatch({
           type: "successMessage",
           value: "Active status updated.",
@@ -73,23 +93,35 @@ function UserRowEdit(props) {
         username,
         email,
       });
-      const data = response.data.split(" ");
-      data.pop();
-      if (data.length > 0) {
-        if (data.includes("InvalidEmail")) {
-          appDispatch({
-            type: "errorMessage",
-            value: "Invalid email format.",
-          });
-        }
-        if (data.includes("EmailTaken")) {
-          appDispatch({
-            type: "errorMessage",
-            value: "Email taken. Please choose another email.",
-          });
-        }
+      if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Unauthorized") {
+        appDispatch({ type: "errorMessage", value: "Not authorized." });
+        navigate("/home");
       } else {
-        appDispatch({ type: "successMessage", value: "Email updated." });
+        const data = response.data.split(" ");
+        data.pop();
+        if (data.length > 0) {
+          if (data.includes("InvalidEmail")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Invalid email format.",
+            });
+          }
+          if (data.includes("EmailTaken")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Email taken. Please choose another email.",
+            });
+          }
+        } else {
+          appDispatch({ type: "successMessage", value: "Email updated." });
+        }
       }
       setEmail("");
     } catch (err) {
@@ -100,30 +132,41 @@ function UserRowEdit(props) {
 
   async function updatePassword(username, password) {
     try {
-      await verifyToken();
       const response = await Axios.put("/user/updatePasswordAdmin", {
         username,
         password,
       });
-      const data = response.data.split(" ");
-      data.pop();
-      if (data.length > 0) {
-        if (data.includes("PasswordCharacter")) {
-          appDispatch({
-            type: "errorMessage",
-            value:
-              "Password must contain alphabet, number and special character.",
-          });
-        }
-        if (data.includes("PasswordLength")) {
-          appDispatch({
-            type: "errorMessage",
-            value:
-              "Password must be at least 8 characters and at most 10 characters long.",
-          });
-        }
+      if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Unauthorized") {
+        appDispatch({ type: "errorMessage", value: "Not authorized." });
+        navigate("/home");
       } else {
-        appDispatch({ type: "successMessage", value: "Password updated." });
+        const data = response.data.split(" ");
+        data.pop();
+        if (data.length > 0) {
+          if (data.includes("PasswordCharacter")) {
+            appDispatch({
+              type: "errorMessage",
+              value:
+                "Password must contain alphabet, number and special character.",
+            });
+          }
+          if (data.includes("PasswordLength")) {
+            appDispatch({
+              type: "errorMessage",
+              value:
+                "Password must be at least 8 characters and at most 10 characters long.",
+            });
+          }
+        } else {
+          appDispatch({ type: "successMessage", value: "Password updated." });
+        }
       }
       setPassword("");
     } catch (err) {
