@@ -57,7 +57,7 @@ exports.checkActiveUser = (req, res, next) => {
         }
       );
     } catch (err) {
-      res.status(401).json({ message: "Unauthorized" });
+      res.send(false);
     }
   }
 };
@@ -75,8 +75,9 @@ exports.verifyUser = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    res.send(true);
   } catch (err) {
-    res.status(401).json({ message: "Invalid token" });
+    res.send(false);
   }
 };
 

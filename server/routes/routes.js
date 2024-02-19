@@ -10,8 +10,6 @@ const {
   updatePassword,
   updateEmailAdmin,
   updatePasswordAdmin,
-  disableUser,
-  activateUser,
   createAdmin,
   verifyUser,
   checkActiveUser,

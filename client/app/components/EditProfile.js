@@ -26,26 +26,32 @@ function EditProfile() {
     }
   }
 
-  async function checkActive() {
+  async function verifyToken() {
     try {
-      const response = await Axios.get("/checkActive");
+      const response = await Axios.get("/verify");
       if (!response.data) {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
         navigate("/");
-        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        checkActive();
       }
     } catch (err) {
       console.log(err);
     }
   }
 
-  async function verifyToken() {
+  async function checkActive() {
     try {
-      const response = await Axios.get("/verify");
+      const response = await Axios.get("/checkActive");
+      if (!response.data) {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        getUserDetails();
+      }
     } catch (err) {
       console.log(err);
-      appDispatch({ type: "errorMessage", value: "Token invalid." });
-      appDispatch({ type: "logout" });
-      navigate("/");
     }
   }
 
@@ -58,8 +64,6 @@ function EditProfile() {
   }, []);
 
   useEffect(() => {
-    getUserDetails();
-    checkActive();
     verifyToken();
   }, []);
 

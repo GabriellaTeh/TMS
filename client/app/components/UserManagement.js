@@ -65,6 +65,35 @@ function UserManagement() {
     }
   }
 
+  async function verifyToken(refresh) {
+    try {
+      const response = await Axios.get("/verify");
+      if (!response.data) {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else {
+        checkActive(refresh);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function checkActive(refresh) {
+    try {
+      const response = await Axios.get("/checkActive");
+      if (!response.data) {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        checkAdmin(refresh);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async function checkAdmin() {
     const group_name = "admin";
     try {
@@ -72,29 +101,10 @@ function UserManagement() {
       if (!response.data) {
         navigate("/home");
         appState.authChange = true;
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function verifyToken() {
-    try {
-      const response = await Axios.get("/verify");
-    } catch (err) {
-      console.log(err);
-      appDispatch({ type: "errorMessage", value: "Token invalid." });
-      appDispatch({ type: "logout" });
-      navigate("/");
-    }
-  }
-
-  async function checkActive() {
-    try {
-      const response = await Axios.get("/checkActive");
-      if (!response.data) {
-        navigate("/");
-        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        getGroupsList();
+        getUsersTable();
+        setRefresh(false);
       }
     } catch (err) {
       console.log(err);
@@ -108,13 +118,6 @@ function UserManagement() {
       navigate("/");
     } else {
       verifyToken();
-      checkAdmin();
-      checkActive();
-      if (refresh) {
-        getGroupsList();
-        getUsersTable();
-        setRefresh(false);
-      }
     }
   }, [refresh]);
 
