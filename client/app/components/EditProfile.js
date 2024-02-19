@@ -13,6 +13,7 @@ function EditProfile() {
   const [email, setEmail] = useState();
   const [username, setUsername] = useState();
   const [userEmail, setUserEmail] = useState();
+  const [errorSent, setErrorSent] = useState(false);
 
   async function getUserDetails() {
     try {
@@ -30,9 +31,11 @@ function EditProfile() {
     try {
       const response = await Axios.get("/verify");
       if (!response.data) {
+        console.log("here");
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
         navigate("/");
+        setErrorSent(true);
       } else {
         checkActive();
       }
@@ -45,10 +48,10 @@ function EditProfile() {
     try {
       const response = await Axios.get("/checkActive");
       if (!response.data) {
+        console.log("inactive");
         navigate("/");
         appDispatch({ type: "errorMessage", value: "Inactive." });
-      } else {
-        getUserDetails();
+        setErrorSent(true);
       }
     } catch (err) {
       console.log(err);
@@ -65,6 +68,9 @@ function EditProfile() {
 
   useEffect(() => {
     verifyToken();
+    if (!errorSent) {
+      getUserDetails();
+    }
   }, []);
 
   async function updateEmail(email) {
