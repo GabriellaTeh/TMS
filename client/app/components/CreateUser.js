@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
 import { Autocomplete, TextField } from "@mui/material";
@@ -8,6 +9,7 @@ function CreateUser(props) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [groups, setGroups] = useState([]);
+  const navigate = useNavigate();
   const appDispatch = useContext(DispatchContext);
 
   async function handleCreateUser(e) {
@@ -29,62 +31,74 @@ function CreateUser(props) {
           email,
           groupNames,
         });
-        const data = response.data.split(" ");
-        data.pop();
-        if (data.length > 0) {
-          if (data.includes("UsernameLength")) {
-            appDispatch({
-              type: "errorMessage",
-              value:
-                "Username must be at least 3 characters and at most 20 characters long.",
-            });
-          }
-          if (data.includes("UsernameCharacter")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Username can only contain alphanumeric characters.",
-            });
-          }
-          if (data.includes("PasswordLength")) {
-            appDispatch({
-              type: "errorMessage",
-              value:
-                "Password must be at least 8 characters and at most 10 characters long.",
-            });
-          }
-          if (data.includes("PasswordCharacter")) {
-            appDispatch({
-              type: "errorMessage",
-              value:
-                "Password must contain alphabet, number and special character.",
-            });
-          }
-          if (data.includes("InvalidEmail")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Invalid email format",
-            });
-          }
-          if (data.includes("EmailTaken")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Email taken. Please choose another email.",
-            });
-          }
-          if (data.includes("UserExists")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "User already exists.",
-            });
-          }
+        if (response.data === "Inactive") {
+          navigate("/");
+          appDispatch({ type: "errorMessage", value: "Inactive." });
+        } else if (response.data === "Jwt") {
+          appDispatch({ type: "errorMessage", value: "Token invalid." });
+          appDispatch({ type: "logout" });
+          navigate("/");
+        } else if (response.data === "Unauthorized") {
+          appDispatch({ type: "errorMessage", value: "Not authorized." });
+          navigate("/home");
         } else {
-          appDispatch({
-            type: "successMessage",
-            value: "User created.",
-          });
-          props.setRefresh(true);
-          e.target.reset();
-          setGroups([]);
+          const data = response.data.split(" ");
+          data.pop();
+          if (data.length > 0) {
+            if (data.includes("UsernameLength")) {
+              appDispatch({
+                type: "errorMessage",
+                value:
+                  "Username must be at least 3 characters and at most 20 characters long.",
+              });
+            }
+            if (data.includes("UsernameCharacter")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Username can only contain alphanumeric characters.",
+              });
+            }
+            if (data.includes("PasswordLength")) {
+              appDispatch({
+                type: "errorMessage",
+                value:
+                  "Password must be at least 8 characters and at most 10 characters long.",
+              });
+            }
+            if (data.includes("PasswordCharacter")) {
+              appDispatch({
+                type: "errorMessage",
+                value:
+                  "Password must contain alphabet, number and special character.",
+              });
+            }
+            if (data.includes("InvalidEmail")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Invalid email format",
+              });
+            }
+            if (data.includes("EmailTaken")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Email taken. Please choose another email.",
+              });
+            }
+            if (data.includes("UserExists")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "User already exists.",
+              });
+            }
+          } else {
+            appDispatch({
+              type: "successMessage",
+              value: "User created.",
+            });
+            props.setRefresh(true);
+            e.target.reset();
+            setGroups([]);
+          }
         }
       } else {
         appDispatch({
