@@ -13,7 +13,6 @@ function EditProfile() {
   const [email, setEmail] = useState();
   const [username, setUsername] = useState();
   const [userEmail, setUserEmail] = useState();
-  const [errorSent, setErrorSent] = useState(false);
 
   async function getUserDetails() {
     try {
@@ -31,11 +30,9 @@ function EditProfile() {
     try {
       const response = await Axios.get("/verify");
       if (!response.data) {
-        console.log("here");
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
         navigate("/");
-        setErrorSent(true);
       } else {
         checkActive();
       }
@@ -48,10 +45,10 @@ function EditProfile() {
     try {
       const response = await Axios.get("/checkActive");
       if (!response.data) {
-        console.log("inactive");
         navigate("/");
         appDispatch({ type: "errorMessage", value: "Inactive." });
-        setErrorSent(true);
+      } else {
+        getUserDetails();
       }
     } catch (err) {
       console.log(err);
@@ -68,30 +65,39 @@ function EditProfile() {
 
   useEffect(() => {
     verifyToken();
-    if (!errorSent) {
-      getUserDetails();
-    }
   }, []);
 
   async function updateEmail(email) {
     try {
       const response = await Axios.put("/user/updateEmail", { email });
-      const data = response.data.split(" ");
-      data.pop();
-      if (data.length > 0) {
-        if (data.includes("InvalidEmail")) {
-          appDispatch({ type: "errorMessage", value: "Invalid email format." });
-        }
-        if (data.includes("EmailTaken")) {
-          appDispatch({
-            type: "errorMessage",
-            value: "Invalid email.",
-          });
-        }
+      if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
       } else {
-        setEmail("");
-        getUserDetails();
-        appDispatch({ type: "successMessage", value: "Email updated." });
+        const data = response.data.split(" ");
+        data.pop();
+        if (data.length > 0) {
+          if (data.includes("InvalidEmail")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Invalid email format.",
+            });
+          }
+          if (data.includes("EmailTaken")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Invalid email.",
+            });
+          }
+        } else {
+          setEmail("");
+          getUserDetails();
+          appDispatch({ type: "successMessage", value: "Email updated." });
+        }
       }
       setEmail("");
     } catch (err) {
@@ -103,25 +109,34 @@ function EditProfile() {
   async function updatePassword(password) {
     try {
       const response = await Axios.put("/user/updatePassword", { password });
-      const data = response.data.split(" ");
-      data.pop();
-      if (data.length > 0) {
-        if (data.includes("PasswordCharacter")) {
-          appDispatch({
-            type: "errorMessage",
-            value:
-              "Password must contain alphabet, number and special character.",
-          });
-        }
-        if (data.includes("PasswordLength")) {
-          appDispatch({
-            type: "errorMessage",
-            value:
-              "Password must be at least 8 characters and at most 10 characters long.",
-          });
-        }
+      if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
       } else {
-        appDispatch({ type: "successMessage", value: "Password updated." });
+        const data = response.data.split(" ");
+        data.pop();
+        if (data.length > 0) {
+          if (data.includes("PasswordCharacter")) {
+            appDispatch({
+              type: "errorMessage",
+              value:
+                "Password must contain alphabet, number and special character.",
+            });
+          }
+          if (data.includes("PasswordLength")) {
+            appDispatch({
+              type: "errorMessage",
+              value:
+                "Password must be at least 8 characters and at most 10 characters long.",
+            });
+          }
+        } else {
+          appDispatch({ type: "successMessage", value: "Password updated." });
+        }
       }
       setPassword("");
     } catch (err) {
