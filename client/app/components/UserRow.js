@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ToggleSwitchView from "./ToggleSwitchView";
 import UserRowEdit from "./UserRowEdit";
 import { Autocomplete, TextField } from "@mui/material";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 
 function UserRow(props) {
   const [edit, setEdit] = useState(false);
@@ -25,20 +27,12 @@ function UserRow(props) {
           setRefresh={props.setRefresh}
         />
       ) : (
-        <tr key={props.username}>
-          <td>{props.username}</td>
-          <td>
-            <input type="password" readOnly={true} value="......." />
-          </td>
-          <td>
-            <input
-              type="text"
-              readOnly={true}
-              value={props.email}
-              placeholder="No email"
-            />
-          </td>
-          <td>
+        <TableRow>
+          <TableCell align="center">{props.username}</TableCell>
+          <TableCell align="center">........</TableCell>
+          <TableCell align="center">{props.email}</TableCell>
+          <TableCell align="center">
+            {" "}
             <Autocomplete
               multiple
               size="small"
@@ -47,16 +41,16 @@ function UserRow(props) {
               options={[]}
               renderInput={(params) => <TextField {...params} />}
             />
-          </td>
-          <td>
+          </TableCell>
+          <TableCell align="center">
             <ToggleSwitchView value={props.isActive === 1 ? true : false} />
-          </td>
-          <td>
+          </TableCell>
+          <TableCell align="center">
             <button onClick={handleEdit} className="btn btn-primary btn-sm">
               Edit
             </button>
-          </td>
-        </tr>
+          </TableCell>
+        </TableRow>
       )}
     </>
   );

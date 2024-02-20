@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import StateContext from "../StateContext";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
-import ApplicationRow from "./ApplicationRow";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";

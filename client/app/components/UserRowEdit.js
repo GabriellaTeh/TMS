@@ -4,6 +4,8 @@ import ToggleSwitchEdit from "./ToggleSwitchEdit";
 import ToggleSwitchView from "./ToggleSwitchView";
 import DispatchContext from "../DispatchContext";
 import { Autocomplete, TextField } from "@mui/material";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 
 function UserRowEdit(props) {
   const appDispatch = useContext(DispatchContext);
@@ -182,16 +184,16 @@ function UserRowEdit(props) {
 
   return (
     <>
-      <tr key={props.username}>
-        <td>{props.username}</td>
-        <td>
+      <TableRow>
+        <TableCell align="center">{props.username}</TableCell>
+        <TableCell align="center">
           <input
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             placeholder="New password"
           />
-        </td>
-        <td>
+        </TableCell>
+        <TableCell align="center">
           <input
             type="text"
             defaultValue={props.email}
@@ -201,8 +203,8 @@ function UserRowEdit(props) {
               setEmailChanged(true);
             }}
           />
-        </td>
-        <td>
+        </TableCell>
+        <TableCell align="center">
           {props.isDefaultAdmin ? (
             <Autocomplete
               multiple
@@ -222,8 +224,8 @@ function UserRowEdit(props) {
               onChange={handleGroupChange}
             />
           )}
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
           {props.isDefaultAdmin ? (
             <ToggleSwitchView value={props.isActive === 1} />
           ) : (
@@ -233,16 +235,16 @@ function UserRowEdit(props) {
               setActiveChanged={setActiveChanged}
             />
           )}
-        </td>
-        <td>
+        </TableCell>
+        <TableCell align="center">
           <button onClick={handleSave} className="btn btn-primary btn-sm">
             Save
           </button>{" "}
           <button onClick={handleCancel} className="btn btn-danger btn-sm">
             Cancel
           </button>
-        </td>
-      </tr>
+        </TableCell>
+      </TableRow>
     </>
   );
 }

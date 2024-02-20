@@ -7,6 +7,12 @@ import CreateUser from "./CreateUser";
 import CreateGroup from "./CreateGroup";
 import Axios from "axios";
 import UserRow from "./UserRow";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import Paper from "@mui/material/Paper";
 
 function UserManagement() {
   const appState = useContext(StateContext);
@@ -128,42 +134,32 @@ function UserManagement() {
       <CreateGroup setRefresh={setRefresh} />
       <CreateUser groupList={groupList} setRefresh={setRefresh} />
       <div className="mt-3">
-        <table id="userTable" className="table table-hover">
-          <thead>
-            <tr>
-              <th className="col-2" scope="col">
-                Username
-              </th>
-              <th className="col-2" scope="col">
-                Password
-              </th>
-              <th className="col-2" scope="col">
-                Email
-              </th>
-              <th className="col-auto" scope="col">
-                Groups
-              </th>
-              <th className="col-auto" scope="col">
-                Active
-              </th>
-              <th className="col-auto" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => {
-              return (
-                <UserRow
-                  username={user.username}
-                  email={user.email}
-                  isActive={user.isActive}
-                  groups={findGroups(user.username)}
-                  groupList={groupList}
-                  setRefresh={setRefresh}
-                />
-              );
-            })}
-          </tbody>
-        </table>
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableCell align="center">Username</TableCell>
+              <TableCell align="center">Password</TableCell>
+              <TableCell align="center">Email</TableCell>
+              <TableCell align="center">Groups</TableCell>
+              <TableCell align="center">Active</TableCell>
+              <TableCell align="center"></TableCell>
+            </TableHead>
+            <TableBody>
+              {users.map((user) => {
+                return (
+                  <UserRow
+                    username={user.username}
+                    email={user.email}
+                    isActive={user.isActive}
+                    groups={findGroups(user.username)}
+                    groupList={groupList}
+                    setRefresh={setRefresh}
+                  />
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </>
   );
