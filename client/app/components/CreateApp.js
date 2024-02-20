@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -6,7 +6,41 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Autocomplete, TextField } from "@mui/material";
 
 function CreateApp() {
-  function handleSubmit() {}
+  const [name, setName] = useState();
+  const [description, setDescription] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [open, setOpen] = useState();
+  const [todo, setTodo] = useState();
+  const [doing, setDoing] = useState();
+  const [done, setDone] = useState();
+  const [closed, setClosed] = useState();
+
+  function handleOpenChange(event, values) {
+    setOpen(values);
+  }
+
+  function handleTodoChange(event, values) {
+    setTodo(values);
+  }
+
+  function handleDoingChange(event, values) {
+    setDoing(values);
+  }
+
+  function handleDoneChange(event, values) {
+    setDone(values);
+  }
+
+  function handleClosedChange(event, values) {
+    setClosed(values);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    e.target.reset();
+  }
+
   return (
     <div className="container md-5">
       <Helmet>
@@ -17,20 +51,35 @@ function CreateApp() {
         <label className="text-muted mb-1">
           <small>Application Name</small>
         </label>
-        <input className="form-control" type="text" placeholder="App name" />
+        <input
+          onChange={(e) => setName(e.target.value)}
+          className="form-control"
+          type="text"
+          placeholder="App name"
+        />
       </div>
       <div className="form-group">
         <label className="text-muted mb-1">
           <small>Application Description</small>
         </label>
-        <input className="form-control" placeholder="Description" />
+        <input
+          onChange={(e) => setDescription(e.target.value)}
+          className="form-control"
+          placeholder="Description"
+        />
       </div>
       <div className="form-group">
         <label className="text-muted mb-1">
           <small>Start Date</small>
         </label>{" "}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateField size="small" label="Start date" />
+          <DateField
+            size="small"
+            label="Start date"
+            onChange={(newValue) => {
+              setStartDate(newValue);
+            }}
+          />
         </LocalizationProvider>
       </div>
       <div className="form-group">
@@ -38,7 +87,13 @@ function CreateApp() {
           <small>End Date </small>
         </label>{" "}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateField size="small" label="End date" />
+          <DateField
+            size="small"
+            label="End date"
+            onChange={(newValue) => {
+              setEndDate(newValue);
+            }}
+          />
         </LocalizationProvider>
       </div>
       <div className="form-group">
@@ -53,6 +108,7 @@ function CreateApp() {
             <TextField {...params} placeholder="Permit open" />
           )}
           sx={{ width: "350px" }}
+          onChange={handleOpenChange}
         />
       </div>
       <div className="form-group">
@@ -67,6 +123,7 @@ function CreateApp() {
             <TextField {...params} placeholder="Permit open" />
           )}
           sx={{ width: "350px" }}
+          onChange={handleTodoChange}
         />
       </div>
       <div className="form-group">
@@ -81,6 +138,7 @@ function CreateApp() {
             <TextField {...params} placeholder="Permit open" />
           )}
           sx={{ width: "350px" }}
+          onChange={handleDoingChange}
         />
       </div>
       <div className="form-group">
@@ -95,6 +153,7 @@ function CreateApp() {
             <TextField {...params} placeholder="Permit open" />
           )}
           sx={{ width: "350px" }}
+          onChange={handleDoneChange}
         />
       </div>
       <div className="form-group">
@@ -109,6 +168,7 @@ function CreateApp() {
             <TextField {...params} placeholder="Permit open" />
           )}
           sx={{ width: "350px" }}
+          onChange={handleClosedChange}
         />
       </div>
       <button
