@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import StateContext from "../StateContext";
@@ -8,6 +8,7 @@ import Axios from "axios";
 function Homepage() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
+  const [isPL, setIsPL] = useState(false);
   const navigate = useNavigate();
 
   async function verifyToken() {
@@ -47,11 +48,33 @@ function Homepage() {
     }
   }, []);
 
+  async function checkPL() {
+    try {
+      const group_name = "projectleader";
+      const response = await Axios.post("/user/checkGroup", { group_name });
+      setIsPL(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    checkPL();
+  }, [appState.loggedIn]);
+
   return (
     <>
       <Helmet>
         <title>Home</title>
       </Helmet>
+      <div className="d-flex flex-column flex-md-row align-items-center p-3">
+        <h4 className="my-0 mr-md-auto font-weight-normal">Applications</h4>
+        {isPL ? (
+          <button className="btn btn-sm btn-primary">Add application</button>
+        ) : (
+          ""
+        )}
+      </div>
     </>
   );
 }
