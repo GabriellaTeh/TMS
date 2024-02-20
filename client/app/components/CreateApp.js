@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { DateField } from "@mui/x-date-pickers/DateField";
@@ -17,6 +17,7 @@ function CreateApp() {
   const [doing, setDoing] = useState();
   const [done, setDone] = useState();
   const [closed, setClosed] = useState();
+  const [isPL, setIsPL] = useState(false);
   const navigate = useNavigate();
 
   function handleOpenChange(event, values) {
@@ -47,6 +48,23 @@ function CreateApp() {
   function handleCancel() {
     navigate("/home");
   }
+
+  async function checkPL() {
+    try {
+      const group_name = "projectleader";
+      const response = await Axios.post("/user/checkGroup", { group_name });
+      setIsPL(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    checkPL();
+    if (!isPL) {
+      navigate("/home");
+    }
+  }, []);
 
   return (
     <div className="container md-5">
