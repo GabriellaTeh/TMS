@@ -60,27 +60,30 @@ function CreateApp() {
             <label className="text-muted mb-1">
               <small>Application Name</small>
             </label>
-            <input
+            <TextField
+              fullWidth
+              size="small"
+              label="Name"
               onChange={(e) => setName(e.target.value)}
-              className="form-control"
-              type="text"
-              placeholder="App name"
-            />
+            ></TextField>
           </div>
           <div className="form-group">
             <label className="text-muted mb-1">
               <small>Application Description</small>
             </label>
-            <input
+            <TextField
+              fullWidth
+              label="Description"
+              multiline
+              rows={8}
               onChange={(e) => setDescription(e.target.value)}
-              className="form-control"
-              placeholder="Description"
-            />
+            ></TextField>
           </div>
           <div className="form-group">
             <label className="text-muted mb-1">
               <small>Start Date</small>
-            </label>{" "}
+            </label>
+            {"  "}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateField
                 size="small"
@@ -94,7 +97,8 @@ function CreateApp() {
           <div className="form-group">
             <label className="text-muted mb-1">
               <small>End Date </small>
-            </label>{" "}
+            </label>
+            {"  "}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateField
                 size="small"
