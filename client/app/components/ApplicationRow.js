@@ -13,7 +13,11 @@ function ApplicationRow(props) {
           {props.endDate ? dayjs(props.endDate).format("DD-MM-YYYY") : "-"}
         </td>
         <td>
-          <button className="btn btn-primary btn-sm">Edit</button>
+          {props.isPL ? (
+            <button className="btn btn-primary btn-sm">View/Edit</button>
+          ) : (
+            <button className="btn btn-primary btn-sm">View</button>
+          )}
         </td>
       </tr>
     </>

@@ -5,6 +5,14 @@ import StateContext from "../StateContext";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
 import ApplicationRow from "./ApplicationRow";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import dayjs from "dayjs";
+import Paper from "@mui/material/Paper";
 
 function Homepage() {
   const appState = useContext(StateContext);
@@ -98,32 +106,44 @@ function Homepage() {
         )}
       </div>
       <div className="mt-3">
-        <table id="userTable" className="table table-hover">
-          <thead>
-            <tr>
-              <th className="col-auto" scope="col">
-                Acronym
-              </th>
-              <th className="col-auto" scope="col">
-                Start Date
-              </th>
-              <th className="col-auto" scope="col">
-                End Date
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {applications.map((app) => {
-              return (
-                <ApplicationRow
-                  name={app.App_Acronym}
-                  startDate={app.App_startDate}
-                  endDate={app.App_endDate}
-                />
-              );
-            })}
-          </tbody>
-        </table>
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Acronym</TableCell>
+                <TableCell align="center">Start Date</TableCell>
+                <TableCell align="center">End Date</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {applications.map((app) => (
+                <TableRow>
+                  <TableCell align="center">{app.App_Acronym}</TableCell>
+                  <TableCell align="center">
+                    {app.App_startDate
+                      ? dayjs(app.App_startDate).format("DD-MM-YYYY")
+                      : "-"}
+                  </TableCell>
+                  <TableCell align="center">
+                    {app.App_endDate
+                      ? dayjs(app.App_endDate).format("DD-MM-YYYY")
+                      : "-"}
+                  </TableCell>
+                  <TableCell align="center">
+                    {isPL ? (
+                      <button className="btn btn-primary btn-sm">
+                        View/Edit
+                      </button>
+                    ) : (
+                      <button className="btn btn-primary btn-sm">View</button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </>
   );
