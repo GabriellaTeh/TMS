@@ -62,6 +62,10 @@ function Homepage() {
     checkPL();
   }, [appState.loggedIn]);
 
+  function handleCreateApp() {
+    navigate("/createApp");
+  }
+
   return (
     <>
       <Helmet>
@@ -70,7 +74,9 @@ function Homepage() {
       <div className="d-flex flex-column flex-md-row align-items-center p-3">
         <h4 className="my-0 mr-md-auto font-weight-normal">Applications</h4>
         {isPL ? (
-          <button className="btn btn-sm btn-primary">Add application</button>
+          <button onClick={handleCreateApp} className="btn btn-sm btn-primary">
+            Add application
+          </button>
         ) : (
           ""
         )}
