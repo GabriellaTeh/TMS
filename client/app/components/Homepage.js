@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import StateContext from "../StateContext";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
@@ -89,10 +89,6 @@ function Homepage() {
     navigate("/createApp");
   }
 
-  function handleView() {
-    navigate("/app");
-  }
-
   return (
     <>
       <Helmet>
@@ -135,19 +131,9 @@ function Homepage() {
                   </TableCell>
                   <TableCell align="center">
                     {isPL ? (
-                      <button
-                        onClick={handleView}
-                        className="btn btn-primary btn-sm"
-                      >
-                        View/Edit
-                      </button>
+                      <Link to={`/app/${app.App_Acronym}`}>View/Edit</Link>
                     ) : (
-                      <button
-                        onClick={handleView}
-                        className="btn btn-primary btn-sm"
-                      >
-                        View
-                      </button>
+                      <Link to={`/app/${app.App_Acronym}`}>View</Link>
                     )}
                   </TableCell>
                 </TableRow>

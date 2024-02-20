@@ -71,7 +71,7 @@ function Main() {
               <Route path="/profile" element={<EditProfile />}></Route>
               <Route path="/manage" element={<UserManagement />}></Route>
               <Route path="/createApp" element={<CreateApp />}></Route>
-              <Route path="/app" element={<ViewEditApp />}></Route>
+              <Route path="/app/:name" element={<ViewEditApp />}></Route>
               <Route path={"*"} element={<Navigate to="/" />}></Route>
             </Routes>
             <ToastContainer position="top-center" autoClose={1250} />
