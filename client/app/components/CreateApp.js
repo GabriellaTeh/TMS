@@ -5,12 +5,15 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Autocomplete, TextField } from "@mui/material";
+import dayjs from "dayjs";
 import Grid from "@mui/material/Grid";
 import Axios from "axios";
 import StateContext from "../StateContext";
+import DispatchContext from "../DispatchContext";
 
 function CreateApp() {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [startDate, setStartDate] = useState();
@@ -43,9 +46,51 @@ function CreateApp() {
     setClosed(values);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    navigate("/home");
+    if (name) {
+      const response = await Axios.post("/app/create", {
+        name,
+        description,
+        startDate,
+        endDate,
+        open,
+        todo,
+        doing,
+        done,
+        closed,
+      });
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        const data = response.data.split(" ");
+        data.pop();
+        if (data.length > 0) {
+          if (data.includes("AppExists")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Application Acronym exists.",
+            });
+          }
+        } else {
+          appDispatch({
+            type: "successMessage",
+            value: "Application created.",
+          });
+          navigate("/home");
+        }
+      }
+    } else {
+      appDispatch({
+        type: "errorMessage",
+        value: "Application acronym required.",
+      });
+    }
   }
 
   function handleCancel() {
@@ -102,12 +147,12 @@ function CreateApp() {
         <Grid item xs={6}>
           <div className="form-group">
             <label className="text-muted mb-1">
-              <small>Application Name</small>
+              <small>Application Acronym</small>
             </label>
             <TextField
               fullWidth
               size="small"
-              label="Name"
+              label="Acronym"
               onChange={(e) => setName(e.target.value)}
             ></TextField>
           </div>
@@ -132,8 +177,9 @@ function CreateApp() {
               <DateField
                 size="small"
                 label="Start date"
+                format="DD-MM-YYYY"
                 onChange={(newValue) => {
-                  setStartDate(newValue);
+                  setStartDate(dayjs(newValue).format("YYYY-MM-DD"));
                 }}
               />
             </LocalizationProvider>
@@ -147,8 +193,9 @@ function CreateApp() {
               <DateField
                 size="small"
                 label="End date"
+                format="DD-MM-YYYY"
                 onChange={(newValue) => {
-                  setEndDate(newValue);
+                  setEndDate(dayjs(newValue).format("YYYY-MM-DD"));
                 }}
               />
             </LocalizationProvider>
@@ -176,7 +223,7 @@ function CreateApp() {
               size="small"
               options={groupList}
               renderInput={(params) => (
-                <TextField {...params} placeholder="Permit open" />
+                <TextField {...params} placeholder="Permit todo" />
               )}
               onChange={handleTodoChange}
             />
@@ -189,7 +236,7 @@ function CreateApp() {
               size="small"
               options={groupList}
               renderInput={(params) => (
-                <TextField {...params} placeholder="Permit open" />
+                <TextField {...params} placeholder="Permit doing" />
               )}
               onChange={handleDoingChange}
             />
@@ -202,7 +249,7 @@ function CreateApp() {
               size="small"
               options={groupList}
               renderInput={(params) => (
-                <TextField {...params} placeholder="Permit open" />
+                <TextField {...params} placeholder="Permit done" />
               )}
               onChange={handleDoneChange}
             />
@@ -215,7 +262,7 @@ function CreateApp() {
               size="small"
               options={groupList}
               renderInput={(params) => (
-                <TextField {...params} placeholder="Permit open" />
+                <TextField {...params} placeholder="Permit closed" />
               )}
               onChange={handleClosedChange}
             />
