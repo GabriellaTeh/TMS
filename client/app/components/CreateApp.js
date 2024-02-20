@@ -20,6 +20,7 @@ function CreateApp() {
   const [doing, setDoing] = useState();
   const [done, setDone] = useState();
   const [closed, setClosed] = useState();
+  const [groupList, setGroupList] = useState([]);
   const navigate = useNavigate();
 
   function handleOpenChange(event, values) {
@@ -57,6 +58,24 @@ function CreateApp() {
       const response = await Axios.post("/user/checkGroup", { group_name });
       if (!response.data) {
         navigate("/home");
+      } else {
+        getGroupList();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function getGroupList() {
+    setGroupList([]);
+    try {
+      const response = await Axios.get("/groups");
+      if (response.data) {
+        const options = [];
+        response.data.forEach((group) => {
+          options.push(group.name);
+        });
+        setGroupList(options);
       }
     } catch (err) {
       console.log(err);
@@ -141,9 +160,8 @@ function CreateApp() {
               <small>Permit Open</small>
             </label>{" "}
             <Autocomplete
-              multiple
               size="small"
-              options={[]}
+              options={groupList}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit open" />
               )}
@@ -155,9 +173,8 @@ function CreateApp() {
               <small>Permit Todo</small>
             </label>{" "}
             <Autocomplete
-              multiple
               size="small"
-              options={[]}
+              options={groupList}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit open" />
               )}
@@ -169,9 +186,8 @@ function CreateApp() {
               <small>Permit Doing</small>
             </label>{" "}
             <Autocomplete
-              multiple
               size="small"
-              options={[]}
+              options={groupList}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit open" />
               )}
@@ -183,9 +199,8 @@ function CreateApp() {
               <small>Permit Done</small>
             </label>{" "}
             <Autocomplete
-              multiple
               size="small"
-              options={[]}
+              options={groupList}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit open" />
               )}
@@ -197,9 +212,8 @@ function CreateApp() {
               <small>Permit Closed</small>
             </label>{" "}
             <Autocomplete
-              multiple
               size="small"
-              options={[]}
+              options={groupList}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit open" />
               )}
