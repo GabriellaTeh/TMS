@@ -80,3 +80,23 @@ exports.createApp = async (req, res, next) => {
   }
   res.end();
 };
+
+exports.getApps = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  database.query("SELECT * FROM application", function (error, results) {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
+};

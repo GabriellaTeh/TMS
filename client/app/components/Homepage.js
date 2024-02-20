@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import StateContext from "../StateContext";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
+import ApplicationRow from "./ApplicationRow";
 
 function Homepage() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const [isPL, setIsPL] = useState(false);
+  const [applications, setApplications] = useState([]);
   const navigate = useNavigate();
 
   async function verifyToken() {
@@ -32,6 +34,20 @@ function Homepage() {
       if (!response.data) {
         navigate("/");
         appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        getAppTable();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function getAppTable() {
+    setApplications([]);
+    try {
+      const response = await Axios.get("/apps");
+      if (response.data) {
+        setApplications(response.data);
       }
     } catch (err) {
       console.log(err);
@@ -80,6 +96,34 @@ function Homepage() {
         ) : (
           ""
         )}
+      </div>
+      <div className="mt-3">
+        <table id="userTable" className="table table-hover">
+          <thead>
+            <tr>
+              <th className="col-auto" scope="col">
+                Acronym
+              </th>
+              <th className="col-auto" scope="col">
+                Start Date
+              </th>
+              <th className="col-auto" scope="col">
+                End Date
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {applications.map((app) => {
+              return (
+                <ApplicationRow
+                  name={app.App_Acronym}
+                  startDate={app.App_startDate}
+                  endDate={app.App_endDate}
+                />
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </>
   );
