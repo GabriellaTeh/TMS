@@ -89,6 +89,10 @@ function Homepage() {
     navigate("/createApp");
   }
 
+  function handleView() {
+    navigate("/app");
+  }
+
   return (
     <>
       <Helmet>
@@ -131,11 +135,19 @@ function Homepage() {
                   </TableCell>
                   <TableCell align="center">
                     {isPL ? (
-                      <button className="btn btn-primary btn-sm">
+                      <button
+                        onClick={handleView}
+                        className="btn btn-primary btn-sm"
+                      >
                         View/Edit
                       </button>
                     ) : (
-                      <button className="btn btn-primary btn-sm">View</button>
+                      <button
+                        onClick={handleView}
+                        className="btn btn-primary btn-sm"
+                      >
+                        View
+                      </button>
                     )}
                   </TableCell>
                 </TableRow>

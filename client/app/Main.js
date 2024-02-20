@@ -19,6 +19,7 @@ import StateContext from "./StateContext";
 import EditProfile from "./components/EditProfile";
 import UserManagement from "./components/UserManagement";
 import CreateApp from "./components/CreateApp";
+import ViewEditApp from "./components/ViewEditApp";
 
 function Main() {
   const initialState = {
@@ -70,6 +71,7 @@ function Main() {
               <Route path="/profile" element={<EditProfile />}></Route>
               <Route path="/manage" element={<UserManagement />}></Route>
               <Route path="/createApp" element={<CreateApp />}></Route>
+              <Route path="/app" element={<ViewEditApp />}></Route>
               <Route path={"*"} element={<Navigate to="/" />}></Route>
             </Routes>
             <ToastContainer position="top-center" autoClose={1250} />
