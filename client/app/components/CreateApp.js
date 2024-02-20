@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { DateField } from "@mui/x-date-pickers/DateField";
@@ -6,8 +6,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Autocomplete, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import Axios from "axios";
+import StateContext from "../StateContext";
 
 function CreateApp() {
+  const appState = useContext(StateContext);
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [startDate, setStartDate] = useState();
@@ -17,7 +20,6 @@ function CreateApp() {
   const [doing, setDoing] = useState();
   const [done, setDone] = useState();
   const [closed, setClosed] = useState();
-  const [isPL, setIsPL] = useState(false);
   const navigate = useNavigate();
 
   function handleOpenChange(event, values) {
@@ -53,16 +55,21 @@ function CreateApp() {
     try {
       const group_name = "projectleader";
       const response = await Axios.post("/user/checkGroup", { group_name });
-      setIsPL(response.data);
+      if (!response.data) {
+        navigate("/home");
+      }
     } catch (err) {
       console.log(err);
     }
   }
 
   useEffect(() => {
-    checkPL();
-    if (!isPL) {
-      navigate("/home");
+    if (!appState.loggedIn) {
+      appDispatch({ type: "logout" });
+      appDispatch({ type: "errorMessage", value: "Please log in." });
+      navigate("/");
+    } else {
+      checkPL();
     }
   }, []);
 
