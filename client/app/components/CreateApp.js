@@ -15,14 +15,14 @@ function CreateApp() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const [name, setName] = useState();
-  const [description, setDescription] = useState();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [open, setOpen] = useState();
-  const [todo, setTodo] = useState();
-  const [doing, setDoing] = useState();
-  const [done, setDone] = useState();
-  const [closed, setClosed] = useState();
+  const [description, setDescription] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [open, setOpen] = useState("");
+  const [todo, setTodo] = useState("");
+  const [doing, setDoing] = useState("");
+  const [done, setDone] = useState("");
+  const [closed, setClosed] = useState("");
   const [groupList, setGroupList] = useState([]);
   const navigate = useNavigate();
 
