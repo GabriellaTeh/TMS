@@ -62,9 +62,23 @@ function EditApp(props) {
       } else if (response.data === "Inactive") {
         navigate("/");
         appDispatch({ type: "errorMessage", value: "Inactive." });
-      } else if (response.data) {
-        appDispatch({ type: "successMessage", value: "Application updated." });
-        navigate("/home");
+      } else {
+        const data = response.data.split(" ");
+        data.pop();
+        if (data.length > 0) {
+          if (data.includes("DatesInvalid")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Start date must be before or equal to end date.",
+            });
+          }
+        } else {
+          appDispatch({
+            type: "successMessage",
+            value: "Application updated.",
+          });
+          navigate("/home");
+        }
       }
     } catch (err) {
       console.log(err);

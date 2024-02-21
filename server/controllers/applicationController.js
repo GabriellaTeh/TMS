@@ -179,6 +179,10 @@ exports.editApp = (req, res, next) => {
       done,
       create,
     } = req.body;
+    if (startDate && endDate && validateDates(res, startDate, endDate)) {
+      res.send();
+      return;
+    }
     database.query(
       "UPDATE application SET App_Description = ?, App_startDate = ?, App_endDate = ?, App_permit_Open = ?, App_permit_toDoList = ?, App_permit_Doing = ?, App_permit_Done = ?, App_permit_Create = ? WHERE App_Acronym = ?",
       [description, startDate, endDate, open, todo, doing, done, create, name],
@@ -186,11 +190,12 @@ exports.editApp = (req, res, next) => {
         if (err) {
           console.log(err);
         } else {
-          res.send(true);
+          res.write("Success");
         }
       }
     );
   } catch (err) {
     console.log(err);
   }
+  res.end();
 };
