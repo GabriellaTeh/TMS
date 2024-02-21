@@ -11,6 +11,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
 import CreatePlan from "./CreatePlan";
+import ViewPlans from "./ViewPlans";
 
 function Kanban() {
   let { name } = useParams();
@@ -58,6 +59,9 @@ function Kanban() {
           <DialogTitle>Plans</DialogTitle>
           <DialogContent>
             <CreatePlan />
+          </DialogContent>
+          <DialogContent>
+            <ViewPlans />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Close</Button>

@@ -6,11 +6,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 
 function CreatePlan() {
+  function handleCreate() {}
   return (
     <>
       <TextField
         required
-        label="Email Address"
+        label="Plan Name"
         type="email"
         style={{ width: 400 }}
         size="small"
@@ -36,7 +37,9 @@ function CreatePlan() {
           }}
         />
       </LocalizationProvider>{" "}
-      <button className="btn btn-primary">Create Plan</button>
+      <button onClick={handleCreate} className="btn btn-primary">
+        Create Plan
+      </button>
     </>
   );
 }
