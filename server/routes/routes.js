@@ -30,6 +30,7 @@ const {
   createApp,
   getApps,
   getApp,
+  editApp,
 } = require("../controllers/applicationController");
 
 //admin insert
@@ -73,5 +74,6 @@ router
 router.route("/app/create").post(isAuthenticatedUser, createApp);
 router.route("/apps").get(isAuthenticatedUser, getApps);
 router.route("/app").post(isAuthenticatedUser, getApp);
+router.route("/app/edit").post(isAuthenticatedUser, editApp);
 
 module.exports = router;
