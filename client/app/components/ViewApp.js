@@ -1,64 +1,17 @@
-import React, { useEffect, useContext, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Autocomplete, TextField } from "@mui/material";
-import dayjs from "dayjs";
 import Grid from "@mui/material/Grid";
 import StateContext from "../StateContext";
 import DispatchContext from "../DispatchContext";
-import Axios from "axios";
 
-function ViewApp() {
+function ViewApp(props) {
   const appState = useContext(StateContext);
   const navigate = useNavigate();
   const appDispatch = useContext(DispatchContext);
-  const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [open, setOpen] = useState(null);
-  const [todo, setTodo] = useState(null);
-  const [doing, setDoing] = useState(null);
-  const [done, setDone] = useState(null);
-  const [create, setCreate] = useState(null);
-  const [groupList, setGroupList] = useState([]);
-  const { name } = useParams();
 
   function handleCancel() {
     navigate("/home");
-  }
-
-  async function getAppDetails() {
-    try {
-      const response = await Axios.post("/app", { name });
-      const data = response.data[0];
-      setDescription(data.App_Description);
-      if (data.App_startDate) {
-        setStartDate(dayjs(data.App_startDate).format("YYYY-MM-DD"));
-      } else {
-        setStartDate(null);
-      }
-      if (data.App_endDate) {
-        setEndDate(dayjs(data.App_endDate).format("YYYY-MM-DD"));
-      } else {
-        setEndDate(null);
-      }
-      if (data.App_permit_Create) {
-        setCreate(data.App_permit_Create);
-      }
-      if (data.App_permit_Doing) {
-        setDoing(data.App_permit_Doing);
-      }
-      if (data.App_permit_Done) {
-        setDone(data.App_permit_Done);
-      }
-      if (data.App_permit_toDoList) {
-        setTodo(data.App_permit_toDoList);
-      }
-      if (data.App_permit_Open) {
-        setOpen(data.App_permit_Open);
-      }
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   useEffect(() => {
@@ -66,8 +19,6 @@ function ViewApp() {
       appDispatch({ type: "logout" });
       appDispatch({ type: "errorMessage", value: "Please log in." });
       navigate("/");
-    } else {
-      getAppDetails();
     }
   }, []);
 
@@ -84,7 +35,7 @@ function ViewApp() {
               readOnly
               multiline
               rows={8}
-              value={description}
+              value={props.description}
             ></TextField>
           </div>
           <div className="form-group">
@@ -92,14 +43,14 @@ function ViewApp() {
               <small>Start Date</small>
             </label>
             {"  "}
-            <input type="date" readOnly value={startDate}></input>
+            <input type="date" readOnly value={props.startDate}></input>
           </div>
           <div className="form-group">
             <label className="text-muted mb-1">
               <small>End Date </small>
             </label>
             {"  "}
-            <input type="date" readOnly value={endDate}></input>
+            <input type="date" readOnly value={props.endDate}></input>
           </div>
         </Grid>
         <Grid item xs={6}>
@@ -110,11 +61,11 @@ function ViewApp() {
             <Autocomplete
               size="small"
               readOnly
-              options={groupList}
+              options={[]}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit create" />
               )}
-              value={create}
+              value={props.create}
             />
           </div>
           <div className="form-group">
@@ -124,11 +75,11 @@ function ViewApp() {
             <Autocomplete
               size="small"
               readOnly
-              options={groupList}
+              options={[]}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit open" />
               )}
-              value={open}
+              value={props.open}
             />
           </div>
           <div className="form-group">
@@ -138,11 +89,11 @@ function ViewApp() {
             <Autocomplete
               size="small"
               readOnly
-              options={groupList}
+              options={[]}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit todo" />
               )}
-              value={todo}
+              value={props.todo}
             />
           </div>
           <div className="form-group">
@@ -152,11 +103,11 @@ function ViewApp() {
             <Autocomplete
               size="small"
               readOnly
-              options={groupList}
+              options={[]}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit doing" />
               )}
-              value={doing}
+              value={props.doing}
             />
           </div>
           <div className="form-group">
@@ -166,11 +117,11 @@ function ViewApp() {
             <Autocomplete
               size="small"
               readOnly
-              options={groupList}
+              options={[]}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit done" />
               )}
-              value={done}
+              value={props.done}
             />
           </div>
           <div>
