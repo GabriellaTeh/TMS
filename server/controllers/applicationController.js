@@ -19,6 +19,29 @@ async function findApp(name) {
   });
 }
 
+function validateAcronym(res, acronym) {
+  const regex = "^[a-zA-Z0-9]+$";
+  let error = false;
+  if (acronym.length < 3 || acronym.length > 20) {
+    res.write("AcronymLength ");
+    error = true;
+  }
+  if (!acronym.match(regex)) {
+    res.write("AcronymCharacter ");
+    error = true;
+  }
+  return error;
+}
+
+function validateDates(res, startDate, endDate) {
+  const startArr = new Date(startDate);
+  const endArr = new Date(endDate);
+  if (startArr > endArr) {
+    res.write("DatesInvalid ");
+  }
+  return startArr > endArr;
+}
+
 exports.createApp = async (req, res, next) => {
   let token;
   if (
@@ -43,7 +66,14 @@ exports.createApp = async (req, res, next) => {
       create,
     } = req.body;
     if (name) {
-      //add validation
+      if (validateAcronym(res, name)) {
+        res.send();
+        return;
+      }
+      if (startDate && endDate && validateDates(res, startDate, endDate)) {
+        res.send();
+        return;
+      }
       const appExists = await findApp(name);
       if (!appExists) {
         database.query(

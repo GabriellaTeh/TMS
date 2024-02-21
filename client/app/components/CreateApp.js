@@ -60,6 +60,7 @@ function CreateApp() {
         done,
         create,
       });
+      console.log(response.data);
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
@@ -75,6 +76,26 @@ function CreateApp() {
             appDispatch({
               type: "errorMessage",
               value: "Application Acronym exists.",
+            });
+          }
+          if (data.includes("AcronymLength")) {
+            appDispatch({
+              type: "errorMessage",
+              value:
+                "Application acronym must be at least 3 and at most 20 characters long.",
+            });
+          }
+          if (data.includes("AcronymCharacter")) {
+            appDispatch({
+              type: "errorMessage",
+              value:
+                "Application acronym can only contain alphanumeric characters.",
+            });
+          }
+          if (data.includes("DatesInvalid")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Start date must be before or equal to end date.",
             });
           }
         } else {
