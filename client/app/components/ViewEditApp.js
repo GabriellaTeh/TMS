@@ -16,16 +16,16 @@ function ViewEditApp() {
   const navigate = useNavigate();
   const [isPL, setIsPL] = useState(false);
   const appDispatch = useContext(DispatchContext);
-  const [description, setDescription] = useState();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [open, setOpen] = useState();
-  const [todo, setTodo] = useState();
-  const [doing, setDoing] = useState();
-  const [done, setDone] = useState();
-  const [closed, setClosed] = useState();
+  const [description, setDescription] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [open, setOpen] = useState([]);
+  const [todo, setTodo] = useState([]);
+  const [doing, setDoing] = useState([]);
+  const [done, setDone] = useState([]);
+  const [create, setCreate] = useState([]);
   const [groupList, setGroupList] = useState([]);
-  let { name } = useParams();
+  const { name } = useParams();
 
   function handleOpenChange(event, values) {
     setOpen(values);
@@ -43,15 +43,18 @@ function ViewEditApp() {
     setDone(values);
   }
 
-  function handleClosedChange(event, values) {
-    setClosed(values);
+  function handleCreateChange(event, values) {
+    setCreate(values);
   }
 
   function handleSubmit(e) {
+    navigate("/home");
     e.preventDefault();
   }
 
-  function handleCancel() {}
+  function handleCancel() {
+    navigate("/home");
+  }
 
   async function checkPL() {
     try {
@@ -63,12 +66,65 @@ function ViewEditApp() {
     }
   }
 
+  async function getGroupList() {
+    setGroupList([]);
+    try {
+      const response = await Axios.get("/groups");
+      if (response.data) {
+        const options = [];
+        response.data.forEach((group) => {
+          options.push(group.name);
+        });
+        setGroupList(options);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function getAppDetails() {
+    try {
+      const response = await Axios.post("/app", { name });
+      const data = response.data[0];
+      setDescription(data.App_Description);
+      if (data.App_startDate) {
+        setStartDate(dayjs(data.App_startDate).format("YYYY-MM-DD"));
+      } else {
+        setStartDate(null);
+      }
+      if (data.App_endDate) {
+        setEndDate(dayjs(data.App_endDate).format("YYYY-MM-DD"));
+      } else {
+        setEndDate(null);
+      }
+      if (data.App_permit_Create) {
+        setCreate(data.App_permit_Create);
+      }
+      if (data.App_permit_Doing) {
+        setDoing(data.App_permit_Doing);
+      }
+      if (data.App_permit_Done) {
+        setDone(data.App_permit_Done);
+      }
+      if (data.App_permit_toDoList) {
+        setTodo(data.App_permit_toDoList);
+      }
+      if (data.App_permit_Open) {
+        setOpen(data.App_permit_Open);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     if (!appState.loggedIn) {
       appDispatch({ type: "logout" });
       appDispatch({ type: "errorMessage", value: "Please log in." });
       navigate("/");
     } else {
+      getAppDetails();
+      getGroupList();
       checkPL();
     }
   }, []);
@@ -77,7 +133,7 @@ function ViewEditApp() {
     <>
       <div className="container md-5">
         <Helmet>
-          <title>View App</title>
+          <title>{name}</title>
         </Helmet>
         <h4>{name}</h4>
         <Grid container spacing={3}>
@@ -88,9 +144,9 @@ function ViewEditApp() {
               </label>
               <TextField
                 fullWidth
-                label="Description"
                 multiline
                 rows={8}
+                value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </div>
@@ -99,35 +155,42 @@ function ViewEditApp() {
                 <small>Start Date</small>
               </label>
               {"  "}
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateField
-                  size="small"
-                  label="Start date"
-                  format="DD-MM-YYYY"
-                  onChange={(newValue) => {
-                    setStartDate(dayjs(newValue).format("YYYY-MM-DD"));
-                  }}
-                />
-              </LocalizationProvider>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(newValue) => {
+                  setStartDate(newValue.target.value);
+                }}
+              ></input>
             </div>
             <div className="form-group">
               <label className="text-muted mb-1">
                 <small>End Date </small>
               </label>
               {"  "}
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateField
-                  size="small"
-                  label="End date"
-                  format="DD-MM-YYYY"
-                  onChange={(newValue) => {
-                    setEndDate(dayjs(newValue).format("YYYY-MM-DD"));
-                  }}
-                />
-              </LocalizationProvider>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(newValue) => {
+                  setEndDate(newValue.target.value);
+                }}
+              ></input>
             </div>
           </Grid>
           <Grid item xs={6}>
+            <div className="form-group">
+              <label className="text-muted mb-1">
+                <small>Permit Create</small>
+              </label>{" "}
+              <Autocomplete
+                size="small"
+                options={groupList}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="Permit create" />
+                )}
+                onChange={handleCreateChange}
+              />
+            </div>
             <div className="form-group">
               <label className="text-muted mb-1">
                 <small>Permit Open</small>
@@ -180,19 +243,6 @@ function ViewEditApp() {
                 onChange={handleDoneChange}
               />
             </div>
-            <div className="form-group">
-              <label className="text-muted mb-1">
-                <small>Permit Closed</small>
-              </label>{" "}
-              <Autocomplete
-                size="small"
-                options={groupList}
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="Permit closed" />
-                )}
-                onChange={handleClosedChange}
-              />
-            </div>
             {isPL ? (
               <div>
                 <button
@@ -201,14 +251,14 @@ function ViewEditApp() {
                   className="btn btn-sm btn-success"
                 >
                   Save
-                </button>
+                </button>{" "}
                 <button
                   onClick={handleCancel}
                   type="submit"
                   className="btn btn-sm btn-secondary"
                 >
                   Cancel
-                </button>{" "}
+                </button>
               </div>
             ) : (
               ""
