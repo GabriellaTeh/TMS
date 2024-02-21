@@ -26,7 +26,11 @@ const {
   updateUserGroup,
 } = require("../controllers/groupController");
 
-const { createApp, getApps } = require("../controllers/applicationController");
+const {
+  createApp,
+  getApps,
+  getApp,
+} = require("../controllers/applicationController");
 
 //admin insert
 router.route("/createAdmin").post(createAdmin);
@@ -68,5 +72,6 @@ router
 //application functions
 router.route("/app/create").post(isAuthenticatedUser, createApp);
 router.route("/apps").get(isAuthenticatedUser, getApps);
+router.route("/app").post(isAuthenticatedUser, getApp);
 
 module.exports = router;

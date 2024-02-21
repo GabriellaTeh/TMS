@@ -16,8 +16,8 @@ function CreateApp() {
   const appDispatch = useContext(DispatchContext);
   const [name, setName] = useState();
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [open, setOpen] = useState("");
   const [todo, setTodo] = useState("");
   const [doing, setDoing] = useState("");
