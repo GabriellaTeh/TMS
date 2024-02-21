@@ -17,13 +17,13 @@ function ViewEditApp() {
   const [isPL, setIsPL] = useState(false);
   const appDispatch = useContext(DispatchContext);
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [open, setOpen] = useState([]);
-  const [todo, setTodo] = useState([]);
-  const [doing, setDoing] = useState([]);
-  const [done, setDone] = useState([]);
-  const [create, setCreate] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [open, setOpen] = useState(null);
+  const [todo, setTodo] = useState(null);
+  const [doing, setDoing] = useState(null);
+  const [done, setDone] = useState(null);
+  const [create, setCreate] = useState(null);
   const [groupList, setGroupList] = useState([]);
   const { name } = useParams();
 
@@ -189,6 +189,7 @@ function ViewEditApp() {
                   <TextField {...params} placeholder="Permit create" />
                 )}
                 onChange={handleCreateChange}
+                value={create}
               />
             </div>
             <div className="form-group">
@@ -202,6 +203,7 @@ function ViewEditApp() {
                   <TextField {...params} placeholder="Permit open" />
                 )}
                 onChange={handleOpenChange}
+                value={open}
               />
             </div>
             <div className="form-group">
@@ -215,6 +217,7 @@ function ViewEditApp() {
                   <TextField {...params} placeholder="Permit todo" />
                 )}
                 onChange={handleTodoChange}
+                value={todo}
               />
             </div>
             <div className="form-group">
@@ -228,6 +231,7 @@ function ViewEditApp() {
                   <TextField {...params} placeholder="Permit doing" />
                 )}
                 onChange={handleDoingChange}
+                value={doing}
               />
             </div>
             <div className="form-group">
@@ -241,6 +245,7 @@ function ViewEditApp() {
                   <TextField {...params} placeholder="Permit done" />
                 )}
                 onChange={handleDoneChange}
+                value={done}
               />
             </div>
             {isPL ? (

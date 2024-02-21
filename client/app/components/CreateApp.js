@@ -22,7 +22,7 @@ function CreateApp() {
   const [todo, setTodo] = useState("");
   const [doing, setDoing] = useState("");
   const [done, setDone] = useState("");
-  const [closed, setClosed] = useState("");
+  const [create, setCreate] = useState("");
   const [groupList, setGroupList] = useState([]);
   const navigate = useNavigate();
 
@@ -42,8 +42,8 @@ function CreateApp() {
     setDone(values);
   }
 
-  function handleClosedChange(event, values) {
-    setClosed(values);
+  function handleCreateChange(event, values) {
+    setCreate(values);
   }
 
   async function handleSubmit(e) {
@@ -58,7 +58,7 @@ function CreateApp() {
         todo,
         doing,
         done,
-        closed,
+        create,
       });
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
@@ -204,6 +204,19 @@ function CreateApp() {
         <Grid item xs={6}>
           <div className="form-group">
             <label className="text-muted mb-1">
+              <small>Permit Create</small>
+            </label>{" "}
+            <Autocomplete
+              size="small"
+              options={groupList}
+              renderInput={(params) => (
+                <TextField {...params} placeholder="Permit create" />
+              )}
+              onChange={handleCreateChange}
+            />
+          </div>
+          <div className="form-group">
+            <label className="text-muted mb-1">
               <small>Permit Open</small>
             </label>{" "}
             <Autocomplete
@@ -252,19 +265,6 @@ function CreateApp() {
                 <TextField {...params} placeholder="Permit done" />
               )}
               onChange={handleDoneChange}
-            />
-          </div>
-          <div className="form-group">
-            <label className="text-muted mb-1">
-              <small>Permit Closed</small>
-            </label>{" "}
-            <Autocomplete
-              size="small"
-              options={groupList}
-              renderInput={(params) => (
-                <TextField {...params} placeholder="Permit closed" />
-              )}
-              onChange={handleClosedChange}
             />
           </div>
           <button
