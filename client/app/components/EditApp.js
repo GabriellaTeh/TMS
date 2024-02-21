@@ -1,9 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from "react-router-dom";
-import { DateField } from "@mui/x-date-pickers/DateField";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Autocomplete, TextField } from "@mui/material";
 import dayjs from "dayjs";
 import Grid from "@mui/material/Grid";
@@ -11,21 +7,20 @@ import StateContext from "../StateContext";
 import DispatchContext from "../DispatchContext";
 import Axios from "axios";
 
-function EditApp() {
+function EditApp(props) {
   const appState = useContext(StateContext);
   const navigate = useNavigate();
-  const [isPL, setIsPL] = useState(false);
   const appDispatch = useContext(DispatchContext);
-  const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [open, setOpen] = useState(null);
-  const [todo, setTodo] = useState(null);
-  const [doing, setDoing] = useState(null);
-  const [done, setDone] = useState(null);
-  const [create, setCreate] = useState(null);
+  const [description, setDescription] = useState(props.description);
+  const [startDate, setStartDate] = useState(props.startDate);
+  const [endDate, setEndDate] = useState(props.endDate);
+  const [open, setOpen] = useState(props.open);
+  const [todo, setTodo] = useState(props.todo);
+  const [doing, setDoing] = useState(props.doing);
+  const [done, setDone] = useState(props.done);
+  const [create, setCreate] = useState(props.create);
   const [groupList, setGroupList] = useState([]);
-  const { name } = useParams();
+  let { name } = useParams();
 
   function handleOpenChange(event, values) {
     setOpen(values);
@@ -50,7 +45,26 @@ function EditApp() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      // const response = await Axios.post("/app/edit", {})
+      const response = await Axios.post("/app/edit", {
+        name,
+        description,
+        startDate,
+        endDate,
+        create,
+        open,
+        todo,
+        doing,
+        done,
+      });
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+      }
     } catch (err) {
       console.log(err);
     }
@@ -59,16 +73,6 @@ function EditApp() {
 
   function handleCancel() {
     navigate("/home");
-  }
-
-  async function checkPL() {
-    try {
-      const group_name = "projectleader";
-      const response = await Axios.post("/user/checkGroup", { group_name });
-      setIsPL(response.data);
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   async function getGroupList() {
@@ -87,50 +91,13 @@ function EditApp() {
     }
   }
 
-  async function getAppDetails() {
-    try {
-      const response = await Axios.post("/app", { name });
-      const data = response.data[0];
-      setDescription(data.App_Description);
-      if (data.App_startDate) {
-        setStartDate(dayjs(data.App_startDate).format("YYYY-MM-DD"));
-      } else {
-        setStartDate(null);
-      }
-      if (data.App_endDate) {
-        setEndDate(dayjs(data.App_endDate).format("YYYY-MM-DD"));
-      } else {
-        setEndDate(null);
-      }
-      if (data.App_permit_Create) {
-        setCreate(data.App_permit_Create);
-      }
-      if (data.App_permit_Doing) {
-        setDoing(data.App_permit_Doing);
-      }
-      if (data.App_permit_Done) {
-        setDone(data.App_permit_Done);
-      }
-      if (data.App_permit_toDoList) {
-        setTodo(data.App_permit_toDoList);
-      }
-      if (data.App_permit_Open) {
-        setOpen(data.App_permit_Open);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   useEffect(() => {
     if (!appState.loggedIn) {
       appDispatch({ type: "logout" });
       appDispatch({ type: "errorMessage", value: "Please log in." });
       navigate("/");
     } else {
-      getAppDetails();
       getGroupList();
-      checkPL();
     }
   }, []);
   return (
@@ -247,26 +214,22 @@ function EditApp() {
               value={done}
             />
           </div>
-          {isPL ? (
-            <div>
-              <button
-                onClick={handleSubmit}
-                type="submit"
-                className="btn btn-sm btn-success"
-              >
-                Save
-              </button>{" "}
-              <button
-                onClick={handleCancel}
-                type="submit"
-                className="btn btn-sm btn-secondary"
-              >
-                Cancel
-              </button>
-            </div>
-          ) : (
-            ""
-          )}
+          <div>
+            <button
+              onClick={handleSubmit}
+              type="submit"
+              className="btn btn-sm btn-success"
+            >
+              Save
+            </button>{" "}
+            <button
+              onClick={handleCancel}
+              type="submit"
+              className="btn btn-sm btn-secondary"
+            >
+              Cancel
+            </button>
+          </div>
         </Grid>
       </Grid>
     </>

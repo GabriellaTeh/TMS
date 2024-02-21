@@ -1,9 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from "react-router-dom";
-import { DateField } from "@mui/x-date-pickers/DateField";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Autocomplete, TextField } from "@mui/material";
 import dayjs from "dayjs";
 import Grid from "@mui/material/Grid";
@@ -14,7 +10,6 @@ import Axios from "axios";
 function ViewApp() {
   const appState = useContext(StateContext);
   const navigate = useNavigate();
-  const [isPL, setIsPL] = useState(false);
   const appDispatch = useContext(DispatchContext);
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");

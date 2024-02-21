@@ -40,7 +40,7 @@ exports.createApp = async (req, res, next) => {
       todo,
       doing,
       done,
-      closed,
+      create,
     } = req.body;
     if (name) {
       //add validation
@@ -57,7 +57,7 @@ exports.createApp = async (req, res, next) => {
             todo,
             doing,
             done,
-            closed,
+            create,
           ],
           function (err, results) {
             if (err) {
@@ -136,5 +136,31 @@ exports.editApp = (req, res, next) => {
   }
   if (!token) {
     return res.send(false);
+  }
+  try {
+    const {
+      name,
+      description,
+      startDate,
+      endDate,
+      open,
+      todo,
+      doing,
+      done,
+      create,
+    } = req.body;
+    database.query(
+      "UPDATE application SET App_Description = ?, App_startDate = ?, App_endDate = ?, App_permit_Open = ?, App_permit_toDoList = ?, App_permit_Doing = ?, App_permit_Done = ?, App_permit_Create = ? WHERE App_Acronym = ?",
+      [description, startDate, endDate, open, todo, doing, done, create, name],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(true);
+        }
+      }
+    );
+  } catch (err) {
+    console.log(err);
   }
 };
