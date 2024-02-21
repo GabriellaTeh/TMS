@@ -21,6 +21,7 @@ function AppDetails() {
   const [doing, setDoing] = useState(null);
   const [done, setDone] = useState(null);
   const [create, setCreate] = useState(null);
+  const [groupList, setGroupList] = useState([]);
   let { name } = useParams();
 
   async function checkPL() {
@@ -68,6 +69,22 @@ function AppDetails() {
     }
   }
 
+  async function getGroupList() {
+    setGroupList([]);
+    try {
+      const response = await Axios.get("/groups");
+      if (response.data) {
+        const options = [];
+        response.data.forEach((group) => {
+          options.push(group.name);
+        });
+        setGroupList(options);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     if (!appState.loggedIn) {
       appDispatch({ type: "logout" });
@@ -76,6 +93,7 @@ function AppDetails() {
     } else {
       checkPL();
       getAppDetails();
+      getGroupList();
     }
   }, []);
 
@@ -96,6 +114,7 @@ function AppDetails() {
             done={done}
             todo={todo}
             open={open}
+            groupList={groupList}
           />
         ) : (
           <ViewApp

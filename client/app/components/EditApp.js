@@ -18,7 +18,6 @@ function EditApp(props) {
   const [doing, setDoing] = useState(props.doing);
   const [done, setDone] = useState(props.done);
   const [create, setCreate] = useState(props.create);
-  const [groupList, setGroupList] = useState([]);
   let { name } = useParams();
 
   function handleOpenChange(event, values) {
@@ -89,31 +88,14 @@ function EditApp(props) {
     navigate("/home");
   }
 
-  async function getGroupList() {
-    setGroupList([]);
-    try {
-      const response = await Axios.get("/groups");
-      if (response.data) {
-        const options = [];
-        response.data.forEach((group) => {
-          options.push(group.name);
-        });
-        setGroupList(options);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   useEffect(() => {
     if (!appState.loggedIn) {
       appDispatch({ type: "logout" });
       appDispatch({ type: "errorMessage", value: "Please log in." });
       navigate("/");
-    } else {
-      getGroupList();
     }
   }, []);
+
   return (
     <>
       <Grid container spacing={3}>
@@ -126,7 +108,7 @@ function EditApp(props) {
               fullWidth
               multiline
               rows={8}
-              value={description}
+              defaultValue={props.description}
               onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </div>
@@ -137,7 +119,7 @@ function EditApp(props) {
             {"  "}
             <input
               type="date"
-              value={startDate}
+              defaultValue={props.startDate}
               onChange={(newValue) => {
                 setStartDate(newValue.target.value);
               }}
@@ -150,7 +132,7 @@ function EditApp(props) {
             {"  "}
             <input
               type="date"
-              value={endDate}
+              defaultValue={props.endDate}
               onChange={(newValue) => {
                 setEndDate(newValue.target.value);
               }}
@@ -164,12 +146,12 @@ function EditApp(props) {
             </label>{" "}
             <Autocomplete
               size="small"
-              options={groupList}
+              options={props.groupList}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit create" />
               )}
               onChange={handleCreateChange}
-              value={create}
+              value={props.create}
             />
           </div>
           <div className="form-group">
@@ -178,12 +160,12 @@ function EditApp(props) {
             </label>{" "}
             <Autocomplete
               size="small"
-              options={groupList}
+              options={props.groupList}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit open" />
               )}
               onChange={handleOpenChange}
-              value={open}
+              value={props.open}
             />
           </div>
           <div className="form-group">
@@ -192,12 +174,12 @@ function EditApp(props) {
             </label>{" "}
             <Autocomplete
               size="small"
-              options={groupList}
+              options={props.groupList}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit todo" />
               )}
               onChange={handleTodoChange}
-              value={todo}
+              value={props.todo}
             />
           </div>
           <div className="form-group">
@@ -206,12 +188,12 @@ function EditApp(props) {
             </label>{" "}
             <Autocomplete
               size="small"
-              options={groupList}
+              options={props.groupList}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit doing" />
               )}
               onChange={handleDoingChange}
-              value={doing}
+              value={props.doing}
             />
           </div>
           <div className="form-group">
@@ -220,12 +202,12 @@ function EditApp(props) {
             </label>{" "}
             <Autocomplete
               size="small"
-              options={groupList}
+              options={props.groupList}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Permit done" />
               )}
               onChange={handleDoneChange}
-              value={done}
+              value={props.done}
             />
           </div>
           <div>
