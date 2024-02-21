@@ -63,12 +63,13 @@ function EditApp(props) {
       } else if (response.data === "Inactive") {
         navigate("/");
         appDispatch({ type: "errorMessage", value: "Inactive." });
-      } else {
+      } else if (response.data) {
+        appDispatch({ type: "successMessage", value: "Application updated." });
+        navigate("/home");
       }
     } catch (err) {
       console.log(err);
     }
-    navigate("/home");
   }
 
   function handleCancel() {
