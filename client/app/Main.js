@@ -20,6 +20,7 @@ import EditProfile from "./components/EditProfile";
 import UserManagement from "./components/UserManagement";
 import CreateApp from "./components/CreateApp";
 import AppDetails from "./components/AppDetails";
+import Kanban from "./components/Kanban";
 
 function Main() {
   const initialState = {
@@ -72,6 +73,7 @@ function Main() {
               <Route path="/manage" element={<UserManagement />}></Route>
               <Route path="/createApp" element={<CreateApp />}></Route>
               <Route path="/app/:name" element={<AppDetails />}></Route>
+              <Route path="/kanban/:name" element={<Kanban />}></Route>
               <Route path={"*"} element={<Navigate to="/" />}></Route>
             </Routes>
             <ToastContainer position="top-center" autoClose={1250} />

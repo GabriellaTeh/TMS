@@ -118,7 +118,11 @@ function Homepage() {
             <TableBody>
               {applications.map((app) => (
                 <TableRow>
-                  <TableCell align="center">{app.App_Acronym}</TableCell>
+                  <TableCell align="center">
+                    <Link to={`/kanban/${app.App_Acronym}`}>
+                      {app.App_Acronym}
+                    </Link>
+                  </TableCell>
                   <TableCell align="center">
                     {app.App_startDate
                       ? dayjs(app.App_startDate).format("DD-MM-YYYY")
