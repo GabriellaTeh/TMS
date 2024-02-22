@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import StateContext from "../StateContext";
 import Axios from "axios";
 import Dialog from "@mui/material/Dialog";
@@ -8,7 +8,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import PlanDialog from "./PlanDialog";
 
 function Kanban() {
@@ -47,7 +47,13 @@ function Kanban() {
         <title>{name} Kanban</title>
       </Helmet>
       <div className="d-flex flex-column flex-md-row align-items-center p-3">
-        <h4 className="my-0 mr-md-auto font-weight-normal">{name}</h4>
+        <h4 className="my-0 mr-md-auto font-weight-normal">
+          <Tooltip title="Applications" arrow>
+            <Link to="/home" className="text-info">
+              {name}
+            </Link>
+          </Tooltip>
+        </h4>
         <button onClick={handlePlans} className="btn btn-sm btn-info">
           Plans
         </button>

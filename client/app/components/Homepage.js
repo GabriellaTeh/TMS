@@ -12,6 +12,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import dayjs from "dayjs";
 import Paper from "@mui/material/Paper";
+import { Tooltip } from "@mui/material";
 
 function Homepage() {
   const appState = useContext(StateContext);
@@ -119,9 +120,11 @@ function Homepage() {
               {applications.map((app) => (
                 <TableRow>
                   <TableCell align="center">
-                    <Link to={`/kanban/${app.App_Acronym}`}>
-                      {app.App_Acronym}
-                    </Link>
+                    <Tooltip title={`View Kanban`} arrow>
+                      <Link to={`/kanban/${app.App_Acronym}`}>
+                        {app.App_Acronym}
+                      </Link>
+                    </Tooltip>
                   </TableCell>
                   <TableCell align="center">
                     {app.App_startDate

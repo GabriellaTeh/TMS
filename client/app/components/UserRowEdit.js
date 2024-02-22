@@ -39,7 +39,6 @@ function UserRowEdit(props) {
 
   function handleCancel() {
     props.setEdit(false);
-    props.setRefresh(true);
   }
 
   async function updateUserGroups(groups) {

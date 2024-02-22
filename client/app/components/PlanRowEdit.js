@@ -55,7 +55,6 @@ function PlanRowEdit(props) {
 
   function handleCancel() {
     props.setEdit(false);
-    props.setRefresh(true);
   }
 
   return (
