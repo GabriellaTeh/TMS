@@ -25,6 +25,31 @@ exports.getPlans = (req, res, next) => {
   );
 };
 
+exports.getPlanNames = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  const name = req.body.name;
+  database.query(
+    "SELECT Plan_MVP_name FROM plan WHERE Plan_app_Acronym = ?",
+    [name],
+    function (error, results) {
+      if (error) {
+        console.log(error);
+      } else {
+        res.json(results);
+      }
+    }
+  );
+};
+
 async function findPlan(name, appName) {
   return new Promise((resolve, reject) => {
     database.query(

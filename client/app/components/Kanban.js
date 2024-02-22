@@ -18,6 +18,7 @@ function Kanban() {
   const [isPL, setIsPL] = useState(false);
   const [openPlan, setOpenPlan] = useState(false);
   const [openAddTask, setOpenAddTask] = useState(false);
+  const [plans, setPlans] = useState([]);
 
   function handlePlans() {
     setOpenPlan(true);
@@ -35,10 +36,6 @@ function Kanban() {
     setOpenAddTask(false);
   }
 
-  function handleSaveTask() {
-    setOpenAddTask(false);
-  }
-
   async function checkPL() {
     try {
       const group_name = "projectleader";
@@ -49,9 +46,27 @@ function Kanban() {
     }
   }
 
+  async function getPlans() {
+    setPlans([]);
+    try {
+      const response = await Axios.post("/plan/list", { name });
+      const list = [];
+      response.data.forEach((plan) => {
+        list.push(plan.Plan_MVP_name);
+      });
+      setPlans(list);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     checkPL();
   }, [appState.loggedIn]);
+
+  useEffect(() => {
+    getPlans();
+  }, []);
 
   return (
     <>
@@ -94,18 +109,11 @@ function Kanban() {
               <DialogTitle>Create Task for {name}</DialogTitle>
               <DialogContentText></DialogContentText>
               <DialogContent>
-                <AddTaskDialog />
+                <AddTaskDialog plans={plans} />
               </DialogContent>
               <DialogActions>
-                <Button
-                  onClick={handleSaveTask}
-                  variant="outlined"
-                  color="success"
-                >
-                  Save
-                </Button>
-                <Button onClick={handleCloseTask} color="error">
-                  Cancel
+                <Button onClick={handleCloseTask} color="primary">
+                  Close
                 </Button>
               </DialogActions>
             </Dialog>

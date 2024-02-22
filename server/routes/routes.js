@@ -37,6 +37,7 @@ const {
   getPlans,
   createPlan,
   editPlan,
+  getPlanNames,
 } = require("../controllers/planController");
 
 //admin insert
@@ -84,6 +85,7 @@ router.route("/app/edit").post(isAuthenticatedUser, editApp);
 
 //plan functions
 router.route("/plans").post(isAuthenticatedUser, getPlans);
+router.route("/plan/list").post(isAuthenticatedUser, getPlanNames);
 router.route("/plan/create").post(isAuthenticatedUser, createPlan);
 router.route("/plan/edit").post(isAuthenticatedUser, editPlan);
 
