@@ -33,7 +33,11 @@ const {
   editApp,
 } = require("../controllers/applicationController");
 
-const { getPlans, createPlan } = require("../controllers/planController");
+const {
+  getPlans,
+  createPlan,
+  editPlan,
+} = require("../controllers/planController");
 
 //admin insert
 router.route("/createAdmin").post(createAdmin);
@@ -81,5 +85,6 @@ router.route("/app/edit").post(isAuthenticatedUser, editApp);
 //plan functions
 router.route("/plans").post(isAuthenticatedUser, getPlans);
 router.route("/plan/create").post(isAuthenticatedUser, createPlan);
+router.route("/plan/edit").post(isAuthenticatedUser, editPlan);
 
 module.exports = router;

@@ -113,3 +113,37 @@ exports.createPlan = async (req, res, next) => {
     console.log(err);
   }
 };
+
+exports.editPlan = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  try {
+    const { name, planName, startDate, endDate } = req.body;
+    if (startDate && endDate && validateDates(res, startDate, endDate)) {
+      res.send();
+      return;
+    }
+    database.query(
+      "UPDATE plan SET Plan_startDate = ?, Plan_endDate = ? WHERE Plan_MVP_name = ? AND Plan_app_Acronym = ?",
+      [startDate, endDate, planName, name],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.write("Success");
+        }
+      }
+    );
+    res.end();
+  } catch (err) {
+    console.log(err);
+  }
+};

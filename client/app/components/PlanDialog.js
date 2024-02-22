@@ -15,6 +15,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import PlanRow from "./PlanRow";
+import { setRef } from "@mui/material";
 
 function PlanDialog() {
   const [planName, setPlanName] = useState();
@@ -24,7 +25,7 @@ function PlanDialog() {
   const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
   const [isPM, setIsPM] = useState(false);
-  const [refresh, setRefresh] = useState(true);
+  const [refresh, setRefresh] = useState(false);
   let { name } = useParams();
 
   async function handleCreate(e) {
@@ -113,6 +114,7 @@ function PlanDialog() {
   useEffect(() => {
     getPlanTable();
     checkPM();
+    setRefresh(false);
   }, [refresh]);
 
   return (
