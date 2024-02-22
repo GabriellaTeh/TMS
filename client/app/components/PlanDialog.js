@@ -14,6 +14,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import PlanRow from "./PlanRow";
 
 function PlanDialog() {
   const [planName, setPlanName] = useState();
@@ -23,6 +24,7 @@ function PlanDialog() {
   const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
   const [isPM, setIsPM] = useState(false);
+  const [refresh, setRefresh] = useState(true);
   let { name } = useParams();
 
   async function handleCreate(e) {
@@ -111,7 +113,7 @@ function PlanDialog() {
   useEffect(() => {
     getPlanTable();
     checkPM();
-  }, []);
+  }, [refresh]);
 
   return (
     <>
@@ -159,23 +161,18 @@ function PlanDialog() {
                 <TableCell align="center">Name</TableCell>
                 <TableCell align="center">Start Date</TableCell>
                 <TableCell align="center">End Date</TableCell>
+                {isPM ? <TableCell></TableCell> : ""}
               </TableRow>
             </TableHead>
             <TableBody>
               {plans.map((plan) => (
-                <TableRow>
-                  <TableCell align="center">{plan.Plan_MVP_name}</TableCell>
-                  <TableCell align="center">
-                    {plan.Plan_startDate
-                      ? dayjs(plan.Plan_startDate).format("DD-MM-YYYY")
-                      : "-"}
-                  </TableCell>
-                  <TableCell align="center">
-                    {plan.Plan_endDate
-                      ? dayjs(plan.Plan_endDate).format("DD-MM-YYYY")
-                      : "-"}
-                  </TableCell>
-                </TableRow>
+                <PlanRow
+                  name={plan.Plan_MVP_name}
+                  startDate={plan.Plan_startDate}
+                  endDate={plan.Plan_endDate}
+                  isPM={isPM}
+                  setRefresh={setRefresh}
+                />
               ))}
             </TableBody>
           </Table>

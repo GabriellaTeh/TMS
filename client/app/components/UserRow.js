@@ -46,7 +46,7 @@ function UserRow(props) {
             <ToggleSwitchView value={props.isActive === 1 ? true : false} />
           </TableCell>
           <TableCell align="center">
-            <button onClick={handleEdit} className="btn btn-primary btn-sm">
+            <button onClick={handleEdit} className="btn btn-secondary btn-sm">
               Edit
             </button>
           </TableCell>
