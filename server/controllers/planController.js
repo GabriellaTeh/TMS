@@ -11,13 +11,18 @@ exports.getPlans = (req, res, next) => {
   if (!token) {
     return res.send(false);
   }
-  database.query("SELECT * FROM plan", function (error, results) {
-    if (error) {
-      console.log(error);
-    } else {
-      res.json(results);
+  const name = req.body.name;
+  database.query(
+    "SELECT * FROM plan WHERE Plan_app_Acronym = ?",
+    [name],
+    function (error, results) {
+      if (error) {
+        console.log(error);
+      } else {
+        res.json(results);
+      }
     }
-  });
+  );
 };
 
 async function findPlan(name, appName) {

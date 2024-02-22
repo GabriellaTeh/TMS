@@ -79,7 +79,7 @@ router.route("/app").post(isAuthenticatedUser, getApp);
 router.route("/app/edit").post(isAuthenticatedUser, editApp);
 
 //plan functions
-router.route("/plans").get(isAuthenticatedUser, getPlans);
+router.route("/plans").post(isAuthenticatedUser, getPlans);
 router.route("/plan/create").post(isAuthenticatedUser, createPlan);
 
 module.exports = router;
