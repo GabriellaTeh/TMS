@@ -10,12 +10,14 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button, Tooltip } from "@mui/material";
 import PlanDialog from "./PlanDialog";
+import AddTaskDialog from "./AddTaskDialog";
 
 function Kanban() {
   let { name } = useParams();
   const appState = useContext(StateContext);
   const [isPL, setIsPL] = useState(false);
   const [openPlan, setOpenPlan] = useState(false);
+  const [openAddTask, setOpenAddTask] = useState(false);
 
   function handlePlans() {
     setOpenPlan(true);
@@ -25,7 +27,13 @@ function Kanban() {
     setOpenPlan(false);
   }
 
-  function handleAddTask() {}
+  function handleAddTask() {
+    setOpenAddTask(true);
+  }
+
+  function handleCloseTask() {
+    setOpenAddTask(false);
+  }
 
   async function checkPL() {
     try {
@@ -69,9 +77,26 @@ function Kanban() {
         </Dialog>
         <div className="text-white">...</div>
         {isPL ? (
-          <button onClick={handleAddTask} className="btn btn-sm btn-primary">
-            Add Task
-          </button>
+          <>
+            <button onClick={handleAddTask} className="btn btn-sm btn-primary">
+              Add Task
+            </button>
+            <Dialog
+              open={openAddTask}
+              onClose={handleCloseTask}
+              fullWidth
+              maxWidth="lg"
+            >
+              <DialogTitle>Create Task for {name}</DialogTitle>
+              <DialogContentText></DialogContentText>
+              <DialogContent>
+                <AddTaskDialog />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseTask}>Close</Button>
+              </DialogActions>
+            </Dialog>
+          </>
         ) : (
           ""
         )}
