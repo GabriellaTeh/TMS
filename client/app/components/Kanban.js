@@ -18,9 +18,6 @@ function Kanban() {
   const appState = useContext(StateContext);
   const [isPL, setIsPL] = useState(false);
   const [openPlan, setOpenPlan] = useState(false);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-
   function handlePlans() {
     setOpenPlan(true);
   }
