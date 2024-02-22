@@ -15,6 +15,14 @@ function AddTaskDialog(props) {
     setPlan(values);
   }
 
+  function handleSaveTask() {
+    props.setOpenAddTask(false);
+  }
+
+  function handleCancelTask() {
+    props.setOpenAddTask(false);
+  }
+
   return (
     <>
       <Grid container spacing={3}>
@@ -68,14 +76,14 @@ function AddTaskDialog(props) {
               onChange={(e) => setNotes(e.target.value)}
             ></TextField>
           </div>
+          <Button onClick={handleSaveTask} color="success">
+            Save
+          </Button>
+          <Button onClick={handleCancelTask} color="primary">
+            Cancel
+          </Button>
         </Grid>
       </Grid>
-      <Button variant="contained" color="success">
-        Save
-      </Button>{" "}
-      <Button variant="contained" color="error">
-        Cancel
-      </Button>
     </>
   );
 }

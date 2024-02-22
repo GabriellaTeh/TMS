@@ -109,13 +109,8 @@ function Kanban() {
               <DialogTitle>Create Task for {name}</DialogTitle>
               <DialogContentText></DialogContentText>
               <DialogContent>
-                <AddTaskDialog plans={plans} />
+                <AddTaskDialog plans={plans} setOpenAddTask={setOpenAddTask} />
               </DialogContent>
-              <DialogActions>
-                <Button onClick={handleCloseTask} color="primary">
-                  Close
-                </Button>
-              </DialogActions>
             </Dialog>
           </>
         ) : (
