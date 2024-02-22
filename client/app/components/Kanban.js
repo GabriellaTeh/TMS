@@ -35,6 +35,10 @@ function Kanban() {
     setOpenAddTask(false);
   }
 
+  function handleSaveTask() {
+    setOpenAddTask(false);
+  }
+
   async function checkPL() {
     try {
       const group_name = "projectleader";
@@ -93,7 +97,16 @@ function Kanban() {
                 <AddTaskDialog />
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCloseTask}>Close</Button>
+                <Button
+                  onClick={handleSaveTask}
+                  variant="outlined"
+                  color="success"
+                >
+                  Save
+                </Button>
+                <Button onClick={handleCloseTask} color="error">
+                  Cancel
+                </Button>
               </DialogActions>
             </Dialog>
           </>
