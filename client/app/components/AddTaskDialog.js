@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import { TextField, Autocomplete, Button } from "@mui/material";
+import Axios from "axios";
 
 function AddTaskDialog(props) {
   const [taskName, setTaskName] = useState();
   const [description, setDescription] = useState();
   const [plan, setPlan] = useState("");
   const [notes, setNotes] = useState();
+  let { name } = useParams();
 
   //TODO: when create task, do 2-phase commit
   //taskName, description, notes, plan, appName, state (open), creator (current user), owner (current user), createDate (current date)
@@ -15,7 +18,18 @@ function AddTaskDialog(props) {
     setPlan(values);
   }
 
-  function handleSaveTask() {
+  async function handleSaveTask() {
+    try {
+      const response = await Axios.post("/task/create", {
+        taskName,
+        description,
+        notes,
+        plan,
+        name,
+      });
+    } catch (err) {
+      console.log(err);
+    }
     props.setOpenAddTask(false);
   }
 
