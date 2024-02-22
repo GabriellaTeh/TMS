@@ -22,6 +22,7 @@ function PlanDialog() {
   const appDispatch = useContext(DispatchContext);
   const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
+  const [isPM, setIsPM] = useState(false);
   let { name } = useParams();
 
   async function handleCreate(e) {
@@ -97,44 +98,59 @@ function PlanDialog() {
     }
   }
 
+  async function checkPM() {
+    try {
+      const group_name = "projectmanager";
+      const response = await Axios.post("/user/checkGroup", { group_name });
+      setIsPM(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     getPlanTable();
+    checkPM();
   }, []);
 
   return (
     <>
-      <form onSubmit={handleCreate}>
-        <TextField
-          required
-          label="Plan Name"
-          type="text"
-          style={{ width: 400 }}
-          size="small"
-          onChange={(e) => setPlanName(e.target.value)}
-        />
-        {"   "}
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateField
+      {isPM ? (
+        <form onSubmit={handleCreate}>
+          <TextField
+            required
+            label="Plan Name"
+            type="text"
+            style={{ width: 400 }}
             size="small"
-            label="Start date"
-            format="DD-MM-YYYY"
-            onChange={(newValue) => {
-              setStartDate(dayjs(newValue).format("YYYY-MM-DD"));
-            }}
+            onChange={(e) => setPlanName(e.target.value)}
           />
-        </LocalizationProvider>{" "}
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateField
-            size="small"
-            label="End date"
-            format="DD-MM-YYYY"
-            onChange={(newValue) => {
-              setEndDate(dayjs(newValue).format("YYYY-MM-DD"));
-            }}
-          />
-        </LocalizationProvider>{" "}
-        <button className="btn btn-primary">Create Plan</button>
-      </form>
+          {"   "}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateField
+              size="small"
+              label="Start date"
+              format="DD-MM-YYYY"
+              onChange={(newValue) => {
+                setStartDate(dayjs(newValue).format("YYYY-MM-DD"));
+              }}
+            />
+          </LocalizationProvider>{" "}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateField
+              size="small"
+              label="End date"
+              format="DD-MM-YYYY"
+              onChange={(newValue) => {
+                setEndDate(dayjs(newValue).format("YYYY-MM-DD"));
+              }}
+            />
+          </LocalizationProvider>{" "}
+          <button className="btn btn-primary">Create Plan</button>
+        </form>
+      ) : (
+        ""
+      )}
       <div className="mt-3">
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
