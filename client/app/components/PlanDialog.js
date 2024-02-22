@@ -168,8 +168,16 @@ function PlanDialog() {
               {plans.map((plan) => (
                 <PlanRow
                   name={plan.Plan_MVP_name}
-                  startDate={plan.Plan_startDate}
-                  endDate={plan.Plan_endDate}
+                  startDate={
+                    plan.Plan_startDate
+                      ? dayjs(plan.Plan_startDate).format("YYYY-MM-DD")
+                      : null
+                  }
+                  endDate={
+                    plan.Plan_endDate
+                      ? dayjs(plan.Plan_endDate).format("YYYY-MM-DD")
+                      : null
+                  }
                   isPM={isPM}
                   setRefresh={setRefresh}
                 />
