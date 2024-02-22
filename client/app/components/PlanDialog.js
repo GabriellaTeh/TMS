@@ -7,13 +7,21 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 import Axios from "axios";
 import DispatchContext from "../DispatchContext";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
-function CreatePlan() {
+function PlanDialog() {
   const [planName, setPlanName] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const appDispatch = useContext(DispatchContext);
   const navigate = useNavigate();
+  const [plans, setPlans] = useState([]);
   let { name } = useParams();
 
   async function handleCreate(e) {
@@ -68,6 +76,7 @@ function CreatePlan() {
               value: "Plan created.",
             });
             e.target.reset();
+            getPlanTable();
           }
         }
       } catch (err) {
@@ -77,6 +86,20 @@ function CreatePlan() {
       appDispatch({ type: "errorMessage", value: "Plan MVP name required." });
     }
   }
+
+  async function getPlanTable() {
+    setPlans([]);
+    try {
+      const response = await Axios.post("/plans", { name });
+      setPlans(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    getPlanTable();
+  }, []);
 
   return (
     <>
@@ -112,8 +135,38 @@ function CreatePlan() {
         </LocalizationProvider>{" "}
         <button className="btn btn-primary">Create Plan</button>
       </form>
+      <div className="mt-3">
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Name</TableCell>
+                <TableCell align="center">Start Date</TableCell>
+                <TableCell align="center">End Date</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {plans.map((plan) => (
+                <TableRow>
+                  <TableCell align="center">{plan.Plan_MVP_name}</TableCell>
+                  <TableCell align="center">
+                    {plan.Plan_startDate
+                      ? dayjs(plan.Plan_startDate).format("DD-MM-YYYY")
+                      : "-"}
+                  </TableCell>
+                  <TableCell align="center">
+                    {plan.Plan_endDate
+                      ? dayjs(plan.Plan_endDate).format("DD-MM-YYYY")
+                      : "-"}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     </>
   );
 }
 
-export default CreatePlan;
+export default PlanDialog;

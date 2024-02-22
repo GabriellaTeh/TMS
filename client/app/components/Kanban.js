@@ -3,21 +3,20 @@ import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import StateContext from "../StateContext";
 import Axios from "axios";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
-import CreatePlan from "./CreatePlan";
-import ViewPlans from "./ViewPlans";
+import PlanDialog from "./PlanDialog";
 
 function Kanban() {
   let { name } = useParams();
   const appState = useContext(StateContext);
   const [isPL, setIsPL] = useState(false);
   const [openPlan, setOpenPlan] = useState(false);
+
   function handlePlans() {
     setOpenPlan(true);
   }
@@ -54,11 +53,9 @@ function Kanban() {
         </button>
         <Dialog open={openPlan} onClose={handleClose} fullWidth maxWidth="lg">
           <DialogTitle>Plans</DialogTitle>
+          <DialogContentText></DialogContentText>
           <DialogContent>
-            <CreatePlan />
-          </DialogContent>
-          <DialogContent>
-            <ViewPlans />
+            <PlanDialog />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Close</Button>
