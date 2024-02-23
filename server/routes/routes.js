@@ -40,7 +40,7 @@ const {
   getPlanNames,
 } = require("../controllers/planController");
 
-const { createTask } = require("../controllers/taskController");
+const { createTask, getTasks } = require("../controllers/taskController");
 
 //admin insert
 router.route("/createAdmin").post(createAdmin);
@@ -93,5 +93,6 @@ router.route("/plan/edit").post(isAuthenticatedUser, editPlan);
 
 //task functions
 router.route("/task/create").post(isAuthenticatedUser, createTask);
+router.route("/tasks").post(isAuthenticatedUser, getTasks);
 
 module.exports = router;

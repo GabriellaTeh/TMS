@@ -1,6 +1,39 @@
 const database = require("../config/db");
 const jwt = require("jsonwebtoken");
 
+exports.getTasks = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  const { state } = req.body;
+  if (state) {
+    try {
+      database.query(
+        "SELECT * from task WHERE Task_state = ?",
+        [state],
+        function (err, results) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.json(results);
+          }
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    res.send(false);
+  }
+};
+
 async function findTask(task) {
   return new Promise((resolve, reject) => {
     database.query(

@@ -1,16 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import dayjs from "dayjs";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import { TextField, Autocomplete, Button } from "@mui/material";
+import Axios from "axios";
 
 function TaskBoard() {
+  const [openTasks, setOpenTasks] = useState([]);
+  const [todoTasks, setTodoTasks] = useState([]);
+  const [doingTasks, setDoingTasks] = useState([]);
+  const [doneTasks, setDoneTasks] = useState([]);
+  const [closedTasks, setClosedTasks] = useState([]);
+
+  async function getOpenTasks() {
+    try {
+      const state = "open";
+      const response = await Axios.post("/tasks", { state });
+      console.log(response.data);
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        setOpenTasks(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    getOpenTasks();
+  }, []);
   return (
     <>
       <Grid container>
@@ -23,9 +50,11 @@ function TaskBoard() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {/* <TableRow>
-                  <TableCell align="center">Hello</TableCell>
-                </TableRow> */}
+                {openTasks.map((open) => (
+                  <TableRow>
+                    <TableCell align="center">{open.Task_name}</TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
