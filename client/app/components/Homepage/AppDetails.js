@@ -1,8 +1,8 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from "react-router-dom";
-import StateContext from "../StateContext";
-import DispatchContext from "../DispatchContext";
+import StateContext from "../../StateContext";
+import DispatchContext from "../../DispatchContext";
 import Axios from "axios";
 import dayjs from "dayjs";
 import EditApp from "./EditApp";

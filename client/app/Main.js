@@ -12,14 +12,14 @@ Axios.defaults.headers.common["Authorization"] = `Bearer ${Cookies.get(
 )}`;
 
 import Login from "./components/Login";
-import Homepage from "./components/Homepage";
+import Homepage from "./components//Homepage/Homepage";
 import Header from "./components/Header";
 import DispatchContext from "./DispatchContext";
 import StateContext from "./StateContext";
 import EditProfile from "./components/EditProfile";
 import UserManagement from "./components/UserManagement";
-import CreateApp from "./components/CreateApp";
-import AppDetails from "./components/AppDetails";
+import CreateApp from "./components/Homepage/CreateApp";
+import AppDetails from "./components/Homepage/AppDetails";
 import Kanban from "./components/Kanban";
 
 function Main() {

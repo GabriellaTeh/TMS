@@ -2,8 +2,8 @@ import React, { useEffect, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Autocomplete, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import StateContext from "../StateContext";
-import DispatchContext from "../DispatchContext";
+import StateContext from "../../StateContext";
+import DispatchContext from "../../DispatchContext";
 import Axios from "axios";
 
 function EditApp(props) {

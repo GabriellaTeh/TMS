@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
-import StateContext from "../StateContext";
-import DispatchContext from "../DispatchContext";
+import StateContext from "../../StateContext";
+import DispatchContext from "../../DispatchContext";
 import Axios from "axios";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
