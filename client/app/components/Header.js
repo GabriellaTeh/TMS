@@ -31,7 +31,7 @@ function Header() {
           <h4 className="body my-0 mr-md-auto font-weight-normal">
             <Tooltip title="Home" arrow>
               <Link to="/home" className="text-dark">
-                TMS
+                <b>TMS</b>
               </Link>
             </Tooltip>
           </h4>

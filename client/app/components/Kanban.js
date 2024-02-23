@@ -78,7 +78,7 @@ function Kanban() {
         <h4 className="my-0 mr-md-auto font-weight-normal">
           <Tooltip title="Applications" arrow>
             <Link to="/home" className="text-dark">
-              {name}
+              <b>{name}</b>
             </Link>
           </Tooltip>
         </h4>

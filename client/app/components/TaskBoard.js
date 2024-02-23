@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,6 +8,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Grid from "@mui/material/Grid";
 import Axios from "axios";
+import Card from "@mui/material/Card";
+import Typography from "@mui/material/Typography";
+import CardContent from "@mui/material/CardContent";
 
 function TaskBoard() {
   const [openTasks, setOpenTasks] = useState([]);
@@ -52,7 +56,18 @@ function TaskBoard() {
               <TableBody>
                 {openTasks.map((open) => (
                   <TableRow>
-                    <TableCell align="center">{open.Task_name}</TableCell>
+                    <TableCell align="center">
+                      <Card
+                        variant="outlined"
+                        style={{ backgroundColor: "pink" }}
+                      >
+                        <CardContent>
+                          <Typography variant="body2">
+                            {open.Task_name} ({open.Task_id})
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
