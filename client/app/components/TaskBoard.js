@@ -7,7 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Grid from "@mui/material/Grid";
 import Axios from "axios";
-import OpenTaskRow from "./OpenTaskRow";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 
 function TaskBoard() {
   const [openViewTask, setOpenViewTask] = useState(false);
@@ -21,7 +22,6 @@ function TaskBoard() {
     try {
       const state = "open";
       const response = await Axios.post("/tasks", { state });
-      console.log(response.data);
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
@@ -48,6 +48,7 @@ function TaskBoard() {
   useEffect(() => {
     getOpenTasks();
   }, []);
+
   return (
     <>
       <Grid container>
@@ -61,16 +62,25 @@ function TaskBoard() {
               </TableHead>
               <TableBody>
                 {openTasks.map((open) => (
-                  <OpenTaskRow
-                    handleClose={handleClose}
-                    handleViewTask={handleViewTask}
-                    openViewTask={openViewTask}
-                    id={open.Task_id}
-                    name={open.Task_name}
-                    creator={open.Task_creator}
-                    createDate={open.Task_createDate}
-                    owner={open.Task_owner}
-                  />
+                  <TableRow>
+                    <TableCell align="center">
+                      <Card
+                        variant="outlined"
+                        style={{ backgroundColor: "pink" }}
+                      >
+                        <CardContent>
+                          <button
+                            className="task-button"
+                            onClick={handleViewTask}
+                          >
+                            <u>
+                              {open.Task_name} ({open.Task_id})
+                            </u>
+                          </button>
+                        </CardContent>
+                      </Card>
+                    </TableCell>
+                  </TableRow>
                 ))}
               </TableBody>
             </Table>
