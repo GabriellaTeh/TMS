@@ -1,36 +1,88 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import { TextField, Autocomplete, Button } from "@mui/material";
 import Axios from "axios";
+import dayjs from "dayjs";
+import DispatchContext from "../DispatchContext";
 
 function AddTaskDialog(props) {
   const [taskName, setTaskName] = useState();
   const [description, setDescription] = useState();
   const [plan, setPlan] = useState("");
   const [notes, setNotes] = useState();
+  const appDispatch = useContext(DispatchContext);
   let { name } = useParams();
-
-  //TODO: when create task, do 2-phase commit
-  //taskName, description, notes, plan, appName, state (open), creator (current user), owner (current user), createDate (current date)
 
   function handlePlanChange(event, values) {
     setPlan(values);
   }
 
   async function handleSaveTask() {
-    try {
-      const response = await Axios.post("/task/create", {
-        taskName,
-        description,
-        notes,
-        plan,
-        name,
-      });
-    } catch (err) {
-      console.log(err);
+    if (taskName) {
+      try {
+        const createDate = dayjs().format("YYYY-MM-DD");
+        const response = await Axios.post("/task/create", {
+          taskName,
+          description,
+          notes,
+          plan,
+          name,
+          createDate,
+        });
+        if (response.data === "Jwt") {
+          appDispatch({ type: "errorMessage", value: "Token invalid." });
+          appDispatch({ type: "logout" });
+          navigate("/");
+        } else if (response.data === "Inactive") {
+          navigate("/");
+          appDispatch({ type: "errorMessage", value: "Inactive." });
+        } else {
+          const data = response.data.split(" ");
+          data.pop();
+          if (data.length > 0) {
+            if (data.includes("TaskExists")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Task name taken.",
+              });
+            }
+            if (data.includes("TaskLength")) {
+              appDispatch({
+                type: "errorMessage",
+                value:
+                  "Task name must be at least 3 and at most 20 characters long.",
+              });
+            }
+            if (data.includes("TaskCharacter")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Task name can only contain alphanumeric characters.",
+              });
+            }
+            if (data.includes("PlanLength")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Plan name must be at most 20 characters long.",
+              });
+            }
+            if (data.includes("PlanCharacter")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Plan name can only contain alphanumeric characters.",
+              });
+            }
+          } else {
+            appDispatch({ type: "successMessage", value: "Task created." });
+          }
+        }
+        props.setOpenAddTask(false);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      appDispatch({ type: "errorMessage", value: "Task name required." });
     }
-    props.setOpenAddTask(false);
   }
 
   function handleCancelTask() {
