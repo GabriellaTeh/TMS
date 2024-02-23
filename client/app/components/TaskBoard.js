@@ -11,7 +11,6 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 
 function TaskBoard() {
-  const [openViewTask, setOpenViewTask] = useState(false);
   const [openTasks, setOpenTasks] = useState([]);
   const [todoTasks, setTodoTasks] = useState([]);
   const [doingTasks, setDoingTasks] = useState([]);
@@ -37,16 +36,88 @@ function TaskBoard() {
     }
   }
 
-  function handleClose() {
-    setOpenViewTask(false);
+  async function getTodoTasks() {
+    try {
+      const state = "todo";
+      const response = await Axios.post("/tasks", { state });
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        setTodoTasks(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  function handleViewTask() {
-    setOpenViewTask(true);
+  async function getDoingTasks() {
+    try {
+      const state = "doing";
+      const response = await Axios.post("/tasks", { state });
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        setDoingTasks(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function getDoneTasks() {
+    try {
+      const state = "done";
+      const response = await Axios.post("/tasks", { state });
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        setDoneTasks(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function getClosedTasks() {
+    try {
+      const state = "closed";
+      const response = await Axios.post("/tasks", { state });
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else {
+        setClosedTasks(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   useEffect(() => {
     getOpenTasks();
+    getTodoTasks();
+    getDoingTasks();
+    getDoneTasks();
+    getClosedTasks();
   }, []);
 
   return (
@@ -66,13 +137,10 @@ function TaskBoard() {
                     <TableCell align="center">
                       <Card
                         variant="outlined"
-                        style={{ backgroundColor: "pink" }}
+                        style={{ backgroundColor: "#FFE4E1" }}
                       >
                         <CardContent>
-                          <button
-                            className="task-button"
-                            onClick={handleViewTask}
-                          >
+                          <button className="task-button">
                             <u>
                               {open.Task_name} ({open.Task_id})
                             </u>
@@ -94,7 +162,26 @@ function TaskBoard() {
                   <TableCell align="center">Todo</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody></TableBody>
+              <TableBody>
+                {todoTasks.map((todo) => (
+                  <TableRow>
+                    <TableCell align="center">
+                      <Card
+                        variant="outlined"
+                        style={{ backgroundColor: "#FFF8DC" }}
+                      >
+                        <CardContent>
+                          <button className="task-button">
+                            <u>
+                              {todo.Task_name} ({todo.Task_id})
+                            </u>
+                          </button>
+                        </CardContent>
+                      </Card>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
           </TableContainer>
         </Grid>
@@ -106,7 +193,26 @@ function TaskBoard() {
                   <TableCell align="center">Doing</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody></TableBody>
+              <TableBody>
+                {doingTasks.map((doing) => (
+                  <TableRow>
+                    <TableCell align="center">
+                      <Card
+                        variant="outlined"
+                        style={{ backgroundColor: "#CFEAD3" }}
+                      >
+                        <CardContent>
+                          <button className="task-button">
+                            <u>
+                              {doing.Task_name} ({doing.Task_id})
+                            </u>
+                          </button>
+                        </CardContent>
+                      </Card>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
           </TableContainer>
         </Grid>
@@ -118,7 +224,26 @@ function TaskBoard() {
                   <TableCell align="center">Done</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody></TableBody>
+              <TableBody>
+                {doneTasks.map((done) => (
+                  <TableRow>
+                    <TableCell align="center">
+                      <Card
+                        variant="outlined"
+                        style={{ backgroundColor: "#FFDAB9" }}
+                      >
+                        <CardContent>
+                          <button className="task-button">
+                            <u>
+                              {done.Task_name} ({done.Task_id})
+                            </u>
+                          </button>
+                        </CardContent>
+                      </Card>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
           </TableContainer>
         </Grid>
@@ -130,7 +255,26 @@ function TaskBoard() {
                   <TableCell align="center">Closed</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody></TableBody>
+              <TableBody>
+                {closedTasks.map((closed) => (
+                  <TableRow>
+                    <TableCell align="center">
+                      <Card
+                        variant="outlined"
+                        style={{ backgroundColor: "#D3D3D3" }}
+                      >
+                        <CardContent>
+                          <button className="task-button">
+                            <u>
+                              {closed.Task_name} ({closed.Task_id})
+                            </u>
+                          </button>
+                        </CardContent>
+                      </Card>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
           </TableContainer>
         </Grid>
