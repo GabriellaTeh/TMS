@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,15 +7,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Grid from "@mui/material/Grid";
 import Axios from "axios";
-import Card from "@mui/material/Card";
-import Typography from "@mui/material/Typography";
-import CardContent from "@mui/material/CardContent";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Button, Tooltip } from "@mui/material";
 import OpenTaskRow from "./OpenTaskRow";
 
 function TaskBoard() {
@@ -77,6 +67,9 @@ function TaskBoard() {
                     openViewTask={openViewTask}
                     id={open.Task_id}
                     name={open.Task_name}
+                    creator={open.Task_creator}
+                    createDate={open.Task_createDate}
+                    owner={open.Task_owner}
                   />
                 ))}
               </TableBody>

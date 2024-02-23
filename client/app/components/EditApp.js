@@ -101,15 +101,13 @@ function EditApp(props) {
       <Grid container spacing={3}>
         <Grid item xs={6}>
           <div className="form-group">
-            <label className="text-muted mb-1">
-              <small>Application Description</small>
-            </label>
             <TextField
               fullWidth
               multiline
               rows={8}
               defaultValue={props.description}
               onChange={(e) => setDescription(e.target.value)}
+              label="Application description"
             ></TextField>
           </div>
           <div className="form-group">

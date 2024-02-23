@@ -6,7 +6,6 @@ import Axios from "axios";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button, Tooltip } from "@mui/material";
 import PlanDialog from "./PlanDialog";
@@ -87,7 +86,6 @@ function Kanban() {
         </button>
         <Dialog open={openPlan} onClose={handleClose} fullWidth maxWidth="lg">
           <DialogTitle>Plans</DialogTitle>
-          <DialogContentText></DialogContentText>
           <DialogContent>
             <PlanDialog />
           </DialogContent>
@@ -108,7 +106,6 @@ function Kanban() {
               maxWidth="lg"
             >
               <DialogTitle>Create Task for {name}</DialogTitle>
-              <DialogContentText></DialogContentText>
               <DialogContent>
                 <AddTaskDialog plans={plans} setOpenAddTask={setOpenAddTask} />
               </DialogContent>
