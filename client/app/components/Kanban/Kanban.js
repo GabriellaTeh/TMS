@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams, Link } from "react-router-dom";
-import StateContext from "../StateContext";
+import StateContext from "../../StateContext";
 import Axios from "axios";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";

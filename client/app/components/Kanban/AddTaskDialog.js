@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import { TextField, Autocomplete, Button } from "@mui/material";
 import Axios from "axios";
 import dayjs from "dayjs";
-import DispatchContext from "../DispatchContext";
+import DispatchContext from "../../DispatchContext";
 
 function AddTaskDialog(props) {
   const [taskName, setTaskName] = useState();

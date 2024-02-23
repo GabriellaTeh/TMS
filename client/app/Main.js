@@ -20,7 +20,7 @@ import EditProfile from "./components/EditProfile";
 import UserManagement from "./components/UserManagement/UserManagement";
 import CreateApp from "./components/Homepage/CreateApp";
 import AppDetails from "./components/Homepage/AppDetails";
-import Kanban from "./components/Kanban";
+import Kanban from "./components/Kanban/Kanban";
 
 function Main() {
   const initialState = {
