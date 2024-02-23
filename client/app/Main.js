@@ -21,6 +21,7 @@ import UserManagement from "./components/UserManagement/UserManagement";
 import CreateApp from "./components/Homepage/CreateApp";
 import AppDetails from "./components/Homepage/AppDetails";
 import Kanban from "./components/Kanban/Kanban";
+import Task from "./components/Kanban/Task";
 
 function Main() {
   const initialState = {
@@ -74,6 +75,7 @@ function Main() {
               <Route path="/createApp" element={<CreateApp />}></Route>
               <Route path="/app/:name" element={<AppDetails />}></Route>
               <Route path="/kanban/:name" element={<Kanban />}></Route>
+              <Route path="/:task" element={<Task />}></Route>
               <Route path={"*"} element={<Navigate to="/" />}></Route>
             </Routes>
             <ToastContainer position="top-center" autoClose={1250} />

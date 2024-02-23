@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -140,11 +141,9 @@ function TaskBoard() {
                         style={{ backgroundColor: "#FFE4E1" }}
                       >
                         <CardContent>
-                          <button className="task-button">
-                            <u>
-                              {open.Task_name} ({open.Task_id})
-                            </u>
-                          </button>
+                          <Link to={`/${open.Task_id}`}>
+                            {open.Task_name} ({open.Task_id})
+                          </Link>
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -171,11 +170,9 @@ function TaskBoard() {
                         style={{ backgroundColor: "#FFF8DC" }}
                       >
                         <CardContent>
-                          <button className="task-button">
-                            <u>
-                              {todo.Task_name} ({todo.Task_id})
-                            </u>
-                          </button>
+                          <Link to={`/${todo.Task_id}`}>
+                            {todo.Task_name} ({todo.Task_id})
+                          </Link>
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -202,11 +199,9 @@ function TaskBoard() {
                         style={{ backgroundColor: "#CFEAD3" }}
                       >
                         <CardContent>
-                          <button className="task-button">
-                            <u>
-                              {doing.Task_name} ({doing.Task_id})
-                            </u>
-                          </button>
+                          <Link to={`/${doing.Task_id}`}>
+                            {doing.Task_name} ({doing.Task_id})
+                          </Link>
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -233,11 +228,9 @@ function TaskBoard() {
                         style={{ backgroundColor: "#FFDAB9" }}
                       >
                         <CardContent>
-                          <button className="task-button">
-                            <u>
-                              {done.Task_name} ({done.Task_id})
-                            </u>
-                          </button>
+                          <Link to={`/${done.Task_id}`}>
+                            {done.Task_name} ({done.Task_id})
+                          </Link>
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -264,11 +257,9 @@ function TaskBoard() {
                         style={{ backgroundColor: "#D3D3D3" }}
                       >
                         <CardContent>
-                          <button className="task-button">
-                            <u>
-                              {closed.Task_name} ({closed.Task_id})
-                            </u>
-                          </button>
+                          <Link to={`/${closed.Task_id}`}>
+                            {closed.Task_name} ({closed.Task_id})
+                          </Link>
                         </CardContent>
                       </Card>
                     </TableCell>
