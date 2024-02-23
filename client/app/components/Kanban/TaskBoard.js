@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import Axios from "axios";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import { Tooltip } from "@mui/material";
 
 function TaskBoard() {
   const [openTasks, setOpenTasks] = useState([]);
@@ -141,9 +142,11 @@ function TaskBoard() {
                         style={{ backgroundColor: "#FFE4E1" }}
                       >
                         <CardContent>
-                          <Link to={`/${open.Task_id}`}>
-                            {open.Task_name} ({open.Task_id})
-                          </Link>
+                          <Tooltip title="View task" arrow>
+                            <Link to={`/${open.Task_id}`}>
+                              {open.Task_name} ({open.Task_id})
+                            </Link>
+                          </Tooltip>
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -170,9 +173,11 @@ function TaskBoard() {
                         style={{ backgroundColor: "#FFF8DC" }}
                       >
                         <CardContent>
-                          <Link to={`/${todo.Task_id}`}>
-                            {todo.Task_name} ({todo.Task_id})
-                          </Link>
+                          <Tooltip title="View task" arrow>
+                            <Link to={`/${todo.Task_id}`}>
+                              {todo.Task_name} ({todo.Task_id})
+                            </Link>
+                          </Tooltip>
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -199,9 +204,11 @@ function TaskBoard() {
                         style={{ backgroundColor: "#CFEAD3" }}
                       >
                         <CardContent>
-                          <Link to={`/${doing.Task_id}`}>
-                            {doing.Task_name} ({doing.Task_id})
-                          </Link>
+                          <Tooltip title="View task" arrow>
+                            <Link to={`/${doing.Task_id}`}>
+                              {doing.Task_name} ({doing.Task_id})
+                            </Link>
+                          </Tooltip>
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -228,9 +235,11 @@ function TaskBoard() {
                         style={{ backgroundColor: "#FFDAB9" }}
                       >
                         <CardContent>
-                          <Link to={`/${done.Task_id}`}>
-                            {done.Task_name} ({done.Task_id})
-                          </Link>
+                          <Tooltip title="View task" arrow>
+                            <Link to={`/${done.Task_id}`}>
+                              {done.Task_name} ({done.Task_id})
+                            </Link>
+                          </Tooltip>
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -257,9 +266,11 @@ function TaskBoard() {
                         style={{ backgroundColor: "#D3D3D3" }}
                       >
                         <CardContent>
-                          <Link to={`/${closed.Task_id}`}>
-                            {closed.Task_name} ({closed.Task_id})
-                          </Link>
+                          <Tooltip title="View task" arrow>
+                            <Link to={`/${closed.Task_id}`}>
+                              {closed.Task_name} ({closed.Task_id})
+                            </Link>
+                          </Tooltip>
                         </CardContent>
                       </Card>
                     </TableCell>
