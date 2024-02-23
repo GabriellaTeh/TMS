@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import StateContext from "../StateContext";
+import StateContext from "../../StateContext";
 import HeaderHomeUser from "./HeaderHomeUser";
 import HeaderHomeAdmin from "./HeaderHomeAdmin";
 import Axios from "axios";

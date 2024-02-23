@@ -13,7 +13,7 @@ Axios.defaults.headers.common["Authorization"] = `Bearer ${Cookies.get(
 
 import Login from "./components/Login";
 import Homepage from "./components//Homepage/Homepage";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import DispatchContext from "./DispatchContext";
 import StateContext from "./StateContext";
 import EditProfile from "./components/EditProfile";

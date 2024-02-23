@@ -1,10 +1,14 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import DispatchContext from "../DispatchContext";
+import DispatchContext from "../../DispatchContext";
 
-function HeaderHomeUser() {
+function HeaderHomeAdmin() {
   const appDispatch = useContext(DispatchContext);
   const navigate = useNavigate();
+
+  function handleUserManagement() {
+    navigate("/manage");
+  }
 
   function handleLogout() {
     appDispatch({ type: "logout" });
@@ -16,6 +20,12 @@ function HeaderHomeUser() {
 
   return (
     <div className="flex-row my-3 my-md-0">
+      <button
+        onClick={handleUserManagement}
+        className="btn btn-sm btn-secondary"
+      >
+        Manage Users
+      </button>{" "}
       <button onClick={handleEditProfile} className="btn btn-sm btn-secondary">
         My Profile
       </button>{" "}
@@ -26,4 +36,4 @@ function HeaderHomeUser() {
   );
 }
 
-export default HeaderHomeUser;
+export default HeaderHomeAdmin;
