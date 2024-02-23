@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import Axios from "axios";
 import ToggleSwitchEdit from "./ToggleSwitchEdit";
 import ToggleSwitchView from "./ToggleSwitchView";
-import DispatchContext from "../DispatchContext";
+import DispatchContext from "../../DispatchContext";
 import { Autocomplete, TextField } from "@mui/material";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";

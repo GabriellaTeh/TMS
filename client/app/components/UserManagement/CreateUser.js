@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import DispatchContext from "../DispatchContext";
+import DispatchContext from "../../DispatchContext";
 import Axios from "axios";
 import { Autocomplete, TextField } from "@mui/material";
 

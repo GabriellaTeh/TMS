@@ -1,8 +1,8 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import StateContext from "../StateContext";
+import StateContext from "../../StateContext";
 import { Helmet } from "react-helmet";
-import DispatchContext from "../DispatchContext";
+import DispatchContext from "../../DispatchContext";
 import CreateUser from "./CreateUser";
 import CreateGroup from "./CreateGroup";
 import Axios from "axios";

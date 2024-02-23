@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Axios from "axios";
-import DispatchContext from "../DispatchContext";
-import StateContext from "../StateContext";
+import DispatchContext from "../../DispatchContext";
+import StateContext from "../../StateContext";
 import { useNavigate } from "react-router-dom";
 
 function CreateGroup(props) {

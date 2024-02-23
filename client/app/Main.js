@@ -17,7 +17,7 @@ import Header from "./components/Header";
 import DispatchContext from "./DispatchContext";
 import StateContext from "./StateContext";
 import EditProfile from "./components/EditProfile";
-import UserManagement from "./components/UserManagement";
+import UserManagement from "./components/UserManagement/UserManagement";
 import CreateApp from "./components/Homepage/CreateApp";
 import AppDetails from "./components/Homepage/AppDetails";
 import Kanban from "./components/Kanban";
