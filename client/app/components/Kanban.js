@@ -11,6 +11,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Button, Tooltip } from "@mui/material";
 import PlanDialog from "./PlanDialog";
 import AddTaskDialog from "./AddTaskDialog";
+import TaskBoard from "./TaskBoard";
 
 function Kanban() {
   let { name } = useParams();
@@ -76,7 +77,7 @@ function Kanban() {
       <div className="d-flex flex-column flex-md-row align-items-center p-3">
         <h4 className="my-0 mr-md-auto font-weight-normal">
           <Tooltip title="Applications" arrow>
-            <Link to="/home" className="text-info">
+            <Link to="/home" className="text-dark">
               {name}
             </Link>
           </Tooltip>
@@ -97,7 +98,7 @@ function Kanban() {
         <div className="text-white">...</div>
         {isPL ? (
           <>
-            <button onClick={handleAddTask} className="btn btn-sm btn-primary">
+            <button onClick={handleAddTask} className="btn btn-sm btn-success">
               Add Task
             </button>
             <Dialog
@@ -116,6 +117,9 @@ function Kanban() {
         ) : (
           ""
         )}
+      </div>
+      <div className="mt-3">
+        <TaskBoard />
       </div>
     </>
   );

@@ -26,11 +26,11 @@ function Header() {
 
   return (
     <>
-      <header className="header-bar bg-primary mb-3">
+      <header className="header-bar mb-3">
         <div className="d-flex flex-column flex-md-row align-items-center p-3">
-          <h4 className="my-0 mr-md-auto font-weight-normal">
+          <h4 className="body my-0 mr-md-auto font-weight-normal">
             <Tooltip title="Home" arrow>
-              <Link to="/home" className="text-white">
+              <Link to="/home" className="text-dark">
                 TMS
               </Link>
             </Tooltip>

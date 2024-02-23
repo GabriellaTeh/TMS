@@ -98,7 +98,7 @@ function Homepage() {
       <div className="d-flex flex-column flex-md-row align-items-center p-3">
         <h4 className="my-0 mr-md-auto font-weight-normal">Applications</h4>
         {isPL ? (
-          <button onClick={handleCreateApp} className="btn btn-sm btn-primary">
+          <button onClick={handleCreateApp} className="btn btn-sm btn-success">
             Add application
           </button>
         ) : (

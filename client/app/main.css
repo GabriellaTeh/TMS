@@ -1,9 +1,9 @@
 body {
   font-family: "Public Sans", sans-serif;
 }
-
 .header-bar {
-  background-color: #292929;
+  background-color: #ffb5b5;
+  /* background-color: pink; */
 }
 
 .container--narrow {
