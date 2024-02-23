@@ -8,7 +8,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button, Tooltip } from "@mui/material";
-import PlanDialog from "./PlanDialog";
+import PlanDialog from "./Plan/PlanDialog";
 import AddTaskDialog from "./AddTaskDialog";
 import TaskBoard from "./TaskBoard";
 

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Axios from "axios";
-import DispatchContext from "../DispatchContext";
+import DispatchContext from "../../DispatchContext";
 
 function PlanRowEdit(props) {
   const [startDate, setStartDate] = useState(props.startDate);
