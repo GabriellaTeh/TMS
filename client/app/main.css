@@ -1,6 +1,16 @@
 body {
   font-family: "Public Sans", sans-serif;
 }
+
+.task-button {
+  border: none;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+}
+
 .header-bar {
   background-color: #ffb5b5;
   /* background-color: pink; */

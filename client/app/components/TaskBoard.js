@@ -11,8 +11,16 @@ import Axios from "axios";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { Button, Tooltip } from "@mui/material";
+import OpenTaskRow from "./OpenTaskRow";
 
 function TaskBoard() {
+  const [openViewTask, setOpenViewTask] = useState(false);
   const [openTasks, setOpenTasks] = useState([]);
   const [todoTasks, setTodoTasks] = useState([]);
   const [doingTasks, setDoingTasks] = useState([]);
@@ -39,6 +47,14 @@ function TaskBoard() {
     }
   }
 
+  function handleClose() {
+    setOpenViewTask(false);
+  }
+
+  function handleViewTask() {
+    setOpenViewTask(true);
+  }
+
   useEffect(() => {
     getOpenTasks();
   }, []);
@@ -55,20 +71,13 @@ function TaskBoard() {
               </TableHead>
               <TableBody>
                 {openTasks.map((open) => (
-                  <TableRow>
-                    <TableCell align="center">
-                      <Card
-                        variant="outlined"
-                        style={{ backgroundColor: "pink" }}
-                      >
-                        <CardContent>
-                          <Typography variant="body2">
-                            {open.Task_name} ({open.Task_id})
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </TableCell>
-                  </TableRow>
+                  <OpenTaskRow
+                    handleClose={handleClose}
+                    handleViewTask={handleViewTask}
+                    openViewTask={openViewTask}
+                    id={open.Task_id}
+                    name={open.Task_name}
+                  />
                 ))}
               </TableBody>
             </Table>
