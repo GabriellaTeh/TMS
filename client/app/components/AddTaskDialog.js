@@ -74,9 +74,9 @@ function AddTaskDialog(props) {
             }
           } else {
             appDispatch({ type: "successMessage", value: "Task created." });
+            props.setOpenAddTask(false);
           }
         }
-        props.setOpenAddTask(false);
       } catch (err) {
         console.log(err);
       }
