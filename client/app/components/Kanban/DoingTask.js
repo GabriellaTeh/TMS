@@ -257,27 +257,15 @@ function DoingTask(props) {
             <label className="text-muted mb-1">
               <small>Plan Name</small>
             </label>{" "}
-            {permitted ? (
-              <Autocomplete
-                size="small"
-                value={plan}
-                options={props.plans}
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="No plans" />
-                )}
-                onChange={handlePlanChange}
-              />
-            ) : (
-              <Autocomplete
-                size="small"
-                readOnly
-                value={plan}
-                options={props.plans}
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="No plans" />
-                )}
-              />
-            )}
+            <Autocomplete
+              size="small"
+              readOnly
+              value={plan}
+              options={props.plans}
+              renderInput={(params) => (
+                <TextField {...params} placeholder="No plans" />
+              )}
+            />
           </div>
           <div className="form-group">
             <label className="text-muted mb-1">
