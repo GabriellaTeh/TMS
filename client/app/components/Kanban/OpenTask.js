@@ -84,7 +84,7 @@ function OpenTask(props) {
 
   async function checkOpenPermit() {
     try {
-      const response = await Axios.post("/permit/open", { app });
+      const response = await Axios.post("/app/permit", { app });
       const group_name = response.data[0].App_permit_Open;
       if (group_name) {
         try {

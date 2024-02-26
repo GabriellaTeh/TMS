@@ -237,7 +237,7 @@ exports.editApp = async (req, res, next) => {
   res.end();
 };
 
-exports.getPermitOpen = (req, res, next) => {
+exports.getPermit = (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&

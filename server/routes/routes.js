@@ -31,7 +31,7 @@ const {
   getApps,
   getApp,
   editApp,
-  getPermitOpen,
+  getPermit,
 } = require("../controllers/applicationController");
 
 const {
@@ -106,6 +106,6 @@ router.route("/task/edit").post(isAuthenticatedUser, editTask);
 router.route("/task/editState").post(isAuthenticatedUser, editTaskState);
 
 //permit functions
-router.route("/permit/open").post(isAuthenticatedUser, getPermitOpen);
+router.route("/app/permit").post(isAuthenticatedUser, getPermit);
 
 module.exports = router;
