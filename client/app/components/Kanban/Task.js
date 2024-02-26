@@ -4,6 +4,8 @@ import Axios from "axios";
 import Grid from "@mui/material/Grid";
 import { TextField, Autocomplete, Button } from "@mui/material";
 import dayjs from "dayjs";
+import OpenTask from "./OpenTask";
+import ClosedTask from "./ClosedTask";
 
 function Task() {
   let { task } = useParams();
@@ -64,84 +66,21 @@ function Task() {
         {dayjs(createDate).format("DD-MM-YYYY")}
         <br></br>Owner: {owner}
         <br></br> State: {state}
-        <Grid container spacing={3} className="mt-1">
-          <Grid item xs={6}>
-            <div className="form-group">
-              <label className="text-muted mb-1">
-                <small>Task Description</small>
-              </label>
-              {state === "closed" ? (
-                <TextField
-                  fullWidth
-                  InputProps={{ readOnly: true }}
-                  multiline
-                  rows={7}
-                  defaultValue={description}
-                ></TextField>
-              ) : (
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={7}
-                  defaultValue={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                ></TextField>
-              )}
-            </div>
-          </Grid>
-          <Grid item xs={6}>
-            <div className="form-group">
-              <label className="text-muted mb-1">
-                <small>Plan Name</small>
-              </label>{" "}
-              {state === "closed" ? (
-                <Autocomplete
-                  size="small"
-                  readOnly
-                  value={plan}
-                  options={plans}
-                  renderInput={(params) => (
-                    <TextField {...params} placeholder="No plans" />
-                  )}
-                />
-              ) : (
-                <Autocomplete
-                  size="small"
-                  value={plan}
-                  options={plans}
-                  renderInput={(params) => (
-                    <TextField {...params} placeholder="No plans" />
-                  )}
-                />
-              )}
-            </div>
-            <div className="form-group">
-              <label className="text-muted mb-1">
-                <small>Task Notes</small>
-              </label>
-              {state === "closed" ? (
-                <TextField
-                  fullWidth
-                  InputProps={{ readOnly: true }}
-                  multiline
-                  rows={6}
-                  defaultValue={notes}
-                ></TextField>
-              ) : (
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={6}
-                  defaultValue={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                ></TextField>
-              )}
-            </div>
-            <Button onClick={handleCancel} color="primary">
-              {state === "closed" ? "Close" : "Cancel"}
-            </Button>
-          </Grid>
-        </Grid>
+        {state === "open" ? (
+          <OpenTask
+            description={description}
+            plan={plan}
+            notes={notes}
+            plans={plans}
+          />
+        ) : (
+          <ClosedTask
+            description={description}
+            plan={plan}
+            notes={notes}
+            plans={plans}
+          />
+        )}
       </div>
     </>
   );

@@ -44,6 +44,7 @@ const {
   createTask,
   getTasks,
   getTask,
+  editTask,
 } = require("../controllers/taskController");
 
 //admin insert
@@ -99,5 +100,6 @@ router.route("/plan/edit").post(isAuthenticatedUser, editPlan);
 router.route("/task/create").post(isAuthenticatedUser, createTask);
 router.route("/tasks").post(isAuthenticatedUser, getTasks);
 router.route("/task").post(isAuthenticatedUser, getTask);
+router.route("/task/edit").post(isAuthenticatedUser, editTask);
 
 module.exports = router;

@@ -196,3 +196,37 @@ exports.createTask = async (req, res, next) => {
   }
   res.end();
 };
+
+exports.editTask = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  try {
+    const { description, plan, notes, task } = req.body;
+    if (plan && validatePlan(res, plan)) {
+      res.send();
+      return;
+    }
+    database.query(
+      "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = ? WHERE task_id = ?",
+      [description, plan, notes, task],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.write("Success");
+        }
+      }
+    );
+    res.end();
+  } catch (err) {
+    console.log(err);
+  }
+};
