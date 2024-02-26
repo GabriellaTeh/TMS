@@ -140,19 +140,19 @@ function AppDetails() {
       } else {
         obj.endDate = endDate;
       }
-      if (open) {
+      if (open || open === null) {
         obj.open = open;
       }
-      if (todo) {
+      if (todo || todo === null) {
         obj.todo = todo;
       }
-      if (doing) {
+      if (doing || doing === null) {
         obj.doing = doing;
       }
-      if (done) {
+      if (done || done === null) {
         obj.done = done;
       }
-      if (create) {
+      if (create || create === null) {
         obj.create = create;
       }
       const response = await Axios.post("/app/edit", obj);
@@ -264,9 +264,7 @@ function AppDetails() {
                   renderInput={(params) => (
                     <TextField {...params} placeholder="Permit create" />
                   )}
-                  onChange={(event, newValue) => {
-                    setCreate(newValue);
-                  }}
+                  onChange={handleCreateChange}
                   value={create}
                 />
               </div>

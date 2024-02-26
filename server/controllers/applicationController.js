@@ -201,31 +201,31 @@ exports.editApp = async (req, res, next) => {
         [endDate, name]
       );
     }
-    if (open) {
+    if (open || open === null) {
       database.query(
         "UPDATE application SET App_permit_Open = ? WHERE App_Acronym = ?",
         [open, name]
       );
     }
-    if (todo) {
+    if (todo || todo === null) {
       database.query(
         "UPDATE application SET App_permit_todoList = ? WHERE App_Acronym = ?",
         [todo, name]
       );
     }
-    if (doing) {
+    if (doing || doing === null) {
       database.query(
         "UPDATE application SET App_permit_Doing = ? WHERE App_Acronym = ?",
         [doing, name]
       );
     }
-    if (done) {
+    if (done || done === null) {
       database.query(
         "UPDATE application SET App_permit_Done = ? WHERE App_Acronym = ?",
         [done, name]
       );
     }
-    if (create) {
+    if (create || create === null) {
       database.query(
         "UPDATE application SET App_permit_Create = ? WHERE App_Acronym = ?",
         [create, name]
