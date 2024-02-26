@@ -21,7 +21,7 @@ import UserManagement from "./components/UserManagement/UserManagement";
 import CreateApp from "./components/Homepage/CreateApp";
 import AppDetails from "./components/Homepage/AppDetails";
 import Kanban from "./components/Kanban/Kanban";
-import Task from "./components/Kanban/Task";
+import Task from "./components/Kanban/Task/Task";
 
 function Main() {
   const initialState = {

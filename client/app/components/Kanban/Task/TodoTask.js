@@ -3,58 +3,51 @@ import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import Grid from "@mui/material/Grid";
 import { TextField, Autocomplete, Button } from "@mui/material";
-import DispatchContext from "../../DispatchContext";
+import DispatchContext from "../../../DispatchContext";
 
-function DoingTask(props) {
+function TodoTask(props) {
   const navigate = useNavigate();
   const [description, setDescription] = useState(props.description);
   const [notes, setNotes] = useState(props.notes);
-  const [permitted, setPermitted] = useState(false);
   const appDispatch = useContext(DispatchContext);
+  const [permitted, setPermitted] = useState(false);
   let { task } = useParams();
   const app = task.split("_")[0];
 
   async function handleSave() {
     try {
-      if (notes === props.notes) {
-        appDispatch({
-          type: "errorMessage",
-          value: "Please add notes to update.",
-        });
+      const response = await Axios.post("/task/edit", {
+        description,
+        plan,
+        notes,
+        task,
+      });
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
       } else {
-        const response = await Axios.post("/task/edit", {
-          description,
-          plan,
-          notes,
-          task,
-        });
-        if (response.data === "Jwt") {
-          appDispatch({ type: "errorMessage", value: "Token invalid." });
-          appDispatch({ type: "logout" });
-          navigate("/");
-        } else if (response.data === "Inactive") {
-          navigate("/");
-          appDispatch({ type: "errorMessage", value: "Inactive." });
-        } else {
-          const data = response.data.split(" ");
-          data.pop();
-          if (data.length > 0) {
-            if (data.includes("PlanLength")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name must be at most 20 characters long.",
-              });
-            }
-            if (data.includes("PlanCharacter")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name can only contain alphanumeric characters.",
-              });
-            }
-          } else {
-            appDispatch({ type: "successMessage", value: "Task updated." });
-            navigate(`/kanban/${app}`);
+        const data = response.data.split(" ");
+        data.pop();
+        if (data.length > 0) {
+          if (data.includes("PlanLength")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Plan name must be at most 20 characters long.",
+            });
           }
+          if (data.includes("PlanCharacter")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Plan name can only contain alphanumeric characters.",
+            });
+          }
+        } else {
+          appDispatch({ type: "successMessage", value: "Task updated." });
+          navigate(`/kanban/${app}`);
         }
       }
     } catch (err) {
@@ -63,13 +56,10 @@ function DoingTask(props) {
   }
 
   async function handleSavePromote() {
+    handleSave();
     try {
-      const response = await Axios.post("/task/edit", {
-        description,
-        plan,
-        notes,
-        task,
-      });
+      const state = "doing";
+      const response = await Axios.post("/task/editState", { state, task });
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
@@ -77,111 +67,12 @@ function DoingTask(props) {
       } else if (response.data === "Inactive") {
         navigate("/");
         appDispatch({ type: "errorMessage", value: "Inactive." });
-      } else {
-        const data = response.data.split(" ");
-        data.pop();
-        if (data.length > 0) {
-          if (data.includes("PlanLength")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Plan name must be at most 20 characters long.",
-            });
-          }
-          if (data.includes("PlanCharacter")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Plan name can only contain alphanumeric characters.",
-            });
-          }
-        } else {
-          appDispatch({ type: "successMessage", value: "Task updated." });
-          try {
-            const state = "done";
-            const response = await Axios.post("/task/editState", {
-              state,
-              task,
-            });
-            if (response.data === "Jwt") {
-              appDispatch({ type: "errorMessage", value: "Token invalid." });
-              appDispatch({ type: "logout" });
-              navigate("/");
-            } else if (response.data === "Inactive") {
-              navigate("/");
-              appDispatch({ type: "errorMessage", value: "Inactive." });
-            } else if (response.data) {
-              appDispatch({
-                type: "successMessage",
-                value: "Task promoted.",
-              });
-              navigate(`/kanban/${app}`);
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function handleSaveDemote() {
-    try {
-      const response = await Axios.post("/task/edit", {
-        description,
-        plan,
-        notes,
-        task,
-      });
-      if (response.data === "Jwt") {
-        appDispatch({ type: "errorMessage", value: "Token invalid." });
-        appDispatch({ type: "logout" });
-        navigate("/");
-      } else if (response.data === "Inactive") {
-        navigate("/");
-        appDispatch({ type: "errorMessage", value: "Inactive." });
-      } else {
-        const data = response.data.split(" ");
-        data.pop();
-        if (data.length > 0) {
-          if (data.includes("PlanLength")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Plan name must be at most 20 characters long.",
-            });
-          }
-          if (data.includes("PlanCharacter")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Plan name can only contain alphanumeric characters.",
-            });
-          }
-        } else {
-          appDispatch({ type: "successMessage", value: "Task updated." });
-          try {
-            const state = "todo";
-            const response = await Axios.post("/task/editState", {
-              state,
-              task,
-            });
-            if (response.data === "Jwt") {
-              appDispatch({ type: "errorMessage", value: "Token invalid." });
-              appDispatch({ type: "logout" });
-              navigate("/");
-            } else if (response.data === "Inactive") {
-              navigate("/");
-              appDispatch({ type: "errorMessage", value: "Inactive." });
-            } else if (response.data) {
-              appDispatch({
-                type: "successMessage",
-                value: "Task demoted.",
-              });
-              navigate(`/kanban/${app}`);
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        }
+      } else if (response.data) {
+        appDispatch({
+          type: "successMessage",
+          value: "Task promoted.",
+        });
+        navigate(`/kanban/${app}`);
       }
     } catch (err) {
       console.log(err);
@@ -192,10 +83,10 @@ function DoingTask(props) {
     navigate(`/kanban/${app}`);
   }
 
-  async function checkDoingPermit() {
+  async function checkTodoPermit() {
     try {
       const response = await Axios.post("/app/permit", { app });
-      const group_name = response.data[0].App_permit_Doing;
+      const group_name = response.data[0].App_permit_toDoList;
       if (group_name) {
         try {
           const res = await Axios.post("/user/checkGroup", { group_name });
@@ -210,7 +101,7 @@ function DoingTask(props) {
   }
 
   useEffect(() => {
-    checkDoingPermit();
+    checkTodoPermit();
   }, []);
 
   return (
@@ -282,9 +173,6 @@ function DoingTask(props) {
               <Button onClick={handleSavePromote} color="success">
                 Save and Promote
               </Button>
-              <Button onClick={handleSaveDemote} color="warning">
-                Save and Demote
-              </Button>
               <Button onClick={handleSave} color="primary">
                 Save
               </Button>
@@ -301,4 +189,4 @@ function DoingTask(props) {
   );
 }
 
-export default DoingTask;
+export default TodoTask;

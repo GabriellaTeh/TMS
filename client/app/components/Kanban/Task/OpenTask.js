@@ -3,16 +3,21 @@ import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import Grid from "@mui/material/Grid";
 import { TextField, Autocomplete, Button } from "@mui/material";
-import DispatchContext from "../../DispatchContext";
+import DispatchContext from "../../../DispatchContext";
 
-function TodoTask(props) {
+function OpenTask(props) {
   const navigate = useNavigate();
   const [description, setDescription] = useState(props.description);
+  const [plan, setPlan] = useState(props.plan);
   const [notes, setNotes] = useState(props.notes);
-  const appDispatch = useContext(DispatchContext);
   const [permitted, setPermitted] = useState(false);
+  const appDispatch = useContext(DispatchContext);
   let { task } = useParams();
   const app = task.split("_")[0];
+
+  function handlePlanChange(event, values) {
+    setPlan(values);
+  }
 
   async function handleSave() {
     try {
@@ -58,7 +63,7 @@ function TodoTask(props) {
   async function handleSavePromote() {
     handleSave();
     try {
-      const state = "doing";
+      const state = "todo";
       const response = await Axios.post("/task/editState", { state, task });
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
@@ -83,10 +88,10 @@ function TodoTask(props) {
     navigate(`/kanban/${app}`);
   }
 
-  async function checkTodoPermit() {
+  async function checkOpenPermit() {
     try {
       const response = await Axios.post("/app/permit", { app });
-      const group_name = response.data[0].App_permit_toDoList;
+      const group_name = response.data[0].App_permit_Open;
       if (group_name) {
         try {
           const res = await Axios.post("/user/checkGroup", { group_name });
@@ -101,7 +106,7 @@ function TodoTask(props) {
   }
 
   useEffect(() => {
-    checkTodoPermit();
+    checkOpenPermit();
   }, []);
 
   return (
@@ -136,15 +141,27 @@ function TodoTask(props) {
             <label className="text-muted mb-1">
               <small>Plan Name</small>
             </label>{" "}
-            <Autocomplete
-              size="small"
-              readOnly
-              value={props.plan}
-              options={props.plans}
-              renderInput={(params) => (
-                <TextField {...params} placeholder="No plans" />
-              )}
-            />
+            {permitted ? (
+              <Autocomplete
+                size="small"
+                value={plan}
+                options={props.plans}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="No plans" />
+                )}
+                onChange={handlePlanChange}
+              />
+            ) : (
+              <Autocomplete
+                size="small"
+                readOnly
+                value={plan}
+                options={props.plans}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="No plans" />
+                )}
+              />
+            )}
           </div>
           <div className="form-group">
             <label className="text-muted mb-1">
@@ -189,4 +206,4 @@ function TodoTask(props) {
   );
 }
 
-export default TodoTask;
+export default OpenTask;
