@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
-import Grid from "@mui/material/Grid";
-import { TextField, Autocomplete, Button } from "@mui/material";
 import dayjs from "dayjs";
 import OpenTask from "./OpenTask";
+import TodoTask from "./TodoTask";
+import DoingTask from "./DoingTask";
+import DoneTask from "./DoneTask";
 import ClosedTask from "./ClosedTask";
 
 function Task() {
@@ -18,7 +19,6 @@ function Task() {
   const [creator, setCreator] = useState();
   const [owner, setOwner] = useState();
   const [createDate, setCreateDate] = useState();
-  const navigate = useNavigate();
 
   async function getTaskDetails() {
     try {
@@ -48,10 +48,6 @@ function Task() {
     }
   }
 
-  function handleCancel() {
-    navigate(`/kanban/${task}`);
-  }
-
   useEffect(() => {
     getTaskDetails();
   }, []);
@@ -69,17 +65,52 @@ function Task() {
         {state === "open" ? (
           <OpenTask
             description={description}
-            plan={plan}
             notes={notes}
+            plan={plan}
             plans={plans}
           />
         ) : (
-          <ClosedTask
+          ""
+        )}
+        {state === "todo" ? (
+          <TodoTask
             description={description}
-            plan={plan}
             notes={notes}
+            plan={plan}
             plans={plans}
           />
+        ) : (
+          ""
+        )}
+        {state === "doing" ? (
+          <DoingTask
+            description={description}
+            notes={notes}
+            plan={plan}
+            plans={plans}
+          />
+        ) : (
+          ""
+        )}
+        {state === "done" ? (
+          <DoneTask
+            description={description}
+            notes={notes}
+            plan={plan}
+            plans={plans}
+          />
+        ) : (
+          ""
+        )}
+        {state === "closed" ? (
+          <ClosedTask
+            description={description}
+            notes={notes}
+            plan={plan}
+            plans={plans}
+          />
+        ) : (
+          ""
         )}
       </div>
     </>
