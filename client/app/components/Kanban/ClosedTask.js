@@ -8,9 +8,10 @@ import dayjs from "dayjs";
 function ClosedTask(props) {
   const navigate = useNavigate();
   let { task } = useParams();
+  const app = task.split("_")[0];
 
   function handleCancel() {
-    navigate(`/kanban/${task}`);
+    navigate(`/kanban/${app}`);
   }
 
   return (
@@ -21,23 +22,6 @@ function ClosedTask(props) {
             <label className="text-muted mb-1">
               <small>Task Description</small>
             </label>
-            {/* {state === "closed" ? (
-              <TextField
-                fullWidth
-                InputProps={{ readOnly: true }}
-                multiline
-                rows={7}
-                defaultValue={description}
-              ></TextField>
-            ) : (
-              <TextField
-                fullWidth
-                multiline
-                rows={7}
-                defaultValue={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></TextField>
-            )} */}
             <TextField
               fullWidth
               InputProps={{ readOnly: true }}
@@ -52,26 +36,6 @@ function ClosedTask(props) {
             <label className="text-muted mb-1">
               <small>Plan Name</small>
             </label>{" "}
-            {/* {state === "closed" ? (
-              <Autocomplete
-                size="small"
-                readOnly
-                value={plan}
-                options={plans}
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="No plans" />
-                )}
-              />
-            ) : (
-              <Autocomplete
-                size="small"
-                value={plan}
-                options={plans}
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="No plans" />
-                )}
-              />
-            )} */}
             <Autocomplete
               size="small"
               readOnly
@@ -93,23 +57,6 @@ function ClosedTask(props) {
               rows={6}
               defaultValue={props.notes}
             ></TextField>
-            {/* {state === "closed" ? (
-              <TextField
-                fullWidth
-                InputProps={{ readOnly: true }}
-                multiline
-                rows={6}
-                defaultValue={notes}
-              ></TextField>
-            ) : (
-              <TextField
-                fullWidth
-                multiline
-                rows={6}
-                defaultValue={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              ></TextField>
-            )} */}
           </div>
           <Button onClick={handleCancel} color="primary">
             Close

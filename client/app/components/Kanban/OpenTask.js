@@ -12,6 +12,7 @@ function OpenTask(props) {
   const [notes, setNotes] = useState(props.notes);
   const appDispatch = useContext(DispatchContext);
   let { task } = useParams();
+  const app = task.split("_")[0];
 
   function handlePlanChange(event, values) {
     setPlan(values);
@@ -51,7 +52,7 @@ function OpenTask(props) {
           }
         } else {
           appDispatch({ type: "successMessage", value: "Task updated." });
-          navigate(`/kanban/${task}`);
+          navigate(`/kanban/${app}`);
         }
       }
     } catch (err) {
@@ -60,7 +61,7 @@ function OpenTask(props) {
   }
 
   function handleCancel() {
-    navigate(`/kanban/${task}`);
+    navigate(`/kanban/${app}`);
   }
 
   return (
