@@ -70,13 +70,23 @@ function Task() {
               <label className="text-muted mb-1">
                 <small>Task Description</small>
               </label>
-              <TextField
-                fullWidth
-                multiline
-                rows={7}
-                defaultValue={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></TextField>
+              {state === "closed" ? (
+                <TextField
+                  fullWidth
+                  multiline
+                  disabled
+                  rows={7}
+                  defaultValue={description}
+                ></TextField>
+              ) : (
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={7}
+                  defaultValue={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                ></TextField>
+              )}
             </div>
           </Grid>
           <Grid item xs={6}>
@@ -84,30 +94,51 @@ function Task() {
               <label className="text-muted mb-1">
                 <small>Plan Name</small>
               </label>{" "}
-              <Autocomplete
-                size="small"
-                value={plan}
-                options={plans}
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="Plans" />
-                )}
-              />
+              {state === "closed" ? (
+                <Autocomplete
+                  size="small"
+                  readOnly
+                  value={plan}
+                  options={plans}
+                  renderInput={(params) => (
+                    <TextField {...params} placeholder="Plans" />
+                  )}
+                />
+              ) : (
+                <Autocomplete
+                  size="small"
+                  value={plan}
+                  options={plans}
+                  renderInput={(params) => (
+                    <TextField {...params} placeholder="Plans" />
+                  )}
+                />
+              )}
             </div>
             <div className="form-group">
               <label className="text-muted mb-1">
                 <small>Task Notes</small>
               </label>
-              <TextField
-                fullWidth
-                multiline
-                rows={6}
-                defaultValue={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              ></TextField>
+              {state === "closed" ? (
+                <TextField
+                  fullWidth
+                  disabled
+                  multiline
+                  rows={6}
+                  defaultValue={notes}
+                ></TextField>
+              ) : (
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={6}
+                  defaultValue={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                ></TextField>
+              )}
             </div>
-            {/* <Button color="success">Save</Button> */}
             <Button onClick={handleCancel} color="primary">
-              Cancel
+              {state === "closed" ? "Close" : "Cancel"}
             </Button>
           </Grid>
         </Grid>
