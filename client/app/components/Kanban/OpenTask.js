@@ -61,7 +61,22 @@ function OpenTask(props) {
     }
   }
 
-  function handleSavePromote() {}
+  async function handleSavePromote() {
+    handleSave();
+    try {
+      const state = "todo";
+      const response = await Axios.post("/task/editState", { state, task });
+      if (response.data) {
+        appDispatch({
+          type: "successMessage",
+          value: "Task promoted.",
+        });
+        navigate(`/kanban/${app}`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   function handleCancel() {
     navigate(`/kanban/${app}`);

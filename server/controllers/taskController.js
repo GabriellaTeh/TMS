@@ -230,3 +230,32 @@ exports.editTask = (req, res, next) => {
     console.log(err);
   }
 };
+
+exports.editTaskState = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  try {
+    const { state, task } = req.body;
+    database.query(
+      "UPDATE task SET Task_state = ? WHERE task_id = ?",
+      [state, task],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(true);
+        }
+      }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
