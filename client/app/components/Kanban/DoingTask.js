@@ -8,18 +8,61 @@ import DispatchContext from "../../DispatchContext";
 function DoingTask(props) {
   const navigate = useNavigate();
   const [description, setDescription] = useState(props.description);
-  const [plan, setPlan] = useState(props.plan);
   const [notes, setNotes] = useState(props.notes);
   const [permitted, setPermitted] = useState(false);
   const appDispatch = useContext(DispatchContext);
   let { task } = useParams();
   const app = task.split("_")[0];
 
-  function handlePlanChange(event, values) {
-    setPlan(values);
+  async function handleSave() {
+    try {
+      if (notes === props.notes) {
+        appDispatch({
+          type: "errorMessage",
+          value: "Please add notes to update.",
+        });
+      } else {
+        const response = await Axios.post("/task/edit", {
+          description,
+          plan,
+          notes,
+          task,
+        });
+        if (response.data === "Jwt") {
+          appDispatch({ type: "errorMessage", value: "Token invalid." });
+          appDispatch({ type: "logout" });
+          navigate("/");
+        } else if (response.data === "Inactive") {
+          navigate("/");
+          appDispatch({ type: "errorMessage", value: "Inactive." });
+        } else {
+          const data = response.data.split(" ");
+          data.pop();
+          if (data.length > 0) {
+            if (data.includes("PlanLength")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Plan name must be at most 20 characters long.",
+              });
+            }
+            if (data.includes("PlanCharacter")) {
+              appDispatch({
+                type: "errorMessage",
+                value: "Plan name can only contain alphanumeric characters.",
+              });
+            }
+          } else {
+            appDispatch({ type: "successMessage", value: "Task updated." });
+            navigate(`/kanban/${app}`);
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  async function handleSave() {
+  async function handleSavePromote() {
     try {
       const response = await Axios.post("/task/edit", {
         description,
@@ -52,76 +95,28 @@ function DoingTask(props) {
           }
         } else {
           appDispatch({ type: "successMessage", value: "Task updated." });
-          navigate(`/kanban/${app}`);
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function handleSavePromote() {
-    try {
-      if (notes === props.notes) {
-        appDispatch({
-          type: "errorMessage",
-          value: "Please add notes to promote.",
-        });
-      } else {
-        const response = await Axios.post("/task/edit", {
-          description,
-          plan,
-          notes,
-          task,
-        });
-        if (response.data === "Jwt") {
-          appDispatch({ type: "errorMessage", value: "Token invalid." });
-          appDispatch({ type: "logout" });
-          navigate("/");
-        } else if (response.data === "Inactive") {
-          navigate("/");
-          appDispatch({ type: "errorMessage", value: "Inactive." });
-        } else {
-          const data = response.data.split(" ");
-          data.pop();
-          if (data.length > 0) {
-            if (data.includes("PlanLength")) {
+          try {
+            const state = "done";
+            const response = await Axios.post("/task/editState", {
+              state,
+              task,
+            });
+            if (response.data === "Jwt") {
+              appDispatch({ type: "errorMessage", value: "Token invalid." });
+              appDispatch({ type: "logout" });
+              navigate("/");
+            } else if (response.data === "Inactive") {
+              navigate("/");
+              appDispatch({ type: "errorMessage", value: "Inactive." });
+            } else if (response.data) {
               appDispatch({
-                type: "errorMessage",
-                value: "Plan name must be at most 20 characters long.",
+                type: "successMessage",
+                value: "Task promoted.",
               });
+              navigate(`/kanban/${app}`);
             }
-            if (data.includes("PlanCharacter")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name can only contain alphanumeric characters.",
-              });
-            }
-          } else {
-            appDispatch({ type: "successMessage", value: "Task updated." });
-            try {
-              const state = "done";
-              const response = await Axios.post("/task/editState", {
-                state,
-                task,
-              });
-              if (response.data === "Jwt") {
-                appDispatch({ type: "errorMessage", value: "Token invalid." });
-                appDispatch({ type: "logout" });
-                navigate("/");
-              } else if (response.data === "Inactive") {
-                navigate("/");
-                appDispatch({ type: "errorMessage", value: "Inactive." });
-              } else if (response.data) {
-                appDispatch({
-                  type: "successMessage",
-                  value: "Task promoted.",
-                });
-                navigate(`/kanban/${app}`);
-              }
-            } catch (err) {
-              console.log(err);
-            }
+          } catch (err) {
+            console.log(err);
           }
         }
       }
@@ -132,66 +127,59 @@ function DoingTask(props) {
 
   async function handleSaveDemote() {
     try {
-      if (notes === props.notes) {
-        appDispatch({
-          type: "errorMessage",
-          value: "Please add notes to demote.",
-        });
+      const response = await Axios.post("/task/edit", {
+        description,
+        plan,
+        notes,
+        task,
+      });
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
       } else {
-        const response = await Axios.post("/task/edit", {
-          description,
-          plan,
-          notes,
-          task,
-        });
-        if (response.data === "Jwt") {
-          appDispatch({ type: "errorMessage", value: "Token invalid." });
-          appDispatch({ type: "logout" });
-          navigate("/");
-        } else if (response.data === "Inactive") {
-          navigate("/");
-          appDispatch({ type: "errorMessage", value: "Inactive." });
+        const data = response.data.split(" ");
+        data.pop();
+        if (data.length > 0) {
+          if (data.includes("PlanLength")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Plan name must be at most 20 characters long.",
+            });
+          }
+          if (data.includes("PlanCharacter")) {
+            appDispatch({
+              type: "errorMessage",
+              value: "Plan name can only contain alphanumeric characters.",
+            });
+          }
         } else {
-          const data = response.data.split(" ");
-          data.pop();
-          if (data.length > 0) {
-            if (data.includes("PlanLength")) {
+          appDispatch({ type: "successMessage", value: "Task updated." });
+          try {
+            const state = "todo";
+            const response = await Axios.post("/task/editState", {
+              state,
+              task,
+            });
+            if (response.data === "Jwt") {
+              appDispatch({ type: "errorMessage", value: "Token invalid." });
+              appDispatch({ type: "logout" });
+              navigate("/");
+            } else if (response.data === "Inactive") {
+              navigate("/");
+              appDispatch({ type: "errorMessage", value: "Inactive." });
+            } else if (response.data) {
               appDispatch({
-                type: "errorMessage",
-                value: "Plan name must be at most 20 characters long.",
+                type: "successMessage",
+                value: "Task demoted.",
               });
+              navigate(`/kanban/${app}`);
             }
-            if (data.includes("PlanCharacter")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name can only contain alphanumeric characters.",
-              });
-            }
-          } else {
-            appDispatch({ type: "successMessage", value: "Task updated." });
-            try {
-              const state = "todo";
-              const response = await Axios.post("/task/editState", {
-                state,
-                task,
-              });
-              if (response.data === "Jwt") {
-                appDispatch({ type: "errorMessage", value: "Token invalid." });
-                appDispatch({ type: "logout" });
-                navigate("/");
-              } else if (response.data === "Inactive") {
-                navigate("/");
-                appDispatch({ type: "errorMessage", value: "Inactive." });
-              } else if (response.data) {
-                appDispatch({
-                  type: "successMessage",
-                  value: "Task demoted.",
-                });
-                navigate(`/kanban/${app}`);
-              }
-            } catch (err) {
-              console.log(err);
-            }
+          } catch (err) {
+            console.log(err);
           }
         }
       }
@@ -260,7 +248,7 @@ function DoingTask(props) {
             <Autocomplete
               size="small"
               readOnly
-              value={plan}
+              value={props.plan}
               options={props.plans}
               renderInput={(params) => (
                 <TextField {...params} placeholder="No plans" />

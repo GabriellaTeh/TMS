@@ -8,16 +8,11 @@ import DispatchContext from "../../DispatchContext";
 function TodoTask(props) {
   const navigate = useNavigate();
   const [description, setDescription] = useState(props.description);
-  const [plan, setPlan] = useState(props.plan);
   const [notes, setNotes] = useState(props.notes);
   const appDispatch = useContext(DispatchContext);
   const [permitted, setPermitted] = useState(false);
   let { task } = useParams();
   const app = task.split("_")[0];
-
-  function handlePlanChange(event, values) {
-    setPlan(values);
-  }
 
   async function handleSave() {
     try {
@@ -144,7 +139,7 @@ function TodoTask(props) {
             <Autocomplete
               size="small"
               readOnly
-              value={plan}
+              value={props.plan}
               options={props.plans}
               renderInput={(params) => (
                 <TextField {...params} placeholder="No plans" />
