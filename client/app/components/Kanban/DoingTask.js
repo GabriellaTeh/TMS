@@ -10,6 +10,7 @@ function DoingTask(props) {
   const [description, setDescription] = useState(props.description);
   const [plan, setPlan] = useState(props.plan);
   const [notes, setNotes] = useState(props.notes);
+  const [permitted, setPermitted] = useState(false);
   const appDispatch = useContext(DispatchContext);
   let { task } = useParams();
   const app = task.split("_")[0];
@@ -60,9 +61,64 @@ function DoingTask(props) {
     }
   }
 
+  async function handleSavePromote() {
+    handleSave();
+    try {
+      const state = "done";
+      const response = await Axios.post("/task/editState", { state, task });
+      if (response.data) {
+        appDispatch({
+          type: "successMessage",
+          value: "Task promoted.",
+        });
+        navigate(`/kanban/${app}`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleSaveDemote() {
+    handleSave();
+    try {
+      const state = "todo";
+      const response = await Axios.post("/task/editState", { state, task });
+      if (response.data) {
+        appDispatch({
+          type: "successMessage",
+          value: "Task demoted.",
+        });
+        navigate(`/kanban/${app}`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   function handleCancel() {
     navigate(`/kanban/${app}`);
   }
+
+  async function checkDoingPermit() {
+    try {
+      const response = await Axios.post("/app/permit", { app });
+      const group_name = response.data[0].App_permit_Doing;
+      if (group_name) {
+        try {
+          const res = await Axios.post("/user/checkGroup", { group_name });
+          setPermitted(res.data);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    checkDoingPermit();
+  }, []);
 
   return (
     <>
@@ -72,14 +128,23 @@ function DoingTask(props) {
             <label className="text-muted mb-1">
               <small>Task Description</small>
             </label>
-
-            <TextField
-              fullWidth
-              multiline
-              rows={7}
-              defaultValue={props.description}
-              onChange={(e) => setDescription(e.target.value)}
-            ></TextField>
+            {permitted ? (
+              <TextField
+                fullWidth
+                multiline
+                rows={7}
+                defaultValue={props.description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></TextField>
+            ) : (
+              <TextField
+                fullWidth
+                multiline
+                InputProps={{ readOnly: true }}
+                rows={7}
+                defaultValue={props.description}
+              ></TextField>
+            )}
           </div>
         </Grid>
         <Grid item xs={6}>
@@ -87,33 +152,67 @@ function DoingTask(props) {
             <label className="text-muted mb-1">
               <small>Plan Name</small>
             </label>{" "}
-            <Autocomplete
-              size="small"
-              value={plan}
-              options={props.plans}
-              renderInput={(params) => (
-                <TextField {...params} placeholder="No plans" />
-              )}
-              onChange={handlePlanChange}
-            />
+            {permitted ? (
+              <Autocomplete
+                size="small"
+                value={plan}
+                options={props.plans}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="No plans" />
+                )}
+                onChange={handlePlanChange}
+              />
+            ) : (
+              <Autocomplete
+                size="small"
+                readOnly
+                value={plan}
+                options={props.plans}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="No plans" />
+                )}
+              />
+            )}
           </div>
           <div className="form-group">
             <label className="text-muted mb-1">
               <small>Task Notes</small>
             </label>
-            <TextField
-              fullWidth
-              multiline
-              rows={6}
-              defaultValue={props.notes}
-              onChange={(e) => setNotes(e.target.value)}
-            ></TextField>
+            {permitted ? (
+              <TextField
+                fullWidth
+                multiline
+                rows={6}
+                defaultValue={props.notes}
+                onChange={(e) => setNotes(e.target.value)}
+              ></TextField>
+            ) : (
+              <TextField
+                fullWidth
+                multiline
+                InputProps={{ readOnly: true }}
+                rows={6}
+                defaultValue={props.notes}
+              ></TextField>
+            )}
           </div>
-          <Button onClick={handleSave} color="primary">
-            Save
-          </Button>
+          {permitted ? (
+            <>
+              <Button onClick={handleSavePromote} color="success">
+                Save and Promote
+              </Button>
+              <Button onClick={handleSaveDemote} color="warning">
+                Save and Demote
+              </Button>
+              <Button onClick={handleSave} color="primary">
+                Save
+              </Button>
+            </>
+          ) : (
+            ""
+          )}
           <Button onClick={handleCancel} color="error">
-            Cancel
+            Close
           </Button>
         </Grid>
       </Grid>
