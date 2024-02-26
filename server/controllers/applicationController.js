@@ -236,3 +236,34 @@ exports.editApp = async (req, res, next) => {
   }
   res.end();
 };
+
+exports.getPermitOpen = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  try {
+    const { app } = req.body;
+    database.query(
+      "SELECT * FROM application WHERE App_Acronym = ?",
+      [app],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else if (results.length === 0) {
+          res.send(false);
+        } else {
+          res.json(results);
+        }
+      }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};

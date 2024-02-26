@@ -109,10 +109,10 @@ function TodoTask(props) {
               onChange={(e) => setNotes(e.target.value)}
             ></TextField>
           </div>
-          <Button onClick={handleSave} color="error">
+          <Button onClick={handleSave} color="primary">
             Save
           </Button>
-          <Button onClick={handleCancel} color="primary">
+          <Button onClick={handleCancel} color="error">
             Cancel
           </Button>
         </Grid>

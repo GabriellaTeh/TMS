@@ -10,6 +10,7 @@ function OpenTask(props) {
   const [description, setDescription] = useState(props.description);
   const [plan, setPlan] = useState(props.plan);
   const [notes, setNotes] = useState(props.notes);
+  const [permitted, setPermitted] = useState(false);
   const appDispatch = useContext(DispatchContext);
   let { task } = useParams();
   const app = task.split("_")[0];
@@ -60,9 +61,32 @@ function OpenTask(props) {
     }
   }
 
+  function handleSavePromote() {}
+
   function handleCancel() {
     navigate(`/kanban/${app}`);
   }
+
+  async function checkOpenPermit() {
+    try {
+      const response = await Axios.post("/permit/open", { app });
+      const group_name = response.data[0].App_permit_Open;
+      if (group_name) {
+        try {
+          const res = await Axios.post("/user/checkGroup", { group_name });
+          setPermitted(res.data);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    checkOpenPermit();
+  }, []);
 
   return (
     <>
@@ -109,10 +133,19 @@ function OpenTask(props) {
               onChange={(e) => setNotes(e.target.value)}
             ></TextField>
           </div>
-          <Button onClick={handleSave} color="error">
-            Save
-          </Button>
-          <Button onClick={handleCancel} color="primary">
+          {permitted ? (
+            <>
+              <Button onClick={handleSavePromote} color="success">
+                Save and Promote
+              </Button>
+              <Button onClick={handleSave} color="primary">
+                Save
+              </Button>
+            </>
+          ) : (
+            ""
+          )}
+          <Button onClick={handleCancel} color="error">
             Cancel
           </Button>
         </Grid>

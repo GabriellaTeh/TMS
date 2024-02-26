@@ -58,7 +58,7 @@ function ClosedTask(props) {
               defaultValue={props.notes}
             ></TextField>
           </div>
-          <Button onClick={handleCancel} color="primary">
+          <Button onClick={handleCancel} color="error">
             Close
           </Button>
         </Grid>
