@@ -96,14 +96,23 @@ function OpenTask(props) {
             <label className="text-muted mb-1">
               <small>Task Description</small>
             </label>
-
-            <TextField
-              fullWidth
-              multiline
-              rows={7}
-              defaultValue={props.description}
-              onChange={(e) => setDescription(e.target.value)}
-            ></TextField>
+            {permitted ? (
+              <TextField
+                fullWidth
+                multiline
+                rows={7}
+                defaultValue={props.description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></TextField>
+            ) : (
+              <TextField
+                fullWidth
+                multiline
+                InputProps={{ readOnly: true }}
+                rows={7}
+                defaultValue={props.description}
+              ></TextField>
+            )}
           </div>
         </Grid>
         <Grid item xs={6}>
@@ -111,27 +120,49 @@ function OpenTask(props) {
             <label className="text-muted mb-1">
               <small>Plan Name</small>
             </label>{" "}
-            <Autocomplete
-              size="small"
-              value={plan}
-              options={props.plans}
-              renderInput={(params) => (
-                <TextField {...params} placeholder="No plans" />
-              )}
-              onChange={handlePlanChange}
-            />
+            {permitted ? (
+              <Autocomplete
+                size="small"
+                value={plan}
+                options={props.plans}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="No plans" />
+                )}
+                onChange={handlePlanChange}
+              />
+            ) : (
+              <Autocomplete
+                size="small"
+                readOnly
+                value={plan}
+                options={props.plans}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="No plans" />
+                )}
+              />
+            )}
           </div>
           <div className="form-group">
             <label className="text-muted mb-1">
               <small>Task Notes</small>
             </label>
-            <TextField
-              fullWidth
-              multiline
-              rows={6}
-              defaultValue={props.notes}
-              onChange={(e) => setNotes(e.target.value)}
-            ></TextField>
+            {permitted ? (
+              <TextField
+                fullWidth
+                multiline
+                rows={6}
+                defaultValue={props.notes}
+                onChange={(e) => setNotes(e.target.value)}
+              ></TextField>
+            ) : (
+              <TextField
+                fullWidth
+                multiline
+                InputProps={{ readOnly: true }}
+                rows={6}
+                defaultValue={props.notes}
+              ></TextField>
+            )}
           </div>
           {permitted ? (
             <>
@@ -146,7 +177,7 @@ function OpenTask(props) {
             ""
           )}
           <Button onClick={handleCancel} color="error">
-            Cancel
+            Close
           </Button>
         </Grid>
       </Grid>
