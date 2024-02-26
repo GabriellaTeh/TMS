@@ -65,7 +65,14 @@ function DoingTask(props) {
     try {
       const state = "done";
       const response = await Axios.post("/task/editState", { state, task });
-      if (response.data) {
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else if (response.data) {
         appDispatch({
           type: "successMessage",
           value: "Task promoted.",
@@ -82,7 +89,14 @@ function DoingTask(props) {
     try {
       const state = "todo";
       const response = await Axios.post("/task/editState", { state, task });
-      if (response.data) {
+      if (response.data === "Jwt") {
+        appDispatch({ type: "errorMessage", value: "Token invalid." });
+        appDispatch({ type: "logout" });
+        navigate("/");
+      } else if (response.data === "Inactive") {
+        navigate("/");
+        appDispatch({ type: "errorMessage", value: "Inactive." });
+      } else if (response.data) {
         appDispatch({
           type: "successMessage",
           value: "Task demoted.",
