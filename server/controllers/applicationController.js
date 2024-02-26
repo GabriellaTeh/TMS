@@ -156,7 +156,7 @@ exports.getApp = (req, res, next) => {
   );
 };
 
-exports.editApp = (req, res, next) => {
+exports.editApp = async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -183,17 +183,54 @@ exports.editApp = (req, res, next) => {
       res.send();
       return;
     }
-    database.query(
-      "UPDATE application SET App_Description = ?, App_startDate = ?, App_endDate = ?, App_permit_Open = ?, App_permit_toDoList = ?, App_permit_Doing = ?, App_permit_Done = ?, App_permit_Create = ? WHERE App_Acronym = ?",
-      [description, startDate, endDate, open, todo, doing, done, create, name],
-      function (err, results) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.write("Success");
-        }
-      }
-    );
+    if (description) {
+      database.query(
+        "UPDATE application SET App_Description = ? WHERE App_Acronym = ?",
+        [description, name]
+      );
+    }
+    if (startDate || startDate === null) {
+      database.query(
+        "UPDATE application SET App_startDate = ? WHERE App_Acronym = ?",
+        [startDate, name]
+      );
+    }
+    if (endDate || endDate === null) {
+      database.query(
+        "UPDATE application SET App_endDate = ? WHERE App_Acronym = ?",
+        [endDate, name]
+      );
+    }
+    if (open) {
+      database.query(
+        "UPDATE application SET App_permit_Open = ? WHERE App_Acronym = ?",
+        [open, name]
+      );
+    }
+    if (todo) {
+      database.query(
+        "UPDATE application SET App_permit_todoList = ? WHERE App_Acronym = ?",
+        [todo, name]
+      );
+    }
+    if (doing) {
+      database.query(
+        "UPDATE application SET App_permit_Doing = ? WHERE App_Acronym = ?",
+        [doing, name]
+      );
+    }
+    if (done) {
+      database.query(
+        "UPDATE application SET App_permit_Done = ? WHERE App_Acronym = ?",
+        [done, name]
+      );
+    }
+    if (create) {
+      database.query(
+        "UPDATE application SET App_permit_Create = ? WHERE App_Acronym = ?",
+        [create, name]
+      );
+    }
   } catch (err) {
     console.log(err);
   }

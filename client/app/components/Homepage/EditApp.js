@@ -5,6 +5,10 @@ import Grid from "@mui/material/Grid";
 import StateContext from "../../StateContext";
 import DispatchContext from "../../DispatchContext";
 import Axios from "axios";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 function EditApp(props) {
   const appState = useContext(StateContext);
@@ -18,6 +22,11 @@ function EditApp(props) {
   const [doing, setDoing] = useState(props.doing);
   const [done, setDone] = useState(props.done);
   const [create, setCreate] = useState(props.create);
+  const [startDateCleared, setStartDateCleared] = useState(false);
+  const [endDateCleared, setEndDateCleared] = useState(false);
+  const [startDateChanged, setStartDateChanged] = useState(false);
+  const [endDateChanged, setEndDateChanged] = useState(false);
+
   let { name } = useParams();
 
   function handleOpenChange(event, values) {
@@ -43,17 +52,40 @@ function EditApp(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await Axios.post("/app/edit", {
-        name,
-        description,
-        startDate,
-        endDate,
-        create,
-        open,
-        todo,
-        doing,
-        done,
-      });
+      let obj = { name };
+      if (description) {
+        obj.description = description;
+      }
+      if (startDateCleared) {
+        obj.startDate = null;
+      } else if (startDateChanged) {
+        obj.startDate = dayjs(startDate).format("YYYY-MM-DD");
+      } else {
+        obj.startDate = props.startDate;
+      }
+      if (endDateCleared) {
+        obj.endDate = null;
+      } else if (endDateChanged) {
+        obj.endDate = dayjs(endDate).format("YYYY-MM-DD");
+      } else {
+        obj.endDate = props.endDate;
+      }
+      if (open) {
+        obj.open = open;
+      }
+      if (todo) {
+        obj.todo = todo;
+      }
+      if (doing) {
+        obj.doing = doing;
+      }
+      if (done) {
+        obj.done = done;
+      }
+      if (create) {
+        obj.create = create;
+      }
+      const response = await Axios.post("/app/edit", obj);
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
@@ -115,26 +147,44 @@ function EditApp(props) {
               <small>Start Date</small>
             </label>
             {"  "}
-            <input
-              type="date"
-              defaultValue={props.startDate}
-              onChange={(newValue) => {
-                setStartDate(newValue.target.value);
-              }}
-            ></input>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Start Date"
+                value={dayjs(props.startDate)}
+                onChange={(newValue) => {
+                  setStartDate(dayjs(newValue).format("YYYY-MM-DD"));
+                  setStartDateChanged(true);
+                }}
+                slotProps={{
+                  field: {
+                    clearable: true,
+                    onClear: () => setStartDateCleared(true),
+                  },
+                }}
+              />
+            </LocalizationProvider>
           </div>
           <div className="form-group">
             <label className="text-muted mb-1">
               <small>End Date </small>
             </label>
             {"  "}
-            <input
-              type="date"
-              defaultValue={props.endDate}
-              onChange={(newValue) => {
-                setEndDate(newValue.target.value);
-              }}
-            ></input>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="End Date"
+                value={dayjs(props.endDate)}
+                onChange={(newValue) => {
+                  setEndDate(dayjs(newValue).format("YYYY-MM-DD"));
+                  setEndDateChanged(true);
+                }}
+                slotProps={{
+                  field: {
+                    clearable: true,
+                    onClear: () => setEndDateCleared(true),
+                  },
+                }}
+              />
+            </LocalizationProvider>
           </div>
         </Grid>
         <Grid item xs={6}>

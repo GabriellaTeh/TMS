@@ -13,7 +13,7 @@ function AppDetails() {
   const navigate = useNavigate();
   const [isPL, setIsPL] = useState(false);
   const appDispatch = useContext(DispatchContext);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [open, setOpen] = useState(null);
