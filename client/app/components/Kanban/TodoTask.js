@@ -27,7 +27,6 @@ function TodoTask(props) {
         notes,
         task,
       });
-      console.log(response.data);
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
