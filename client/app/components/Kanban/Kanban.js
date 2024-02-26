@@ -7,7 +7,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Button, Tooltip } from "@mui/material";
+import { Button, Tooltip, setRef } from "@mui/material";
 import PlanDialog from "./Plan/PlanDialog";
 import AddTaskDialog from "./AddTaskDialog";
 import TaskBoard from "./TaskBoard";
@@ -116,7 +116,7 @@ function Kanban() {
         )}
       </div>
       <div className="mt-3">
-        <TaskBoard />
+        <TaskBoard appName={name} />
       </div>
     </>
   );

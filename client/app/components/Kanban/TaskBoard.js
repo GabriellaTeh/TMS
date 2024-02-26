@@ -12,17 +12,18 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { Tooltip } from "@mui/material";
 
-function TaskBoard() {
+function TaskBoard(props) {
   const [openTasks, setOpenTasks] = useState([]);
   const [todoTasks, setTodoTasks] = useState([]);
   const [doingTasks, setDoingTasks] = useState([]);
   const [doneTasks, setDoneTasks] = useState([]);
   const [closedTasks, setClosedTasks] = useState([]);
+  const appName = props.appName;
 
   async function getOpenTasks() {
     try {
       const state = "open";
-      const response = await Axios.post("/tasks", { state });
+      const response = await Axios.post("/tasks", { state, appName });
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
@@ -41,7 +42,7 @@ function TaskBoard() {
   async function getTodoTasks() {
     try {
       const state = "todo";
-      const response = await Axios.post("/tasks", { state });
+      const response = await Axios.post("/tasks", { state, appName });
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
@@ -60,7 +61,7 @@ function TaskBoard() {
   async function getDoingTasks() {
     try {
       const state = "doing";
-      const response = await Axios.post("/tasks", { state });
+      const response = await Axios.post("/tasks", { state, appName });
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
@@ -79,7 +80,7 @@ function TaskBoard() {
   async function getDoneTasks() {
     try {
       const state = "done";
-      const response = await Axios.post("/tasks", { state });
+      const response = await Axios.post("/tasks", { state, appName });
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });
@@ -98,7 +99,7 @@ function TaskBoard() {
   async function getClosedTasks() {
     try {
       const state = "closed";
-      const response = await Axios.post("/tasks", { state });
+      const response = await Axios.post("/tasks", { state, appName });
       if (response.data === "Jwt") {
         appDispatch({ type: "errorMessage", value: "Token invalid." });
         appDispatch({ type: "logout" });

@@ -45,12 +45,12 @@ exports.getTasks = (req, res, next) => {
   if (!token) {
     return res.send(false);
   }
-  const { state } = req.body;
+  const { state, appName } = req.body;
   if (state) {
     try {
       database.query(
-        "SELECT * from task WHERE Task_state = ?",
-        [state],
+        "SELECT * from task WHERE Task_state = ? AND Task_app_Acronym = ? ",
+        [state, appName],
         function (err, results) {
           if (err) {
             console.log(err);
