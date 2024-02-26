@@ -73,8 +73,8 @@ function Task() {
               {state === "closed" ? (
                 <TextField
                   fullWidth
+                  InputProps={{ readOnly: true }}
                   multiline
-                  disabled
                   rows={7}
                   defaultValue={description}
                 ></TextField>
@@ -101,7 +101,7 @@ function Task() {
                   value={plan}
                   options={plans}
                   renderInput={(params) => (
-                    <TextField {...params} placeholder="Plans" />
+                    <TextField {...params} placeholder="No plans" />
                   )}
                 />
               ) : (
@@ -110,7 +110,7 @@ function Task() {
                   value={plan}
                   options={plans}
                   renderInput={(params) => (
-                    <TextField {...params} placeholder="Plans" />
+                    <TextField {...params} placeholder="No plans" />
                   )}
                 />
               )}
@@ -122,7 +122,7 @@ function Task() {
               {state === "closed" ? (
                 <TextField
                   fullWidth
-                  disabled
+                  InputProps={{ readOnly: true }}
                   multiline
                   rows={6}
                   defaultValue={notes}
