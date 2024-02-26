@@ -74,7 +74,7 @@ function Homepage() {
 
   async function checkPL() {
     try {
-      const group_name = "projectleader";
+      const group_name = "projectlead";
       const response = await Axios.post("/user/checkGroup", { group_name });
       setIsPL(response.data);
     } catch (err) {
