@@ -15,7 +15,7 @@ import TaskBoard from "./TaskBoard";
 function Kanban() {
   let { name } = useParams();
   const appState = useContext(StateContext);
-  const [isPL, setIsPL] = useState(false);
+  const [permitted, setPermitted] = useState(false);
   const [openPlan, setOpenPlan] = useState(false);
   const [openAddTask, setOpenAddTask] = useState(false);
   const [plans, setPlans] = useState([]);
@@ -38,9 +38,17 @@ function Kanban() {
 
   async function checkPL() {
     try {
-      const group_name = "projectlead";
-      const response = await Axios.post("/user/checkGroup", { group_name });
-      setIsPL(response.data);
+      const app = name;
+      const response = await Axios.post("/app/permit", { app });
+      const group_name = response.data[0].App_permit_Create;
+      if (group_name) {
+        try {
+          const res = await Axios.post("/user/checkGroup", { group_name });
+          setPermitted(res.data);
+        } catch (e) {
+          console.log(e);
+        }
+      }
     } catch (err) {
       console.log(err);
     }
@@ -94,7 +102,7 @@ function Kanban() {
           </DialogActions>
         </Dialog>
         <div className="text-white">...</div>
-        {isPL ? (
+        {permitted ? (
           <>
             <button onClick={handleAddTask} className="btn btn-sm btn-success">
               Add Task
