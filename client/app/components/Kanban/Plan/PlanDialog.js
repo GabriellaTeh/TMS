@@ -119,38 +119,40 @@ function PlanDialog() {
   return (
     <>
       {isPM ? (
-        <form onSubmit={handleCreate}>
-          <TextField
-            required
-            label="Plan Name"
-            type="text"
-            style={{ width: 400 }}
-            size="small"
-            onChange={(e) => setPlanName(e.target.value)}
-          />
-          {"   "}
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateField
+        <div className="mt-3">
+          <form onSubmit={handleCreate}>
+            <TextField
+              required
+              label="Plan Name"
+              type="text"
+              style={{ width: 400 }}
               size="small"
-              label="Start date"
-              format="DD-MM-YYYY"
-              onChange={(newValue) => {
-                setStartDate(dayjs(newValue).format("YYYY-MM-DD"));
-              }}
+              onChange={(e) => setPlanName(e.target.value)}
             />
-          </LocalizationProvider>{" "}
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateField
-              size="small"
-              label="End date"
-              format="DD-MM-YYYY"
-              onChange={(newValue) => {
-                setEndDate(dayjs(newValue).format("YYYY-MM-DD"));
-              }}
-            />
-          </LocalizationProvider>{" "}
-          <button className="btn btn-primary">Create Plan</button>
-        </form>
+            {"   "}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateField
+                size="small"
+                label="Start date"
+                format="DD-MM-YYYY"
+                onChange={(newValue) => {
+                  setStartDate(dayjs(newValue).format("YYYY-MM-DD"));
+                }}
+              />
+            </LocalizationProvider>{" "}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateField
+                size="small"
+                label="End date"
+                format="DD-MM-YYYY"
+                onChange={(newValue) => {
+                  setEndDate(dayjs(newValue).format("YYYY-MM-DD"));
+                }}
+              />
+            </LocalizationProvider>{" "}
+            <button className="btn btn-primary">Create Plan</button>
+          </form>
+        </div>
       ) : (
         ""
       )}
