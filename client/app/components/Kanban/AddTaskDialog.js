@@ -75,6 +75,7 @@ function AddTaskDialog(props) {
           } else {
             appDispatch({ type: "successMessage", value: "Task created." });
             props.setOpenAddTask(false);
+            window.location.reload();
           }
         }
       } catch (err) {
@@ -87,6 +88,7 @@ function AddTaskDialog(props) {
 
   function handleCancelTask() {
     props.setOpenAddTask(false);
+    window.location.reload();
   }
 
   return (
