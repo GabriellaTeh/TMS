@@ -143,7 +143,7 @@ function TaskBoard(props) {
                         style={{ backgroundColor: "#FFE4E1" }}
                       >
                         <CardContent>
-                          <Tooltip title="View task" arrow>
+                          <Tooltip title="View Task" arrow>
                             <Link to={`/${open.Task_id}`}>
                               {open.Task_name} ({open.Task_id})
                             </Link>
@@ -174,7 +174,7 @@ function TaskBoard(props) {
                         style={{ backgroundColor: "#FFF8DC" }}
                       >
                         <CardContent>
-                          <Tooltip title="View task" arrow>
+                          <Tooltip title="View Task" arrow>
                             <Link to={`/${todo.Task_id}`}>
                               {todo.Task_name} ({todo.Task_id})
                             </Link>
@@ -205,7 +205,7 @@ function TaskBoard(props) {
                         style={{ backgroundColor: "#CFEAD3" }}
                       >
                         <CardContent>
-                          <Tooltip title="View task" arrow>
+                          <Tooltip title="View Task" arrow>
                             <Link to={`/${doing.Task_id}`}>
                               {doing.Task_name} ({doing.Task_id})
                             </Link>
@@ -236,7 +236,7 @@ function TaskBoard(props) {
                         style={{ backgroundColor: "#FFDAB9" }}
                       >
                         <CardContent>
-                          <Tooltip title="View task" arrow>
+                          <Tooltip title="View Task" arrow>
                             <Link to={`/${done.Task_id}`}>
                               {done.Task_name} ({done.Task_id})
                             </Link>
@@ -267,7 +267,7 @@ function TaskBoard(props) {
                         style={{ backgroundColor: "#D3D3D3" }}
                       >
                         <CardContent>
-                          <Tooltip title="View task" arrow>
+                          <Tooltip title="View Task" arrow>
                             <Link to={`/${closed.Task_id}`}>
                               {closed.Task_name} ({closed.Task_id})
                             </Link>
