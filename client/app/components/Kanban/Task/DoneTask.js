@@ -26,6 +26,10 @@ function DoneTask(props) {
     navigate(`/${task}/edit`);
   }
 
+  function handleReturn() {
+    navigate(`/kanban/${app}`);
+  }
+
   async function checkDonePermit() {
     try {
       const response = await Axios.post("/app/permit", { app });
@@ -116,6 +120,9 @@ function DoneTask(props) {
         ) : (
           ""
         )}
+        <Button onClick={handleReturn} variant="outlined" color="error">
+          Back
+        </Button>
       </div>
     </>
   );

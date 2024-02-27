@@ -16,7 +16,6 @@ function DoneTaskContent(props) {
   const [plan, setPlan] = useState(null);
   const [plans, setPlans] = useState([]);
   const [taskName, setTaskName] = useState();
-  const [permitted, setPermitted] = useState(false);
   const appDispatch = useContext(DispatchContext);
   let { task, action } = useParams();
   const app = task.split("_")[0];
@@ -42,25 +41,8 @@ function DoneTaskContent(props) {
           navigate("/");
           appDispatch({ type: "errorMessage", value: "Inactive." });
         } else {
-          const data = response.data.split(" ");
-          data.pop();
-          if (data.length > 0) {
-            if (data.includes("PlanLength")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name must be at most 20 characters long.",
-              });
-            }
-            if (data.includes("PlanCharacter")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name can only contain alphanumeric characters.",
-              });
-            }
-          } else {
-            appDispatch({ type: "successMessage", value: "Task updated." });
-            navigate(`/kanban/${app}`);
-          }
+          appDispatch({ type: "successMessage", value: "Task updated." });
+          navigate(`/kanban/${app}`);
         }
       }
     } catch (err) {
@@ -92,18 +74,6 @@ function DoneTaskContent(props) {
           const data = response.data.split(" ");
           data.pop();
           if (data.length > 0) {
-            if (data.includes("PlanLength")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name must be at most 20 characters long.",
-              });
-            }
-            if (data.includes("PlanCharacter")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name can only contain alphanumeric characters.",
-              });
-            }
           } else {
             appDispatch({ type: "successMessage", value: "Task updated." });
             try {
@@ -148,6 +118,7 @@ function DoneTaskContent(props) {
         const response = await Axios.post("/task/edit", {
           description,
           notes,
+          plan,
           task,
         });
         if (response.data === "Jwt") {
@@ -207,7 +178,7 @@ function DoneTaskContent(props) {
   }
 
   function handleCancel() {
-    navigate(`/kanban/${app}`);
+    navigate(`/${task}`);
   }
 
   async function checkDonePermit() {
@@ -259,6 +230,10 @@ function DoneTaskContent(props) {
     getTaskDetails();
   }, []);
 
+  function handlePlanChange(event, values) {
+    setPlan(values);
+  }
+
   return (
     <>
       <div className="container md-5">
@@ -275,23 +250,13 @@ function DoneTaskContent(props) {
               <label className="text-muted mb-1">
                 <small>Task Description</small>
               </label>
-              {permitted ? (
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={7}
-                  defaultValue={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                ></TextField>
-              ) : (
-                <TextField
-                  fullWidth
-                  multiline
-                  InputProps={{ readOnly: true }}
-                  rows={7}
-                  defaultValue={description}
-                ></TextField>
-              )}
+              <TextField
+                fullWidth
+                multiline
+                rows={7}
+                defaultValue={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></TextField>
             </div>
           </Grid>
           <Grid item xs={6}>
@@ -299,37 +264,39 @@ function DoneTaskContent(props) {
               <label className="text-muted mb-1">
                 <small>Plan Name</small>
               </label>{" "}
-              <Autocomplete
-                size="small"
-                readOnly
-                value={plan}
-                options={plans}
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="No plans" />
-                )}
-              />
+              {action === "demote" ? (
+                <Autocomplete
+                  size="small"
+                  value={plan}
+                  options={plans}
+                  renderInput={(params) => (
+                    <TextField {...params} placeholder="No plans" />
+                  )}
+                  onChange={handlePlanChange}
+                />
+              ) : (
+                <Autocomplete
+                  size="small"
+                  readOnly
+                  value={plan}
+                  options={plans}
+                  renderInput={(params) => (
+                    <TextField {...params} placeholder="No plans" />
+                  )}
+                />
+              )}
             </div>
             <div className="form-group">
               <label className="text-muted mb-1">
                 <small>Task Notes</small>
               </label>
-              {permitted ? (
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={6}
-                  defaultValue={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                ></TextField>
-              ) : (
-                <TextField
-                  fullWidth
-                  multiline
-                  InputProps={{ readOnly: true }}
-                  rows={6}
-                  defaultValue={notes}
-                ></TextField>
-              )}
+              <TextField
+                fullWidth
+                multiline
+                rows={6}
+                defaultValue={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              ></TextField>
             </div>
             <>
               {action === "promote" ? (
