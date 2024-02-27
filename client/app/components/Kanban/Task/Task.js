@@ -55,19 +55,16 @@ function Task() {
   return (
     <>
       <div className="container md-5">
-        <h4>
-          Task #{task}: {taskName}
-        </h4>
-        Created by: {creator} <br></br> Created on:{" "}
-        {dayjs(createDate).format("DD-MM-YYYY")}
-        <br></br>Owner: {owner}
-        <br></br> State: {state}
         {state === "open" ? (
           <OpenTask
             description={description}
             notes={notes}
             plan={plan}
             plans={plans}
+            taskName={taskName}
+            creator={creator}
+            createDate={createDate}
+            owner={owner}
           />
         ) : (
           ""

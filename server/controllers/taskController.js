@@ -217,7 +217,7 @@ exports.editTask = (req, res, next) => {
       return;
     }
     database.query(
-      "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = ?, Task_owner = ? WHERE task_id = ?",
+      "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ? WHERE task_id = ?",
       [description, plan, notes, username, task],
       function (err, results) {
         if (err) {
