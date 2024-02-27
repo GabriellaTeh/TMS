@@ -195,6 +195,9 @@ function TodoTask(props) {
                   defaultValue={props.notes}
                   placeholder="No existing notes"
                 ></TextField>
+                <label className="text-muted mb-1">
+                  <small>Additional Notes</small>
+                </label>
                 <TextField
                   fullWidth
                   multiline
