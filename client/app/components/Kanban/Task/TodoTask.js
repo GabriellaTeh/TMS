@@ -4,6 +4,7 @@ import Axios from "axios";
 import Grid from "@mui/material/Grid";
 import { TextField, Autocomplete, Button } from "@mui/material";
 import DispatchContext from "../../../DispatchContext";
+import dayjs from "dayjs";
 
 function TodoTask(props) {
   const navigate = useNavigate();
@@ -16,38 +17,33 @@ function TodoTask(props) {
 
   async function handleSave() {
     try {
-      const response = await Axios.post("/task/edit", {
-        description,
-        notes,
-        task,
-      });
-      if (response.data === "Jwt") {
-        appDispatch({ type: "errorMessage", value: "Token invalid." });
-        appDispatch({ type: "logout" });
-        navigate("/");
-      } else if (response.data === "Inactive") {
-        navigate("/");
-        appDispatch({ type: "errorMessage", value: "Inactive." });
-      } else {
-        const data = response.data.split(" ");
-        data.pop();
-        if (data.length > 0) {
-          if (data.includes("PlanLength")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Plan name must be at most 20 characters long.",
-            });
-          }
-          if (data.includes("PlanCharacter")) {
-            appDispatch({
-              type: "errorMessage",
-              value: "Plan name can only contain alphanumeric characters.",
-            });
-          }
+      if (notes && notes !== props.notes) {
+        const response = await Axios.post("/task/edit", {
+          description,
+          notes,
+          task,
+        });
+        if (response.data === "Jwt") {
+          appDispatch({ type: "errorMessage", value: "Token invalid." });
+          appDispatch({ type: "logout" });
+          navigate("/");
+        } else if (response.data === "Inactive") {
+          navigate("/");
+          appDispatch({ type: "errorMessage", value: "Inactive." });
         } else {
-          appDispatch({ type: "successMessage", value: "Task updated." });
-          navigate(`/kanban/${app}`);
+          const data = response.data.split(" ");
+          data.pop();
+          if (data.length > 0) {
+          } else {
+            appDispatch({ type: "successMessage", value: "Task updated." });
+            navigate(`/kanban/${app}`);
+          }
         }
+      } else {
+        appDispatch({
+          type: "errorMessage",
+          value: "Enter notes to update task.",
+        });
       }
     } catch (err) {
       console.log(err);
@@ -55,23 +51,56 @@ function TodoTask(props) {
   }
 
   async function handleSavePromote() {
-    handleSave();
     try {
-      const state = "doing";
-      const response = await Axios.post("/task/editState", { state, task });
-      if (response.data === "Jwt") {
-        appDispatch({ type: "errorMessage", value: "Token invalid." });
-        appDispatch({ type: "logout" });
-        navigate("/");
-      } else if (response.data === "Inactive") {
-        navigate("/");
-        appDispatch({ type: "errorMessage", value: "Inactive." });
-      } else if (response.data) {
-        appDispatch({
-          type: "successMessage",
-          value: "Task promoted.",
+      if (notes && notes !== props.notes) {
+        const response = await Axios.post("/task/edit", {
+          description,
+          notes,
+          task,
         });
-        navigate(`/kanban/${app}`);
+        if (response.data === "Jwt") {
+          appDispatch({ type: "errorMessage", value: "Token invalid." });
+          appDispatch({ type: "logout" });
+          navigate("/");
+        } else if (response.data === "Inactive") {
+          navigate("/");
+          appDispatch({ type: "errorMessage", value: "Inactive." });
+        } else {
+          const data = response.data.split(" ");
+          data.pop();
+          if (data.length > 0) {
+          } else {
+            appDispatch({ type: "successMessage", value: "Task updated." });
+            try {
+              const state = "doing";
+              const response = await Axios.post("/task/editState", {
+                state,
+                task,
+              });
+              if (response.data === "Jwt") {
+                appDispatch({ type: "errorMessage", value: "Token invalid." });
+                appDispatch({ type: "logout" });
+                navigate("/");
+              } else if (response.data === "Inactive") {
+                navigate("/");
+                appDispatch({ type: "errorMessage", value: "Inactive." });
+              } else if (response.data) {
+                appDispatch({
+                  type: "successMessage",
+                  value: "Task promoted.",
+                });
+                navigate(`/kanban/${app}`);
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        }
+      } else {
+        appDispatch({
+          type: "errorMessage",
+          value: "Enter notes to update task.",
+        });
       }
     } catch (err) {
       console.log(err);
@@ -107,6 +136,27 @@ function TodoTask(props) {
     <>
       <Grid container spacing={3} className="mt-1">
         <Grid item xs={6}>
+          <h4>
+            Task #{task}: {props.taskName}
+          </h4>
+          Created by: {props.creator} <br></br> Created on:{" "}
+          {dayjs(props.createDate).format("DD-MM-YYYY")}
+          <br></br>Owner: {props.owner}
+          <br></br> State: todo
+          <div className="form-group">
+            <label className="text-muted mb-1">
+              <small>Plan Name</small>
+            </label>{" "}
+            <Autocomplete
+              size="small"
+              readOnly
+              value={props.plan}
+              options={props.plans}
+              renderInput={(params) => (
+                <TextField {...params} placeholder="No plans" />
+              )}
+            />
+          </div>
           <div className="form-group">
             <label className="text-muted mb-1">
               <small>Task Description</small>
@@ -133,30 +183,26 @@ function TodoTask(props) {
         <Grid item xs={6}>
           <div className="form-group">
             <label className="text-muted mb-1">
-              <small>Plan Name</small>
-            </label>{" "}
-            <Autocomplete
-              size="small"
-              readOnly
-              value={props.plan}
-              options={props.plans}
-              renderInput={(params) => (
-                <TextField {...params} placeholder="No plans" />
-              )}
-            />
-          </div>
-          <div className="form-group">
-            <label className="text-muted mb-1">
               <small>Task Notes</small>
             </label>
             {permitted ? (
-              <TextField
-                fullWidth
-                multiline
-                rows={6}
-                defaultValue={props.notes}
-                onChange={(e) => setNotes(e.target.value)}
-              ></TextField>
+              <>
+                <TextField
+                  fullWidth
+                  multiline
+                  InputProps={{ readOnly: true }}
+                  rows={6}
+                  defaultValue={props.notes}
+                  placeholder="No existing notes"
+                ></TextField>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={6}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Enter notes"
+                ></TextField>
+              </>
             ) : (
               <TextField
                 fullWidth

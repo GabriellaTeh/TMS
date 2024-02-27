@@ -70,7 +70,7 @@ function OpenTask(props) {
 
   async function handleSavePromote() {
     try {
-      if (notes) {
+      if (notes && notes !== props.notes) {
         const response = await Axios.post("/task/edit", {
           description,
           plan,
