@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import Grid from "@mui/material/Grid";
 import { TextField, Autocomplete, Button } from "@mui/material";
+import dayjs from "dayjs";
 
 function DoneTask(props) {
   const navigate = useNavigate();
@@ -53,6 +54,13 @@ function DoneTask(props) {
 
   return (
     <>
+      <h4>
+        Task #{task}: {props.taskName}
+      </h4>
+      Created by: {props.creator} <br></br> Created on:{" "}
+      {dayjs(props.createDate).format("DD-MM-YYYY")}
+      <br></br>Owner: {props.owner}
+      <br></br> State: done
       {!permitted ? (
         <Grid container spacing={3} className="mt-1">
           <Grid item xs={6}>

@@ -6,9 +6,10 @@ import { TextField, Autocomplete, Button } from "@mui/material";
 import DispatchContext from "../../../DispatchContext";
 import dayjs from "dayjs";
 
-function DoneTaskContent(props) {
+function DoneTaskContent() {
   const navigate = useNavigate();
   const [description, setDescription] = useState("");
+  const [oldNotes, setOldNotes] = useState();
   const [notes, setNotes] = useState();
   const [creator, setCreator] = useState();
   const [owner, setOwner] = useState();
@@ -22,12 +23,7 @@ function DoneTaskContent(props) {
 
   async function handleSave() {
     try {
-      if (notes === props.notes) {
-        appDispatch({
-          type: "errorMessage",
-          value: "Please add notes to update.",
-        });
-      } else {
+      if (notes) {
         const response = await Axios.post("/task/edit", {
           description,
           notes,
@@ -44,6 +40,11 @@ function DoneTaskContent(props) {
           appDispatch({ type: "successMessage", value: "Task updated." });
           navigate(`/kanban/${app}`);
         }
+      } else {
+        appDispatch({
+          type: "errorMessage",
+          value: "Enter notes to update task.",
+        });
       }
     } catch (err) {
       console.log(err);
@@ -52,12 +53,7 @@ function DoneTaskContent(props) {
 
   async function handleSavePromote() {
     try {
-      if (notes === props.notes) {
-        appDispatch({
-          type: "errorMessage",
-          value: "Please add notes to update.",
-        });
-      } else {
+      if (notes) {
         const response = await Axios.post("/task/edit", {
           description,
           notes,
@@ -101,6 +97,11 @@ function DoneTaskContent(props) {
             }
           }
         }
+      } else {
+        appDispatch({
+          type: "errorMessage",
+          value: "Enter notes to update task.",
+        });
       }
     } catch (err) {
       console.log(err);
@@ -109,12 +110,7 @@ function DoneTaskContent(props) {
 
   async function handleSaveDemote() {
     try {
-      if (notes === props.notes) {
-        appDispatch({
-          type: "errorMessage",
-          value: "Please add notes to update.",
-        });
-      } else {
+      if (notes) {
         const response = await Axios.post("/task/edit", {
           description,
           notes,
@@ -171,6 +167,11 @@ function DoneTaskContent(props) {
             }
           }
         }
+      } else {
+        appDispatch({
+          type: "errorMessage",
+          value: "Enter notes to update task.",
+        });
       }
     } catch (err) {
       console.log(err);
@@ -181,30 +182,13 @@ function DoneTaskContent(props) {
     navigate(`/${task}`);
   }
 
-  async function checkDonePermit() {
-    try {
-      const response = await Axios.post("/app/permit", { app });
-      const group_name = response.data[0].App_permit_Done;
-      if (group_name) {
-        try {
-          const res = await Axios.post("/user/checkGroup", { group_name });
-          setPermitted(res.data);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   async function getTaskDetails() {
     try {
       const response = await Axios.post("/task", { task });
       const data = response.data[0];
       setTaskName(data.Task_name);
       setDescription(data.Task_description);
-      setNotes(data.Task_notes);
+      setOldNotes(data.Task_notes);
       setPlan(data.Task_plan);
       setCreator(data.Task_creator);
       setCreateDate(data.Task_createDate);
@@ -226,7 +210,6 @@ function DoneTaskContent(props) {
   }
 
   useEffect(() => {
-    checkDonePermit();
     getTaskDetails();
   }, []);
 
@@ -237,29 +220,15 @@ function DoneTaskContent(props) {
   return (
     <>
       <div className="container md-5">
-        <h4>
-          Task #{task}: {taskName}
-        </h4>
-        Created by: {creator} <br></br> Created on:{" "}
-        {dayjs(createDate).format("DD-MM-YYYY")}
-        <br></br>Owner: {owner}
-        <br></br> State: done
         <Grid container spacing={3} className="mt-1">
           <Grid item xs={6}>
-            <div className="form-group">
-              <label className="text-muted mb-1">
-                <small>Task Description</small>
-              </label>
-              <TextField
-                fullWidth
-                multiline
-                rows={7}
-                defaultValue={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></TextField>
-            </div>
-          </Grid>
-          <Grid item xs={6}>
+            <h4>
+              Task #{task}: {taskName}
+            </h4>
+            Created by: {creator} <br></br> Created on:{" "}
+            {dayjs(createDate).format("DD-MM-YYYY")}
+            <br></br>Owner: {owner}
+            <br></br> State: done
             <div className="form-group">
               <label className="text-muted mb-1">
                 <small>Plan Name</small>
@@ -288,15 +257,39 @@ function DoneTaskContent(props) {
             </div>
             <div className="form-group">
               <label className="text-muted mb-1">
-                <small>Task Notes</small>
+                <small>Task Description</small>
               </label>
               <TextField
                 fullWidth
                 multiline
-                rows={6}
-                defaultValue={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                rows={7}
+                defaultValue={description}
+                onChange={(e) => setDescription(e.target.value)}
               ></TextField>
+            </div>
+          </Grid>
+          <Grid item xs={6}>
+            <div className="form-group">
+              <label className="text-muted mb-1">
+                <small>Task Notes</small>
+              </label>
+              <>
+                <TextField
+                  fullWidth
+                  multiline
+                  InputProps={{ readOnly: true }}
+                  rows={6}
+                  defaultValue={oldNotes}
+                  placeholder="No existing notes"
+                ></TextField>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={6}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Enter notes"
+                ></TextField>
+              </>
             </div>
             <>
               {action === "promote" ? (
@@ -304,11 +297,11 @@ function DoneTaskContent(props) {
                   Save and Promote
                 </Button>
               ) : action === "demote" ? (
-                <Button onClick={handleSaveDemote} color="success">
+                <Button onClick={handleSaveDemote} color="warning">
                   Save and Demote
                 </Button>
               ) : (
-                <Button onClick={handleSave} color="success">
+                <Button onClick={handleSave} color="primary">
                   Save
                 </Button>
               )}

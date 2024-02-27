@@ -103,6 +103,10 @@ function Task() {
             notes={notes}
             plan={plan}
             plans={plans}
+            taskName={taskName}
+            creator={creator}
+            createDate={createDate}
+            owner={owner}
           />
         ) : (
           ""
