@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import Grid from "@mui/material/Grid";
 import { TextField, Autocomplete, Button } from "@mui/material";
+import dayjs from "dayjs";
 import DispatchContext from "../../../DispatchContext";
 
 function DoingTask(props) {
@@ -16,12 +17,7 @@ function DoingTask(props) {
 
   async function handleSave() {
     try {
-      if (notes === props.notes) {
-        appDispatch({
-          type: "errorMessage",
-          value: "Please add notes to update.",
-        });
-      } else {
+      if (notes && notes !== props.notes) {
         const response = await Axios.post("/task/edit", {
           description,
           notes,
@@ -55,6 +51,11 @@ function DoingTask(props) {
             navigate(`/kanban/${app}`);
           }
         }
+      } else {
+        appDispatch({
+          type: "errorMessage",
+          value: "Enter notes to update task.",
+        });
       }
     } catch (err) {
       console.log(err);
@@ -63,12 +64,7 @@ function DoingTask(props) {
 
   async function handleSavePromote() {
     try {
-      if (notes === props.notes) {
-        appDispatch({
-          type: "errorMessage",
-          value: "Please add notes to update.",
-        });
-      } else {
+      if (notes && notes !== props.notes) {
         const response = await Axios.post("/task/edit", {
           description,
           notes,
@@ -124,6 +120,11 @@ function DoingTask(props) {
             }
           }
         }
+      } else {
+        appDispatch({
+          type: "errorMessage",
+          value: "Enter notes to update task.",
+        });
       }
     } catch (err) {
       console.log(err);
@@ -132,12 +133,7 @@ function DoingTask(props) {
 
   async function handleSaveDemote() {
     try {
-      if (notes === props.notes) {
-        appDispatch({
-          type: "errorMessage",
-          value: "Please add notes to update.",
-        });
-      } else {
+      if (notes && notes !== props.notes) {
         const response = await Axios.post("/task/edit", {
           description,
           notes,
@@ -193,6 +189,11 @@ function DoingTask(props) {
             }
           }
         }
+      } else {
+        appDispatch({
+          type: "errorMessage",
+          value: "Enter notes to update task.",
+        });
       }
     } catch (err) {
       console.log(err);
@@ -228,6 +229,27 @@ function DoingTask(props) {
     <>
       <Grid container spacing={3} className="mt-1">
         <Grid item xs={6}>
+          <h4>
+            Task #{task}: {props.taskName}
+          </h4>
+          Created by: {props.creator} <br></br> Created on:{" "}
+          {dayjs(props.createDate).format("DD-MM-YYYY")}
+          <br></br>Owner: {props.owner}
+          <br></br> State: doing
+          <div className="form-group">
+            <label className="text-muted mb-1">
+              <small>Plan Name</small>
+            </label>{" "}
+            <Autocomplete
+              size="small"
+              readOnly
+              value={props.plan}
+              options={props.plans}
+              renderInput={(params) => (
+                <TextField {...params} placeholder="No plans" />
+              )}
+            />
+          </div>
           <div className="form-group">
             <label className="text-muted mb-1">
               <small>Task Description</small>
@@ -254,30 +276,26 @@ function DoingTask(props) {
         <Grid item xs={6}>
           <div className="form-group">
             <label className="text-muted mb-1">
-              <small>Plan Name</small>
-            </label>{" "}
-            <Autocomplete
-              size="small"
-              readOnly
-              value={props.plan}
-              options={props.plans}
-              renderInput={(params) => (
-                <TextField {...params} placeholder="No plans" />
-              )}
-            />
-          </div>
-          <div className="form-group">
-            <label className="text-muted mb-1">
               <small>Task Notes</small>
             </label>
             {permitted ? (
-              <TextField
-                fullWidth
-                multiline
-                rows={6}
-                defaultValue={props.notes}
-                onChange={(e) => setNotes(e.target.value)}
-              ></TextField>
+              <>
+                <TextField
+                  fullWidth
+                  multiline
+                  InputProps={{ readOnly: true }}
+                  rows={6}
+                  defaultValue={props.notes}
+                  placeholder="No existing notes"
+                ></TextField>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={6}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Enter notes"
+                ></TextField>
+              </>
             ) : (
               <TextField
                 fullWidth
