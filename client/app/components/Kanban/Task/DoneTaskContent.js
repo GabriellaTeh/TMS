@@ -4,6 +4,7 @@ import Axios from "axios";
 import Grid from "@mui/material/Grid";
 import { TextField, Autocomplete, Button } from "@mui/material";
 import DispatchContext from "../../../DispatchContext";
+import { Helmet } from "react-helmet";
 import dayjs from "dayjs";
 
 function DoneTaskContent() {
@@ -219,6 +220,9 @@ function DoneTaskContent() {
 
   return (
     <>
+      <Helmet>
+        <title>Task {task}</title>
+      </Helmet>
       <div className="container md-5">
         <Grid container spacing={3} className="mt-1">
           <Grid item xs={6}>

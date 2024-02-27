@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
-import dayjs from "dayjs";
+import { Helmet } from "react-helmet";
 import OpenTask from "./OpenTask";
 import TodoTask from "./TodoTask";
 import DoingTask from "./DoingTask";
@@ -54,6 +54,9 @@ function Task() {
 
   return (
     <>
+      <Helmet>
+        <title>Task {task}</title>
+      </Helmet>
       <div className="container md-5">
         {state === "open" ? (
           <OpenTask
