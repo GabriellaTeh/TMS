@@ -210,13 +210,15 @@ exports.editTask = (req, res, next) => {
   }
   try {
     const { description, plan, notes, task } = req.body;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const username = decoded.username;
     if (plan && validatePlan(res, plan)) {
       res.send();
       return;
     }
     database.query(
-      "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = ? WHERE task_id = ?",
-      [description, plan, notes, task],
+      "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = ?, Task_owner = ? WHERE task_id = ?",
+      [description, plan, notes, username, task],
       function (err, results) {
         if (err) {
           console.log(err);
@@ -245,7 +247,7 @@ exports.editTaskState = (req, res, next) => {
   try {
     const { state, task } = req.body;
     database.query(
-      "UPDATE task SET Task_state = ? WHERE task_id = ?",
+      "UPDATE task SET Task_state = ?WHERE task_id = ?",
       [state, task],
       function (err, results) {
         if (err) {

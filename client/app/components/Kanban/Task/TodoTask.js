@@ -18,7 +18,6 @@ function TodoTask(props) {
     try {
       const response = await Axios.post("/task/edit", {
         description,
-        plan,
         notes,
         task,
       });

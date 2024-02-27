@@ -24,7 +24,6 @@ function DoneTask(props) {
       } else {
         const response = await Axios.post("/task/edit", {
           description,
-          plan,
           notes,
           task,
         });
@@ -66,7 +65,6 @@ function DoneTask(props) {
     try {
       const response = await Axios.post("/task/edit", {
         description,
-        plan,
         notes,
         task,
       });
@@ -129,7 +127,6 @@ function DoneTask(props) {
     try {
       const response = await Axios.post("/task/edit", {
         description,
-        plan,
         notes,
         task,
       });
