@@ -68,6 +68,7 @@ function Task() {
             creator={creator}
             createDate={createDate}
             owner={owner}
+            state={state}
           />
         ) : (
           ""
@@ -82,6 +83,7 @@ function Task() {
             creator={creator}
             createDate={createDate}
             owner={owner}
+            state={state}
           />
         ) : (
           ""
@@ -96,6 +98,7 @@ function Task() {
             creator={creator}
             createDate={createDate}
             owner={owner}
+            state={state}
           />
         ) : (
           ""
@@ -110,6 +113,7 @@ function Task() {
             creator={creator}
             createDate={createDate}
             owner={owner}
+            state={state}
           />
         ) : (
           ""
@@ -124,6 +128,7 @@ function Task() {
             creator={creator}
             createDate={createDate}
             owner={owner}
+            state={state}
           />
         ) : (
           ""

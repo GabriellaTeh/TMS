@@ -12,6 +12,7 @@ function OpenTask(props) {
   const [plan, setPlan] = useState(props.plan);
   const [notes, setNotes] = useState(props.notes);
   const [permitted, setPermitted] = useState(false);
+  const state = props.state;
   const appDispatch = useContext(DispatchContext);
   let { task } = useParams();
   const app = task.split("_")[0];
@@ -28,6 +29,7 @@ function OpenTask(props) {
           plan,
           notes,
           task,
+          state,
         });
         if (response.data === "Jwt") {
           appDispatch({ type: "errorMessage", value: "Token invalid." });
@@ -76,6 +78,7 @@ function OpenTask(props) {
           plan,
           notes,
           task,
+          state,
         });
         if (response.data === "Jwt") {
           appDispatch({ type: "errorMessage", value: "Token invalid." });
@@ -173,7 +176,7 @@ function OpenTask(props) {
           Created by: {props.creator} <br></br> Created on:{" "}
           {dayjs(props.createDate).format("DD-MM-YYYY")}
           <br></br>Owner: {props.owner}
-          <br></br> State: open
+          <br></br> State: {props.state}
           <div className="form-group">
             <label className="text-muted mb-1">
               <small>Plan Name</small>

@@ -209,16 +209,18 @@ exports.editTask = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const { description, plan, notes, task } = req.body;
+    const { description, plan, notes, task, state } = req.body;
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const username = decoded.username;
+    const time = Date.now();
     if (plan && validatePlan(res, plan)) {
       res.send();
       return;
     }
+    const audit = `${username}, ${state}, ${time}: ${notes}`;
     database.query(
       "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ? WHERE task_id = ?",
-      [description, plan, notes, username, task],
+      [description, plan, audit, username, task],
       function (err, results) {
         if (err) {
           console.log(err);
