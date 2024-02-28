@@ -19,17 +19,11 @@ function CreateUser(props) {
         if (!email) {
           setEmail("");
         }
-        let groupNames = [];
-        if (groups) {
-          groups.forEach((group) => {
-            groupNames.push(group.value);
-          });
-        }
         const response = await Axios.post("/user/createUser", {
           username,
           password,
           email,
-          groupNames,
+          groups,
         });
         if (response.data === "Inactive") {
           navigate("/");

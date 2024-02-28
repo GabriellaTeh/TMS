@@ -231,7 +231,7 @@ exports.createUser = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
   const email = req.body.email;
-  const groups = req.body.groupNames;
+  const groups = req.body.groups;
 
   if (username && password) {
     if (validateUsername(res, username)) {
