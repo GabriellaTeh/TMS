@@ -527,3 +527,23 @@ exports.updateActive = (req, res, next) => {
     );
   }
 };
+
+exports.getAllPermitDoneEmails = async (group) => {
+  return new Promise((resolve, reject) => {
+    database.query(
+      `SELECT * FROM accounts WHERE isActive = 1 AND groupNames LIKE ?`,
+      ["%" + group + "%"],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          if (results.length === 0) {
+            resolve([]);
+          } else {
+            resolve(results);
+          }
+        }
+      }
+    );
+  });
+};

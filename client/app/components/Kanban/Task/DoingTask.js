@@ -11,6 +11,7 @@ function DoingTask(props) {
   const [description, setDescription] = useState(props.description);
   const [notes, setNotes] = useState(props.notes);
   const [permitted, setPermitted] = useState(false);
+  const [plan, setPlan] = useState(props.plan);
   const state = props.state;
   const appDispatch = useContext(DispatchContext);
   let { task } = useParams();
@@ -56,6 +57,7 @@ function DoingTask(props) {
           notes,
           task,
           state,
+          plan,
           newState,
           app,
         });

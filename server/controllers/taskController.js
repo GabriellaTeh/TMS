@@ -2,6 +2,7 @@ const database = require("../config/db");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const { getDonePermit } = require("./applicationController");
+const { getAllPermitDoneEmails } = require("./userController");
 
 exports.getTask = (req, res, next) => {
   let token;
@@ -392,8 +393,28 @@ async function sendEmail(app, username) {
     },
   });
   const group = await getDonePermit(app);
-  console.log(group);
-  const sender = username;
-  //get all emails in app_permit_done (do this in group controller) and send mail
-  let emails = [];
+  if (group) {
+    const sender = username;
+    //get all emails in app_permit_done (do this in group controller) and send mail
+    const permitUsers = await getAllPermitDoneEmails(group);
+    const emails = [];
+    permitUsers.forEach((user) => {
+      if (user.email.length > 0) {
+        emails.push(user.email);
+      }
+    });
+    emails.forEach((email) => {
+      const content = {
+        from: sender,
+        to: email,
+        subject: "Approval of done task",
+        text: "Submitting task for approval.",
+      };
+      transporter.sendMail(content, function (err, info) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
+  }
 }
