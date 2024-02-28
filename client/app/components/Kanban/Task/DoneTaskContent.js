@@ -15,7 +15,6 @@ function DoneTaskContent() {
   const [creator, setCreator] = useState();
   const [owner, setOwner] = useState();
   const [createDate, setCreateDate] = useState();
-  const [oldPlan, setOldPlan] = useState(null);
   const [plan, setPlan] = useState(null);
   const [plans, setPlans] = useState([]);
   const [taskName, setTaskName] = useState();
@@ -93,7 +92,7 @@ function DoneTaskContent() {
 
   async function handleSaveDemote() {
     try {
-      if (notes && plan) {
+      if (notes) {
         const newState = "doing";
         const response = await Axios.post("/task/editWithPlanState", {
           description,
@@ -134,15 +133,10 @@ function DoneTaskContent() {
             navigate(`/kanban/${app}`);
           }
         }
-      } else if (plan) {
+      } else {
         appDispatch({
           type: "errorMessage",
           value: "Enter notes to update task.",
-        });
-      } else if (notes) {
-        appDispatch({
-          type: "errorMessage",
-          value: "Change plan to demote task.",
         });
       }
     } catch (err) {
@@ -161,7 +155,7 @@ function DoneTaskContent() {
       setTaskName(data.Task_name);
       setDescription(data.Task_description);
       setOldNotes(data.Task_notes);
-      setOldPlan(data.Task_plan);
+      setPlan(data.Task_plan);
       setCreator(data.Task_creator);
       setCreateDate(data.Task_createDate);
       setOwner(data.Task_owner);
@@ -211,7 +205,7 @@ function DoneTaskContent() {
               {action === "demote" ? (
                 <Autocomplete
                   size="small"
-                  value={oldPlan}
+                  value={plan}
                   options={plans}
                   renderInput={(params) => (
                     <TextField {...params} placeholder="No plans" />
@@ -222,7 +216,7 @@ function DoneTaskContent() {
                 <Autocomplete
                   size="small"
                   readOnly
-                  value={oldPlan}
+                  value={plan}
                   options={plans}
                   renderInput={(params) => (
                     <TextField {...params} placeholder="No plans" />
