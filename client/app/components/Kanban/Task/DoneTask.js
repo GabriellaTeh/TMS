@@ -50,30 +50,16 @@ function DoneTask(props) {
 
   return (
     <>
-      <h4>
-        Task #{task}: {props.taskName}
-      </h4>
-      Created by: {props.creator} <br></br> Created on:{" "}
-      {dayjs(props.createDate).format("DD-MM-YYYY")}
-      <br></br>Owner: {props.owner}
-      <br></br> State: done
       {!permitted ? (
         <Grid container spacing={3} className="mt-1">
           <Grid item xs={6}>
-            <div className="form-group">
-              <label className="text-muted mb-1">
-                <small>Task Description</small>
-              </label>
-              <TextField
-                fullWidth
-                multiline
-                InputProps={{ readOnly: true }}
-                rows={7}
-                defaultValue={props.description}
-              ></TextField>
-            </div>
-          </Grid>
-          <Grid item xs={6}>
+            <h4>
+              Task #{task}: {props.taskName}
+            </h4>
+            Created by: {props.creator} <br></br> Created on:{" "}
+            {dayjs(props.createDate).format("DD-MM-YYYY")}
+            <br></br>Owner: {props.owner}
+            <br></br> State: done
             <div className="form-group">
               <label className="text-muted mb-1">
                 <small>Plan Name</small>
@@ -88,6 +74,20 @@ function DoneTask(props) {
                 )}
               />
             </div>
+            <div className="form-group">
+              <label className="text-muted mb-1">
+                <small>Task Description</small>
+              </label>
+              <TextField
+                fullWidth
+                multiline
+                InputProps={{ readOnly: true }}
+                rows={7}
+                defaultValue={props.description}
+              ></TextField>
+            </div>
+          </Grid>
+          <Grid item xs={6}>
             <div className="form-group">
               <label className="text-muted mb-1">
                 <small>Task Notes</small>
@@ -106,10 +106,83 @@ function DoneTask(props) {
           </Grid>
         </Grid>
       ) : (
-        ""
+        <>
+          <Grid container spacing={3} className="mt-1">
+            <Grid item xs={6}>
+              <h4>
+                Task #{task}: {props.taskName}
+              </h4>
+              Created by: {props.creator} <br></br> Created on:{" "}
+              {dayjs(props.createDate).format("DD-MM-YYYY")}
+              <br></br>Owner: {props.owner}
+              <br></br> State: done
+              <div className="form-group">
+                <label className="text-muted mb-1">
+                  <small>Plan Name</small>
+                </label>{" "}
+                <Autocomplete
+                  size="small"
+                  disabled
+                  value={props.plan}
+                  options={props.plans}
+                  renderInput={(params) => (
+                    <TextField {...params} placeholder="No plans" />
+                  )}
+                />
+              </div>
+              <div className="form-group">
+                <label className="text-muted mb-1">
+                  <small>Task Description</small>
+                </label>
+                <TextField
+                  fullWidth
+                  multiline
+                  disabled
+                  rows={7}
+                  defaultValue={props.description}
+                ></TextField>
+              </div>
+            </Grid>
+            <Grid item xs={6}>
+              <div className="form-group">
+                <label className="text-muted mb-1">
+                  <small>Task Notes</small>
+                </label>
+                <TextField
+                  fullWidth
+                  multiline
+                  disabled
+                  rows={6}
+                  defaultValue={props.notes}
+                ></TextField>
+              </div>
+              <div className="mt-2">
+                <Button
+                  onClick={handlePromote}
+                  variant="outlined"
+                  color="success"
+                >
+                  Promote
+                </Button>{" "}
+                <Button
+                  onClick={handleDemote}
+                  variant="outlined"
+                  color="warning"
+                >
+                  Demote
+                </Button>{" "}
+                <Button onClick={handleEdit} variant="outlined" color="primary">
+                  Edit
+                </Button>{" "}
+                <Button onClick={handleClose} variant="outlined" color="error">
+                  Close
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
+        </>
       )}
-      <div className="mt-3">
-        {permitted ? (
+      {/* {permitted ? (
           <>
             <>
               <Button
@@ -176,8 +249,7 @@ function DoneTask(props) {
           </>
         ) : (
           ""
-        )}
-      </div>
+        )} */}
     </>
   );
 }

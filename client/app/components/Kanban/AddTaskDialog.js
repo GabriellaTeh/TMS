@@ -145,7 +145,7 @@ function AddTaskDialog(props) {
             ></TextField>
           </div>
           <Button onClick={handleSaveTask} color="success">
-            Save
+            Create Task
           </Button>
           <Button onClick={handleCancelTask} color="primary">
             Cancel
