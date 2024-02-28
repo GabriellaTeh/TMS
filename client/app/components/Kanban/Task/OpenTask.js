@@ -24,7 +24,7 @@ function OpenTask(props) {
   async function handleSave() {
     try {
       if (notes && notes !== props.notes) {
-        const response = await Axios.post("/task/edit", {
+        const response = await Axios.post("/task/editWithPlan", {
           description,
           plan,
           notes,
@@ -73,7 +73,7 @@ function OpenTask(props) {
   async function handleSavePromote() {
     try {
       if (notes && notes !== props.notes) {
-        const response = await Axios.post("/task/edit", {
+        const response = await Axios.post("/task/editWithPlan", {
           description,
           plan,
           notes,

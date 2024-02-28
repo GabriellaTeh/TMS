@@ -34,18 +34,6 @@ function DoingTask(props) {
           const data = response.data.split(" ");
           data.pop();
           if (data.length > 0) {
-            if (data.includes("PlanLength")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name must be at most 20 characters long.",
-              });
-            }
-            if (data.includes("PlanCharacter")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name can only contain alphanumeric characters.",
-              });
-            }
           } else {
             appDispatch({ type: "successMessage", value: "Task updated." });
             navigate(`/kanban/${app}`);
@@ -81,18 +69,6 @@ function DoingTask(props) {
           const data = response.data.split(" ");
           data.pop();
           if (data.length > 0) {
-            if (data.includes("PlanLength")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name must be at most 20 characters long.",
-              });
-            }
-            if (data.includes("PlanCharacter")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name can only contain alphanumeric characters.",
-              });
-            }
           } else {
             appDispatch({ type: "successMessage", value: "Task updated." });
             try {
@@ -150,18 +126,6 @@ function DoingTask(props) {
           const data = response.data.split(" ");
           data.pop();
           if (data.length > 0) {
-            if (data.includes("PlanLength")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name must be at most 20 characters long.",
-              });
-            }
-            if (data.includes("PlanCharacter")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan name can only contain alphanumeric characters.",
-              });
-            }
           } else {
             appDispatch({ type: "successMessage", value: "Task updated." });
             try {

@@ -1,5 +1,6 @@
 const database = require("../config/db");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 
 exports.getTask = (req, res, next) => {
   let token;
@@ -209,6 +210,40 @@ exports.editTask = (req, res, next) => {
     return res.send(false);
   }
   try {
+    const { description, notes, task, state } = req.body;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const username = decoded.username;
+    const time = new Date();
+    const audit = `${username}, ${state}, ${time}: ${notes}`;
+    database.query(
+      "UPDATE task SET Task_description = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ? WHERE task_id = ?",
+      [description, audit, username, task],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.write("Success");
+        }
+      }
+    );
+    res.end();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.editTaskWithPlan = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  try {
     const { description, plan, notes, task, state } = req.body;
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const username = decoded.username;
@@ -235,7 +270,7 @@ exports.editTask = (req, res, next) => {
   }
 };
 
-exports.editTaskState = (req, res, next) => {
+exports.editTaskWithState = (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -247,9 +282,16 @@ exports.editTaskState = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const { state, task } = req.body;
+    const { description, plan, notes, task, state } = req.body;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const username = decoded.username;
+    const time = new Date();
+    if (plan && validatePlan(res, plan)) {
+      res.send();
+      return;
+    }
     database.query(
-      "UPDATE task SET Task_state = ?WHERE task_id = ?",
+      "UPDATE task SET Task_state = ? WHERE task_id = ?",
       [state, task],
       function (err, results) {
         if (err) {
@@ -263,3 +305,14 @@ exports.editTaskState = (req, res, next) => {
     console.log(err);
   }
 };
+
+function sendEmail() {
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    auth: {
+      user: process.env.SMTP_USERNAME,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  });
+}

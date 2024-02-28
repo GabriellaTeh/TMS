@@ -112,7 +112,7 @@ function DoneTaskContent() {
   async function handleSaveDemote() {
     try {
       if (notes) {
-        const response = await Axios.post("/task/edit", {
+        const response = await Axios.post("/task/editWithPlan", {
           description,
           notes,
           plan,

@@ -46,7 +46,8 @@ const {
   getTasks,
   getTask,
   editTask,
-  editTaskState,
+  editTaskWithPlan,
+  editTaskWithState,
 } = require("../controllers/taskController");
 
 //admin insert
@@ -103,7 +104,8 @@ router.route("/task/create").post(isAuthenticatedUser, createTask);
 router.route("/tasks").post(isAuthenticatedUser, getTasks);
 router.route("/task").post(isAuthenticatedUser, getTask);
 router.route("/task/edit").post(isAuthenticatedUser, editTask);
-router.route("/task/editState").post(isAuthenticatedUser, editTaskState);
+router.route("/task/editWithPlan").post(isAuthenticatedUser, editTaskWithPlan);
+router.route("/task/editState").post(isAuthenticatedUser, editTaskWithState);
 
 //permit functions
 router.route("/app/permit").post(isAuthenticatedUser, getPermit);
