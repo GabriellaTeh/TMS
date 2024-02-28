@@ -395,7 +395,6 @@ async function sendEmail(app, username) {
   const group = await getDonePermit(app);
   if (group) {
     const sender = username;
-    //get all emails in app_permit_done (do this in group controller) and send mail
     const permitUsers = await getAllPermitDoneEmails(group);
     const emails = [];
     permitUsers.forEach((user) => {
