@@ -51,12 +51,13 @@ function DoingTask(props) {
     try {
       if (notes && notes !== props.notes) {
         const newState = "done";
-        const response = await Axios.post("/task/editWithState", {
+        const response = await Axios.post("/task/promoteDoingTask", {
           description,
           notes,
           task,
           state,
           newState,
+          app,
         });
         if (response.data === "Jwt") {
           appDispatch({ type: "errorMessage", value: "Token invalid." });

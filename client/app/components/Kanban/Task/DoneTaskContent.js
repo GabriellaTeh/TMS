@@ -95,14 +95,13 @@ function DoneTaskContent() {
     try {
       if (notes && plan) {
         const newState = "doing";
-        const response = await Axios.post("/task/demoteDoneTask", {
+        const response = await Axios.post("/task/editWithPlanState", {
           description,
           notes,
           plan,
           task,
           state,
           newState,
-          app,
         });
         if (response.data === "Jwt") {
           appDispatch({ type: "errorMessage", value: "Token invalid." });

@@ -343,7 +343,7 @@ exports.editTaskWithState = (req, res, next) => {
   }
 };
 
-exports.demoteDoneTask = (req, res, next) => {
+exports.promoteDoingTask = (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -371,7 +371,7 @@ exports.demoteDoneTask = (req, res, next) => {
         if (err) {
           console.log(err);
         } else {
-          sendEmail(app, username);
+          sendEmail(app);
           res.write("Success");
         }
       }
@@ -392,6 +392,7 @@ async function sendEmail(app, username) {
     },
   });
   const group = await getDonePermit(app);
+  console.log(group);
   const sender = username;
   //get all emails in app_permit_done (do this in group controller) and send mail
   let emails = [];
