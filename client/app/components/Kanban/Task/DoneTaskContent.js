@@ -222,7 +222,7 @@ function DoneTaskContent() {
                 <Autocomplete
                   size="small"
                   readOnly
-                  value={plan}
+                  value={oldPlan}
                   options={plans}
                   renderInput={(params) => (
                     <TextField {...params} placeholder="No plans" />
