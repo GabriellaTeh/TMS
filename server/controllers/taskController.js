@@ -342,6 +342,44 @@ exports.editTaskWithState = (req, res, next) => {
   }
 };
 
+exports.demoteDoneTask = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  try {
+    const { description, notes, plan, task, state, newState } = req.body;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const username = decoded.username;
+    const time = new Date();
+    const audit = `${username}, ${state}, ${time}: ${notes}`;
+    if (plan && validatePlan(res, plan)) {
+      res.send();
+      return;
+    }
+    database.query(
+      "UPDATE task SET Task_description = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ?, Task_state = ?, Task_plan = ? WHERE task_id = ?",
+      [description, audit, username, newState, plan, task],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.write("Success");
+        }
+      }
+    );
+    res.end();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 function sendEmail() {
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,

@@ -15,6 +15,7 @@ function DoneTaskContent() {
   const [creator, setCreator] = useState();
   const [owner, setOwner] = useState();
   const [createDate, setCreateDate] = useState();
+  const [oldPlan, setOldPlan] = useState(null);
   const [plan, setPlan] = useState(null);
   const [plans, setPlans] = useState([]);
   const [taskName, setTaskName] = useState();
@@ -92,12 +93,15 @@ function DoneTaskContent() {
 
   async function handleSaveDemote() {
     try {
-      if (notes) {
-        const response = await Axios.post("/task/editWithPlan", {
+      if (notes && plan) {
+        const newState = "doing";
+        const response = await Axios.post("/task/demoteDoneTask", {
           description,
           notes,
           plan,
           task,
+          state,
+          newState,
         });
         if (response.data === "Jwt") {
           appDispatch({ type: "errorMessage", value: "Token invalid." });
@@ -123,36 +127,22 @@ function DoneTaskContent() {
               });
             }
           } else {
-            appDispatch({ type: "successMessage", value: "Task updated." });
-            try {
-              const state = "doing";
-              const response = await Axios.post("/task/editState", {
-                state,
-                task,
-              });
-              if (response.data === "Jwt") {
-                appDispatch({ type: "errorMessage", value: "Token invalid." });
-                appDispatch({ type: "logout" });
-                navigate("/");
-              } else if (response.data === "Inactive") {
-                navigate("/");
-                appDispatch({ type: "errorMessage", value: "Inactive." });
-              } else if (response.data) {
-                appDispatch({
-                  type: "successMessage",
-                  value: "Task demoted.",
-                });
-                navigate(`/kanban/${app}`);
-              }
-            } catch (err) {
-              console.log(err);
-            }
+            appDispatch({
+              type: "successMessage",
+              value: "Task updated and demoted.",
+            });
+            navigate(`/kanban/${app}`);
           }
         }
-      } else {
+      } else if (plan) {
         appDispatch({
           type: "errorMessage",
           value: "Enter notes to update task.",
+        });
+      } else if (notes) {
+        appDispatch({
+          type: "errorMessage",
+          value: "Change plan to demote task.",
         });
       }
     } catch (err) {
@@ -171,7 +161,7 @@ function DoneTaskContent() {
       setTaskName(data.Task_name);
       setDescription(data.Task_description);
       setOldNotes(data.Task_notes);
-      setPlan(data.Task_plan);
+      setOldPlan(data.Task_plan);
       setCreator(data.Task_creator);
       setCreateDate(data.Task_createDate);
       setOwner(data.Task_owner);
@@ -221,7 +211,7 @@ function DoneTaskContent() {
               {action === "demote" ? (
                 <Autocomplete
                   size="small"
-                  value={plan}
+                  value={oldPlan}
                   options={plans}
                   renderInput={(params) => (
                     <TextField {...params} placeholder="No plans" />
