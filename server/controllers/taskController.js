@@ -218,7 +218,7 @@ exports.editTask = (req, res, next) => {
     const time = new Date();
     const audit = `${username}, ${state}, ${time}: ${notes}`;
     database.query(
-      "UPDATE task SET Task_description = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ? WHERE task_id = ?",
+      "UPDATE task SET Task_description = ?, Task_notes = CONCAT_WS(CHAR(13), ?, Task_notes), Task_owner = ? WHERE task_id = ?",
       [description, audit, username, task],
       function (err, results) {
         if (err) {
@@ -256,7 +256,7 @@ exports.editTaskWithPlan = (req, res, next) => {
     }
     const audit = `${username}, ${state}, ${time}: ${notes}`;
     database.query(
-      "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ? WHERE task_id = ?",
+      "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = CONCAT_WS(CHAR(13), ?, Task_notes), Task_owner = ? WHERE task_id = ?",
       [description, plan, audit, username, task],
       function (err, results) {
         if (err) {
@@ -294,7 +294,7 @@ exports.editTaskWithPlanState = (req, res, next) => {
     }
     const audit = `${username}, ${state}, ${time}: ${notes}`;
     database.query(
-      "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ?, Task_state = ? WHERE task_id = ?",
+      "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = CONCAT_WS(CHAR(13), ?, Task_notes), Task_owner = ?, Task_state = ? WHERE task_id = ?",
       [description, plan, audit, username, newState, task],
       function (err, results) {
         if (err) {
@@ -328,7 +328,7 @@ exports.editTaskWithState = (req, res, next) => {
     const time = new Date();
     const audit = `${username}, ${state}, ${time}: ${notes}`;
     database.query(
-      "UPDATE task SET Task_description = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ?, Task_state = ? WHERE task_id = ?",
+      "UPDATE task SET Task_description = ?, Task_notes = CONCAT_WS(CHAR(13), ?, Task_notes), Task_owner = ?, Task_state = ? WHERE task_id = ?",
       [description, audit, username, newState, task],
       function (err, results) {
         if (err) {
@@ -366,7 +366,7 @@ exports.promoteDoingTask = (req, res, next) => {
       return;
     }
     database.query(
-      "UPDATE task SET Task_description = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ?, Task_state = ?, Task_plan = ? WHERE task_id = ?",
+      "UPDATE task SET Task_description = ?, Task_notes = CONCAT_WS(CHAR(13), ?, Task_notes), Task_owner = ?, Task_state = ?, Task_plan = ? WHERE task_id = ?",
       [description, audit, username, newState, plan, task],
       function (err, results) {
         if (err) {
