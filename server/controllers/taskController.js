@@ -1,6 +1,7 @@
 const database = require("../config/db");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const { getDonePermit } = require("./applicationController");
 
 exports.getTask = (req, res, next) => {
   let token;
@@ -354,7 +355,7 @@ exports.demoteDoneTask = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const { description, notes, plan, task, state, newState } = req.body;
+    const { description, notes, plan, task, state, newState, app } = req.body;
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const username = decoded.username;
     const time = new Date();
@@ -370,6 +371,7 @@ exports.demoteDoneTask = (req, res, next) => {
         if (err) {
           console.log(err);
         } else {
+          sendEmail(app, username);
           res.write("Success");
         }
       }
@@ -380,7 +382,7 @@ exports.demoteDoneTask = (req, res, next) => {
   }
 };
 
-function sendEmail() {
+async function sendEmail(app, username) {
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -389,4 +391,8 @@ function sendEmail() {
       pass: process.env.SMTP_PASSWORD,
     },
   });
+  const group = await getDonePermit(app);
+  const sender = username;
+  //get all emails in app_permit_done (do this in group controller) and send mail
+  let emails = [];
 }

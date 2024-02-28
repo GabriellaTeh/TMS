@@ -267,3 +267,19 @@ exports.getPermit = (req, res, next) => {
     console.log(err);
   }
 };
+
+exports.getDonePermit = async (app) => {
+  return new Promise((resolve, reject) => {
+    database.query(
+      "SELECT * FROM application WHERE App_Acronym = ?",
+      [app],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          resolve(results[0].App_permit_Done);
+        }
+      }
+    );
+  });
+};

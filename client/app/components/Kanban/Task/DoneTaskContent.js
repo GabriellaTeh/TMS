@@ -102,6 +102,7 @@ function DoneTaskContent() {
           task,
           state,
           newState,
+          app,
         });
         if (response.data === "Jwt") {
           appDispatch({ type: "errorMessage", value: "Token invalid." });
