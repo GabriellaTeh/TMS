@@ -27,10 +27,6 @@ function DoneTask(props) {
     navigate(`/${task}/edit`);
   }
 
-  function handleReturn() {
-    navigate(`/kanban/${app}`);
-  }
-
   async function checkDonePermit() {
     try {
       const response = await Axios.post("/app/permit", { app });
@@ -103,10 +99,10 @@ function DoneTask(props) {
                 rows={6}
                 defaultValue={props.notes}
               ></TextField>
-              <Button onClick={handleClose} color="error">
-                Close
-              </Button>
             </div>
+            <Button onClick={handleClose} color="error">
+              Close
+            </Button>
           </Grid>
         </Grid>
       ) : (
@@ -124,13 +120,13 @@ function DoneTask(props) {
             <Button onClick={handleEdit} variant="outlined" color="primary">
               Edit
             </Button>{" "}
+            <Button onClick={handleClose} variant="outlined" color="error">
+              Close
+            </Button>
           </>
         ) : (
           ""
         )}
-        <Button onClick={handleReturn} variant="outlined" color="error">
-          Back
-        </Button>
       </div>
     </>
   );

@@ -20,6 +20,7 @@ function DoneTaskContent() {
   const [taskName, setTaskName] = useState();
   const appDispatch = useContext(DispatchContext);
   let { task, action } = useParams();
+  const state = "done";
   const app = task.split("_")[0];
 
   async function handleSave() {
@@ -29,6 +30,7 @@ function DoneTaskContent() {
           description,
           notes,
           task,
+          state,
         });
         if (response.data === "Jwt") {
           appDispatch({ type: "errorMessage", value: "Token invalid." });
@@ -55,10 +57,13 @@ function DoneTaskContent() {
   async function handleSavePromote() {
     try {
       if (notes) {
-        const response = await Axios.post("/task/edit", {
+        const newState = "closed";
+        const response = await Axios.post("/task/editWithState", {
           description,
           notes,
           task,
+          state,
+          newState,
         });
         if (response.data === "Jwt") {
           appDispatch({ type: "errorMessage", value: "Token invalid." });
@@ -68,35 +73,11 @@ function DoneTaskContent() {
           navigate("/");
           appDispatch({ type: "errorMessage", value: "Inactive." });
         } else {
-          const data = response.data.split(" ");
-          data.pop();
-          if (data.length > 0) {
-          } else {
-            appDispatch({ type: "successMessage", value: "Task updated." });
-            try {
-              const state = "closed";
-              const response = await Axios.post("/task/editState", {
-                state,
-                task,
-              });
-              if (response.data === "Jwt") {
-                appDispatch({ type: "errorMessage", value: "Token invalid." });
-                appDispatch({ type: "logout" });
-                navigate("/");
-              } else if (response.data === "Inactive") {
-                navigate("/");
-                appDispatch({ type: "errorMessage", value: "Inactive." });
-              } else if (response.data) {
-                appDispatch({
-                  type: "successMessage",
-                  value: "Task promoted.",
-                });
-                navigate(`/kanban/${app}`);
-              }
-            } catch (err) {
-              console.log(err);
-            }
-          }
+          appDispatch({
+            type: "successMessage",
+            value: "Task updated and promoted.",
+          });
+          navigate(`/kanban/${app}`);
         }
       } else {
         appDispatch({

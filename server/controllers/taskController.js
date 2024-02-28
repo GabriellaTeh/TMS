@@ -270,6 +270,44 @@ exports.editTaskWithPlan = (req, res, next) => {
   }
 };
 
+exports.editTaskWithPlanState = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.send(false);
+  }
+  try {
+    const { description, plan, notes, task, state, newState } = req.body;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const username = decoded.username;
+    const time = new Date();
+    if (plan && validatePlan(res, plan)) {
+      res.send();
+      return;
+    }
+    const audit = `${username}, ${state}, ${time}: ${notes}`;
+    database.query(
+      "UPDATE task SET Task_description = ?, Task_plan = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ?, Task_state = ? WHERE task_id = ?",
+      [description, plan, audit, username, newState, task],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.write("Success");
+        }
+      }
+    );
+    res.end();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.editTaskWithState = (req, res, next) => {
   let token;
   if (
@@ -282,25 +320,23 @@ exports.editTaskWithState = (req, res, next) => {
     return res.send(false);
   }
   try {
-    const { description, plan, notes, task, state } = req.body;
+    const { description, notes, task, state, newState } = req.body;
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const username = decoded.username;
     const time = new Date();
-    if (plan && validatePlan(res, plan)) {
-      res.send();
-      return;
-    }
+    const audit = `${username}, ${state}, ${time}: ${notes}`;
     database.query(
-      "UPDATE task SET Task_state = ? WHERE task_id = ?",
-      [state, task],
+      "UPDATE task SET Task_description = ?, Task_notes = CONCAT_WS(CHAR(13), Task_notes, ?), Task_owner = ?, Task_state = ? WHERE task_id = ?",
+      [description, audit, username, newState, task],
       function (err, results) {
         if (err) {
           console.log(err);
         } else {
-          res.send(true);
+          res.write("Success");
         }
       }
     );
+    res.end();
   } catch (err) {
     console.log(err);
   }

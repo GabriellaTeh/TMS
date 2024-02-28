@@ -73,12 +73,14 @@ function OpenTask(props) {
   async function handleSavePromote() {
     try {
       if (notes && notes !== props.notes) {
-        const response = await Axios.post("/task/editWithPlan", {
+        const newState = "todo";
+        const response = await Axios.post("/task/editWithPlanState", {
           description,
           plan,
           notes,
           task,
           state,
+          newState,
         });
         if (response.data === "Jwt") {
           appDispatch({ type: "errorMessage", value: "Token invalid." });
@@ -104,30 +106,11 @@ function OpenTask(props) {
               });
             }
           } else {
-            appDispatch({ type: "successMessage", value: "Task updated." });
-            try {
-              const state = "todo";
-              const response = await Axios.post("/task/editState", {
-                state,
-                task,
-              });
-              if (response.data === "Jwt") {
-                appDispatch({ type: "errorMessage", value: "Token invalid." });
-                appDispatch({ type: "logout" });
-                navigate("/");
-              } else if (response.data === "Inactive") {
-                navigate("/");
-                appDispatch({ type: "errorMessage", value: "Inactive." });
-              } else if (response.data) {
-                appDispatch({
-                  type: "successMessage",
-                  value: "Task promoted.",
-                });
-                navigate(`/kanban/${app}`);
-              }
-            } catch (err) {
-              console.log(err);
-            }
+            appDispatch({
+              type: "successMessage",
+              value: "Task updated and promoted.",
+            });
+            navigate(`/kanban/${app}`);
           }
         }
       } else {
