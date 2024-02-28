@@ -212,7 +212,7 @@ exports.editTask = (req, res, next) => {
     const { description, plan, notes, task, state } = req.body;
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const username = decoded.username;
-    const time = Date.now();
+    const time = new Date();
     if (plan && validatePlan(res, plan)) {
       res.send();
       return;
