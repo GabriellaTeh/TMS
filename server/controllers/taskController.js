@@ -165,12 +165,18 @@ exports.createTask = async (req, res, next) => {
       const taskId = name + "_" + rNumber;
       const taskExists = await findTask(taskId);
       if (!taskExists) {
+        let audit = null;
+        if (notes) {
+          const time = new Date();
+          const state = "create";
+          audit = `${username}, ${state}, ${time}: ${notes}`;
+        }
         database.query(
           "BEGIN; INSERT INTO task (Task_name, Task_description, Task_notes, Task_id, Task_plan, Task_app_Acronym, Task_creator, Task_owner, Task_createDate) VALUES (?,?,?,?,?,?,?,?,?); UPDATE application SET App_Rnumber = ? WHERE App_Acronym = ?; COMMIT",
           [
             taskName,
             description,
-            notes,
+            audit,
             taskId,
             plan,
             name,
