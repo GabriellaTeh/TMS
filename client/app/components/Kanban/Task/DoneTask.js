@@ -111,18 +111,68 @@ function DoneTask(props) {
       <div className="mt-3">
         {permitted ? (
           <>
-            <Button onClick={handlePromote} variant="outlined" color="success">
-              Promote
-            </Button>{" "}
-            <Button onClick={handleDemote} variant="outlined" color="warning">
-              Demote
-            </Button>{" "}
-            <Button onClick={handleEdit} variant="outlined" color="primary">
-              Edit
-            </Button>{" "}
-            <Button onClick={handleClose} variant="outlined" color="error">
-              Close
-            </Button>
+            <>
+              <Button
+                onClick={handlePromote}
+                variant="outlined"
+                color="success"
+              >
+                Promote
+              </Button>{" "}
+              <Button onClick={handleDemote} variant="outlined" color="warning">
+                Demote
+              </Button>{" "}
+              <Button onClick={handleEdit} variant="outlined" color="primary">
+                Edit
+              </Button>{" "}
+              <Button onClick={handleClose} variant="outlined" color="error">
+                Close
+              </Button>
+            </>
+            <Grid container spacing={3} className="mt-1">
+              <Grid item xs={6}>
+                <div className="form-group">
+                  <label className="text-muted mb-1">
+                    <small>Task Description</small>
+                  </label>
+                  <TextField
+                    fullWidth
+                    multiline
+                    disabled
+                    rows={7}
+                    defaultValue={props.description}
+                  ></TextField>
+                </div>
+              </Grid>
+              <Grid item xs={6}>
+                <div className="form-group">
+                  <label className="text-muted mb-1">
+                    <small>Plan Name</small>
+                  </label>{" "}
+                  <Autocomplete
+                    size="small"
+                    disabled
+                    value={props.plan}
+                    options={props.plans}
+                    renderInput={(params) => (
+                      <TextField {...params} placeholder="No plans" />
+                    )}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="text-muted mb-1">
+                    <small>Task Notes</small>
+                  </label>
+                  <TextField
+                    fullWidth
+                    multiline
+                    disabled
+                    rows={6}
+                    defaultValue={props.notes}
+                  ></TextField>
+                </div>
+              </Grid>
+            </Grid>
           </>
         ) : (
           ""
