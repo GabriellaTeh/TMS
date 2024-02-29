@@ -70,7 +70,7 @@ async function findPlan(name, appName) {
 }
 
 function validatePlan(res, plan) {
-  const regex = "^[a-zA-Z0-9]+$";
+  const regex = "^[[a-zA-Z0-9_ ]+$";
   let error = false;
   if (plan.length > 20) {
     res.write("PlanLength ");
