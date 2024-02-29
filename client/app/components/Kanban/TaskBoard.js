@@ -144,10 +144,15 @@ function TaskBoard(props) {
                       >
                         <CardContent>
                           <Tooltip title="View Task" arrow>
+                            Task:{" "}
                             <Link to={`/${open.Task_id}`}>
                               {open.Task_name} ({open.Task_id})
                             </Link>
                           </Tooltip>
+                          <br></br>
+                          Plan: {open.Task_plan}
+                          <br></br>
+                          Owner: {open.Task_owner}
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -175,10 +180,15 @@ function TaskBoard(props) {
                       >
                         <CardContent>
                           <Tooltip title="View Task" arrow>
+                            Task:{" "}
                             <Link to={`/${todo.Task_id}`}>
                               {todo.Task_name} ({todo.Task_id})
                             </Link>
                           </Tooltip>
+                          <br></br>
+                          Plan: {todo.Task_plan}
+                          <br></br>
+                          Owner: {todo.Task_owner}
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -206,10 +216,15 @@ function TaskBoard(props) {
                       >
                         <CardContent>
                           <Tooltip title="View Task" arrow>
+                            Task:{" "}
                             <Link to={`/${doing.Task_id}`}>
                               {doing.Task_name} ({doing.Task_id})
                             </Link>
                           </Tooltip>
+                          <br></br>
+                          Plan: {doing.Task_plan}
+                          <br></br>
+                          Owner: {doing.Task_owner}
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -237,10 +252,15 @@ function TaskBoard(props) {
                       >
                         <CardContent>
                           <Tooltip title="View Task" arrow>
+                            Task:{" "}
                             <Link to={`/${done.Task_id}`}>
                               {done.Task_name} ({done.Task_id})
                             </Link>
                           </Tooltip>
+                          <br></br>
+                          Plan: {done.Task_plan}
+                          <br></br>
+                          Owner: {done.Task_owner}
                         </CardContent>
                       </Card>
                     </TableCell>
@@ -268,10 +288,15 @@ function TaskBoard(props) {
                       >
                         <CardContent>
                           <Tooltip title="View Task" arrow>
+                            Task:{" "}
                             <Link to={`/${closed.Task_id}`}>
                               {closed.Task_name} ({closed.Task_id})
                             </Link>
                           </Tooltip>
+                          <br></br>
+                          Plan: {closed.Task_plan}
+                          <br></br>
+                          Owner: {closed.Task_owner}
                         </CardContent>
                       </Card>
                     </TableCell>
