@@ -29,61 +29,68 @@ function PlanDialog() {
 
   async function handleCreate(e) {
     e.preventDefault();
-    if (name) {
-      try {
-        const response = await Axios.post("/plan/create", {
-          planName,
-          startDate,
-          endDate,
-          name,
-        });
-        if (response.data === "Jwt") {
-          appDispatch({ type: "errorMessage", value: "Token invalid." });
-          appDispatch({ type: "logout" });
-          navigate("/");
-        } else if (response.data === "Inactive") {
-          navigate("/");
-          appDispatch({ type: "errorMessage", value: "Inactive." });
-        } else {
-          const data = response.data.split(" ");
-          data.pop();
-          if (data.length > 0) {
-            if (data.includes("PlanLength")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan MVP name must be less than 20 characters.",
-              });
-            }
-            if (data.includes("PlanCharacter")) {
-              appDispatch({
-                type: "errorMessage",
-                value:
-                  "Plan MVP name can only contain alphanumeric characters.",
-              });
-            }
-            if (data.includes("PlanExists")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Plan MVP name exists for this application.",
-              });
-            }
-            if (data.includes("DatesInvalid")) {
-              appDispatch({
-                type: "errorMessage",
-                value: "Start date must be before or equal to end date.",
-              });
-            }
+    if (planName) {
+      if (startDate && endDate) {
+        try {
+          const response = await Axios.post("/plan/create", {
+            planName,
+            startDate,
+            endDate,
+            name,
+          });
+          if (response.data === "Jwt") {
+            appDispatch({ type: "errorMessage", value: "Token invalid." });
+            appDispatch({ type: "logout" });
+            navigate("/");
+          } else if (response.data === "Inactive") {
+            navigate("/");
+            appDispatch({ type: "errorMessage", value: "Inactive." });
           } else {
-            appDispatch({
-              type: "successMessage",
-              value: "Plan created.",
-            });
-            e.target.reset();
-            getPlanTable();
+            const data = response.data.split(" ");
+            data.pop();
+            if (data.length > 0) {
+              if (data.includes("PlanLength")) {
+                appDispatch({
+                  type: "errorMessage",
+                  value: "Plan MVP name must be less than 20 characters.",
+                });
+              }
+              if (data.includes("PlanCharacter")) {
+                appDispatch({
+                  type: "errorMessage",
+                  value:
+                    "Plan MVP name can only contain alphanumeric characters.",
+                });
+              }
+              if (data.includes("PlanExists")) {
+                appDispatch({
+                  type: "errorMessage",
+                  value: "Plan MVP name exists for this application.",
+                });
+              }
+              if (data.includes("DatesInvalid")) {
+                appDispatch({
+                  type: "errorMessage",
+                  value: "Start date must be before or equal to end date.",
+                });
+              }
+            } else {
+              appDispatch({
+                type: "successMessage",
+                value: "Plan created.",
+              });
+              e.target.reset();
+              getPlanTable();
+            }
           }
+        } catch (err) {
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err);
+      } else {
+        appDispatch({
+          type: "errorMessage",
+          value: "Start and End date required.",
+        });
       }
     } else {
       appDispatch({ type: "errorMessage", value: "Plan MVP name required." });
@@ -122,7 +129,6 @@ function PlanDialog() {
         <div className="mt-3">
           <form onSubmit={handleCreate}>
             <TextField
-              required
               label="Plan Name"
               type="text"
               style={{ width: 400 }}
