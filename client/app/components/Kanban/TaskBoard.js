@@ -144,9 +144,9 @@ function TaskBoard(props) {
                       >
                         <CardContent>
                           <Tooltip title="View Task" arrow>
-                            Task:{" "}
+                            {" "}
                             <Link to={`/${open.Task_id}`}>
-                              {open.Task_name} ({open.Task_id})
+                              {open.Task_name} (#{open.Task_id})
                             </Link>
                           </Tooltip>
                           <br></br>
@@ -180,9 +180,8 @@ function TaskBoard(props) {
                       >
                         <CardContent>
                           <Tooltip title="View Task" arrow>
-                            Task:{" "}
                             <Link to={`/${todo.Task_id}`}>
-                              {todo.Task_name} ({todo.Task_id})
+                              {todo.Task_name} (#{todo.Task_id})
                             </Link>
                           </Tooltip>
                           <br></br>
@@ -216,9 +215,8 @@ function TaskBoard(props) {
                       >
                         <CardContent>
                           <Tooltip title="View Task" arrow>
-                            Task:{" "}
                             <Link to={`/${doing.Task_id}`}>
-                              {doing.Task_name} ({doing.Task_id})
+                              {doing.Task_name} (#{doing.Task_id})
                             </Link>
                           </Tooltip>
                           <br></br>
@@ -252,9 +250,8 @@ function TaskBoard(props) {
                       >
                         <CardContent>
                           <Tooltip title="View Task" arrow>
-                            Task:{" "}
                             <Link to={`/${done.Task_id}`}>
-                              {done.Task_name} ({done.Task_id})
+                              {done.Task_name} (#{done.Task_id})
                             </Link>
                           </Tooltip>
                           <br></br>
@@ -288,9 +285,8 @@ function TaskBoard(props) {
                       >
                         <CardContent>
                           <Tooltip title="View Task" arrow>
-                            Task:{" "}
                             <Link to={`/${closed.Task_id}`}>
-                              {closed.Task_name} ({closed.Task_id})
+                              {closed.Task_name} (#{closed.Task_id})
                             </Link>
                           </Tooltip>
                           <br></br>
