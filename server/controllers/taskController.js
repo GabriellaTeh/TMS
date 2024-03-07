@@ -186,7 +186,7 @@ exports.createTask = async (req, res, next) => {
             rNumber,
             name,
           ],
-          function (err, resuts) {
+          function (err, results) {
             if (err) {
               console.log(err);
             } else {
